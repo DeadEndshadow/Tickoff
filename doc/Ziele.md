@@ -1,4 +1,4 @@
-# SMART-Ziele für die Zecken-App
+# SMART-Ziele für TickOff
 
 ## 1. Nutzerfreundlichkeit & Einfachheit
 - **Spezifisch:** Die App soll für alle Altersgruppen leicht verständlich sein, mit einer Hauptansicht „Karte“ und maximal 2 Unterseiten („Zecke melden“ & „Einstellungen“).  
