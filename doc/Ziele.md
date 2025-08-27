@@ -20,7 +20,7 @@
 
 ## 3. Community & Datenqualität
 - **Spezifisch:** Aufbau einer Datenbasis durch Nutzerberichte (Crowdsourcing).  
-- **Messbar:** Mindestens 1.000 Zeckenmeldungen in der ersten Saison (Mai–September/Oktober) durch Nutzer.  
+- **Messbar:** Mindestens 500 Zeckenmeldungen in der ersten Saison (Mai–September/Oktober) durch Nutzer.  
 - **Attraktiv/Erreichbar:** Mit Push-Benachrichtigungen („Warst du heute draussen? Hast du eine Zecke gesehen?“) und einfacher Reporting-Funktion.  
 - **Relevant:** Ohne Daten keine verlässliche Risikokarte → Kernfunktion.  
 - **Terminiert:** Innerhalb der ersten 5 Monate nach Launch.   
