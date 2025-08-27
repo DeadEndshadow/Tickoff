@@ -1,4 +1,4 @@
-# Akzeptanzkriterien für die Zecken-App
+# Akzeptanzkriterien für TickOff
 
 ## 1. Nutzerfreundlichkeit & Mehrsprachigkeit
 - Die App besteht aus genau drei Hauptbuttons in der unteren Navigation:  
