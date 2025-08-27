@@ -52,7 +52,38 @@
 ---
 
 ## 5. Pilot-Testing & Feedback
-- Vor dem offiziellen Launch wird ein **Pilot-Test** mit mindestens **20 Personen** durchgeführt (inkl. Senioren, Jugendlichen, Hundebesitzern).  
-- Es werden mindestens **50 konkrete Feedbackpunkte** dokumentiert.  
-- Die häufigsten **5 Probleme** aus dem Feedback sind **vor Launch behoben**.  
+- Vor dem offiziellen Launch wird ein Pilot-Test mit mindestens **20 Personen durchgeführt (inkl. Senioren, Jugendlichen, Hundebesitzern).  
+- Es werden mindestens 50 konkrete Feedbackpunkte dokumentiert.  
+- Die häufigsten 5 Probleme aus dem Feedback sind vor Launch behoben.  
 
+--- 
+
+## 6. Usability & Barrierefreiheit
+- Die Schriftgrösse ist skalierbar (oder an das System angepasst).
+- Buttons und Icons sind entsprechend Apple/Google UI-Richtlinien.  
+- Die App erfüllt WCAG-Standards (z. B. Farbkontrast für Menschen mit Sehschwäche).  
+- Ein einfacher Onboarding-Screen erklärt beim ersten Start in 3 Schritten, wie die App funktioniert.  
+
+---
+
+## 7. Offline-Funktionalität
+- Die Karte bleibt auch **offline sichtbar**, zumindest mit den letzten geladenen Hotspots.  
+- Zeckenmeldungen können **offline gespeichert** und beim nächsten Internetzugang hochgeladen werden.  
+- Nutzer erhalten einen **Hinweis**, wenn sie ohne Internet keine Live-Daten sehen.  
+
+---
+
+## 8. Wartbarkeit & Erweiterbarkeit
+- Der **Quellcode** ist so strukturiert, dass neue Sprachen oder zusätzliche Features (z. B. Tiermeldungen) ohne komplette Neuentwicklung ergänzt werden können.  
+- Die App verwendet **modulare APIs**.  
+- **Updates** können ohne Datenverlust eingespielt werden.  
+
+---
+
+## 9. Monitoring & Erfolgsmessung
+- Es gibt ein **Analytics-Dashboard** (z. B. Firebase), das anzeigt:  
+  - Anzahl aktiver Nutzer pro Monat  
+  - Anzahl Meldungen pro Region  
+  - Aufrufrate der Erste-Hilfe-Seite  
+- **Projektziel:** Mindestens 1.000 monatlich aktive Nutzer innerhalb des ersten Jahres.  
+- Nutzer können anonym **Feedback** über die App geben (1–5 Sterne + Kommentar).
