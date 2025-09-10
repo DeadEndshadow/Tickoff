@@ -15,6 +15,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: tickoff
+
     steps:
       - uses: actions/checkout@v4
 
