@@ -35,5 +35,5 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
 
-      - name: Build iOS (no codesign)
-        run: flutter build ios --no-codesign
+      # - name: Build iOS (no codesign)
+      #  run: flutter build ios --no-codesign
