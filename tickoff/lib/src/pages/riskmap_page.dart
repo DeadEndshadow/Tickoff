@@ -1,57 +1,62 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RiskMapPage extends StatefulWidget {
   const RiskMapPage({Key? key}) : super(key: key);
 
   @override
   State<RiskMapPage> createState() => _RiskMapPageState();
-
-  
 }
 
 class _RiskMapPageState extends State<RiskMapPage> {
-  late GoogleMapController _mapController;
+  bool _locGranted = false;
 
   @override
-  void dispose() {
-    _mapController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _ask();
   }
 
-  // Beispielhafte Risikopunkte für die Schweiz
-  final Set<Marker> _riskMarkers = {
-    Marker(
-      markerId: MarkerId('risk1'),
-      position: LatLng(47.3769, 8.5417), // Zürich
-      infoWindow: InfoWindow(title: 'Risiko: Hoch'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-    ),
-    Marker(
-      markerId: MarkerId('risk2'),
-      position: LatLng(46.9480, 7.4474), // Bern
-      infoWindow: InfoWindow(title: 'Risiko: Mittel'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-    ),
-    Marker(
-      markerId: MarkerId('risk3'),
-      position: LatLng(46.2044, 6.1432), // Genf
-      infoWindow: InfoWindow(title: 'Risiko: Niedrig'),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
-    ),
-  };
+  Future<void> _ask() async {
+    final s = await Permission.locationWhenInUse.request();
+    if (mounted) setState(() => _locGranted = s.isGranted);
+  }
+
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Risikokarte')),
-      body: GoogleMap(
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(46.8182, 8.2275), // Schweiz Mitte
-          zoom: 7,
+      appBar: AppBar(
+        backgroundColor: Colors.red,
+        title: const Text(
+          'Risko Karte',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
-        markers: _riskMarkers,
-        onMapCreated: (controller) => _mapController = controller,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          tooltip: 'Back',
+          onPressed: () {
+            Navigator.of(context).maybePop();
+          },
+        ),
+      ),
+      body: GoogleMap(
+        mapType: MapType.hybrid,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
       ),
     );
   }
