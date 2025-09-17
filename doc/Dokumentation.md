@@ -1,7 +1,79 @@
 # TickOff Dokumentation
 
-## Akzeptanzkriterien für TickOff
+## 1. Interviews
 
+### Interview #1: Thierry Klötzli (18 Jahre, Emmental)
+- Es nervt ihn. Er sagt, er schreist die Zecken immer ab, er möchte keine Krankheiten erhalten. Zecken sind für ihn sehr mühsam und eklig, da er ein wenig Angst von den Zecken hat.  
+- Generell ja, da es ein Zeck ist. Wer hat schon Zecken gern?  
+- Er fühlt sich an wie Scheisse, wenn er gebissen wird. Es irritiert ihn und er hat das Feeling nicht gern.  
+- Aktuell geht er nicht mehr so oft nach draussen, vor allem nicht auf dichte Wanderwege, die er nicht kennt.  
+- Es nervt ihn, da er eigentlich die Natur sehr gerne hat.  
+- Im Moment probiert er herauszufinden, wo es Hotspots für Zecken gibt. Er hat auch einen Hund, daher ist das für ihn noch wichtiger.  
+- Ja, er wäre gern dabei. Idee tönt cool.  
+
+### Interview #2: Heinz Nyffenegger (85 Jahre, Seeland, Pensioniert)
+- Ich bin dabei vorsichtig. Ich bin mir bewusst, dass Zecken Krankheiten übertragen können. Gesundheit hat in meinem Alter besondere Bedeutung, weswegen ich es ernst nehme.  
+- Ja, es ist mühsam, immer wieder nach Spaziergängen zu suchen. Wenn man alleine ist und nicht mehr so leicht in jede Ecke kommt, kann man etwas schnell übersehen.  
+- Manchmal bin ich mir nicht sicher, ob ich tatsächlich alle Zecken finden kann. Das interessiert mich, da ich gesund bleiben will. Ich möchte weiterhin draussen gehen können, ohne mich zu fürchten.  
+- Normalerweise habe ich eine lange Hose an und sprühe mir gelegentlich Zeckenspray auf die Beine. Zuhause betrachte ich meine Haut dann so gut ich kann im Spiegel.  
+- Es ist unmöglich, sich sicher zu sein, ob man eine Zecke übersehen hat. Und diese Sprays riechen sehr stark.  
+- Es gab verschiedene Sprays, die ich ausprobiert habe, darunter auch natürliche Zitronengrasprodukte. Manchmal trage ich hellere Kleidung, um die Zecken besser zu erkennen.  
+- Ich wäre hilfsbereit, so eine App auszutesten. Würde das Leben schon leichter machen, wenn man all das vermeiden könnte.  
+
+---
+
+## 2. User Stories für TickOff
+
+### 1. Nutzerfreundlichkeit & Mehrsprachigkeit
+- Als Wanderer möchte ich eine übersichtliche Kartenansicht als Startseite, damit ich sofort sehe, wo Zecken-Hotspots sind.  
+- Als Nutzer möchte ich nur drei Hauptbuttons sehen (Karte, Zecke melden, Einstellungen/Info), damit die Bedienung einfach und verständlich bleibt.  
+- Als Tourist möchte ich die App in Deutsch, Englisch oder Französisch nutzen können, damit ich die Inhalte in meiner Sprache verstehe.  
+- Als Senior möchte ich bebilderte Erste-Hilfe-Anleitungen, damit ich sofort weiss, wie ich einen Zeckenbiss richtig behandle.  
+
+### 2. Performance & Agilität
+- Als Nutzer möchte ich, dass die Karte in unter 3 Sekunden lädt, damit ich nicht lange warten muss.  
+- Als Reporter möchte ich, dass meine Zeckenmeldung innerhalb von 30 Sekunden sichtbar wird, damit andere sofort gewarnt sind.  
+- Als Entwickler möchte ich die App in zweiwöchigen Sprints verbessern können, damit Fehler schnell behoben und neue Features ergänzt werden können.  
+
+### 3. Kernfunktionen
+- Als Wanderer möchte ich eine Karte mit farbigen Hotspots, damit ich erkenne, wo Zecken-Risiken hoch sind.  
+- Als Nutzer möchte ich eine Zeckenmeldung nur mit aktiviertem Standort absetzen, damit die Daten zuverlässig sind.  
+- Als besorgter Elternteil möchte ich Push-Benachrichtigungen erhalten, wenn ich mich in einem Hotspot-Gebiet befinde, damit ich meine Kinder schützen kann.  
+- Als Hundebesitzer möchte ich Infos zur Prävention und Krankheiten abrufen können, damit ich auch mein Tier besser schützen kann.  
+- Als Datenschützer möchte ich, dass alle Meldungen anonymisiert gespeichert werden, damit die Privatsphäre gewahrt bleibt.  
+
+### 4. Sicherheit & Datenschutz
+- Als Nutzer möchte ich die Standortfreigabe in den Einstellungen deaktivieren können, damit ich volle Kontrolle über meine Daten habe.  
+- Als Nutzer möchte ich sicher sein, dass die App DSGVO-konform ist, damit meine Daten geschützt sind.  
+
+### 5. Pilot-Testing & Feedback
+- Als Projektteam möchte ich einen Pilot-Test mit 20 Personen durchführen, damit wir echtes Feedback aus der Zielgruppe erhalten.  
+- Als Entwickler möchte ich mindestens 50 Feedbackpunkte sammeln, damit wir die App vor dem Launch optimieren können.  
+- Als Tester möchte ich sehen, dass die häufigsten 5 Probleme behoben sind, damit ich Vertrauen in die Qualität der App habe.  
+
+### 6. Usability & Barrierefreiheit
+- Als Senior möchte ich die Schriftgrösse anpassen können, damit ich Texte auch mit eingeschränktem Sehvermögen lesen kann.  
+- Als Nutzer mit Sehschwäche möchte ich, dass die App hohe Farbkontraste bietet, damit Inhalte auch für mich erkennbar sind.  
+- Als Neuling möchte ich ein Onboarding in 3 Schritten, damit ich sofort verstehe, wie die App funktioniert.  
+
+### 7. Offline-Funktionalität
+- Als Wanderer möchte ich die letzten Hotspots auch offline sehen können, damit ich auch ohne Internet abgesichert bin.  
+- Als Nutzer möchte ich meine Zeckenmeldungen offline speichern und später hochladen, damit ich keine Daten verliere.  
+- Als Nutzer möchte ich eine klare Meldung erhalten, wenn keine Live-Daten verfügbar sind, damit ich nicht in falscher Sicherheit bin.  
+
+### 8. Wartbarkeit & Erweiterbarkeit
+- Als Entwickler möchte ich den Quellcode modular aufbauen, damit ich später neue Features (z. B. Tiermeldungen) einfach ergänzen kann.  
+- Als Projektteam möchte ich modulare APIs nutzen, damit wir flexibel weitere Datenquellen (Karten, Wetter, Gesundheitsinfos) einbinden können.  
+- Als Nutzer möchte ich, dass Updates ohne Datenverlust eingespielt werden, damit meine Meldungen sicher bleiben.  
+
+### 9. Monitoring & Erfolgsmessung
+- Als Projektleiter möchte ich ein Analytics-Dashboard, damit ich sehe, wie viele aktive Nutzer und Meldungen es gibt.  
+- Als Projektteam möchten wir, dass die App mindestens 1.000 aktive Nutzer im ersten Jahr erreicht, damit sich der Nutzen zeigt.  
+- Als Nutzer möchte ich anonym Feedback abgeben können (1–5 Sterne + Kommentar), damit meine Meinung zur Verbesserung beiträgt.  
+
+---
+
+## 3. Akzeptanzkriterien für TickOff
 ### 1. Nutzerfreundlichkeit & Mehrsprachigkeit
 - Die App besteht aus genau drei Hauptbuttons in der unteren Navigation:  
   - **Karte** (Standardansicht, zeigt Hotspots)  
@@ -89,9 +161,9 @@
   - Aufrufrate der Erste-Hilfe-Seite  
 - **Projektziel:** Mindestens 1.000 monatlich aktive Nutzer innerhalb des ersten Jahres.  
 - Nutzer können anonym **Feedback** über die App geben (1–5 Sterne + Kommentar).
+---
 
-# SMART-Ziele für TickOff
-
+## 4. SMART-Ziele für TickOff
 ### 1. Nutzerfreundlichkeit & Einfachheit
 - **Spezifisch:** Die App soll für alle Altersgruppen leicht verständlich sein, mit einer Hauptansicht „Karte“ und maximal 2 Unterseiten („Zecke melden“ & „Einstellungen“).  
 - **Messbar:** Mindestens 80% der Testnutzer (junge Erwachsene + Senioren) schaffen es, innerhalb von 1 Minute einen Zeckenfund zu melden.  
@@ -125,9 +197,10 @@
 - **Attraktiv/Erreichbar:** Rekrutierung über Familie, Vereine, Wandergruppen.  
 - **Relevant:** Nur durch Nutzerfeedback lässt sich die App wirklich optimieren.  
 - **Terminiert:** Innerhalb von 3 Monaten nach MVP-Release.  
+---
 
-# Rollenverteilung
-- Tharun: Developer (Frontend)
-- Luca: Developer (Backend)
-- Terence: Tester
-- Sebastian: Product owner, developer
+## 5. Rollenverteilung
+- Tharun: Developer (Frontend)  
+- Luca: Developer (Backend)  
+- Terence: Tester  
+- Sebastian: Product Owner, Developer  
