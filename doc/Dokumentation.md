@@ -84,15 +84,11 @@
 - **80% der Testnutzer** (inkl. Senioren) schaffen es, eine Zeckenmeldung innerhalb von **1 Minute** erfolgreich durchzuführen.  
 - Die **Info-Seite** enthält verständliche, bebilderte Erste-Hilfe-Anleitungen und Präventionstipps.  
 
----
-
 ### 2. Performance & Agilität
 - Die App lädt die **Kartenansicht** in unter **3 Sekunden** auf einem durchschnittlichen Smartphone.  
 - Eine Meldung (inkl. Standortdaten) wird in **maximal 30 Sekunden** in der Datenbank gespeichert und auf der Karte sichtbar.  
 - Die App läuft stabil bei mindestens **1.000 gleichzeitigen Nutzern** ohne Absturz.  
 - Neue Funktionen und Bugfixes können durch einen **agilen Entwicklungsprozess** (z. B. Sprints von 2 Wochen) eingespielt werden.  
-
----
 
 ### 3. Kernfunktionen
 ### Karte
@@ -115,22 +111,16 @@
 - Meldungen werden **anonymisiert gespeichert**.  
 - Datenbank ist **DSGVO-konform**.  
 
----
-
 ### 4. Sicherheit & Datenschutz
 - Standortdaten werden **ausschliesslich** für die Zeckenmeldung verwendet.  
 - Alle Meldungen werden **anonymisiert gespeichert**.  
 - Die App entspricht den Anforderungen der **DSGVO**.  
 - Nutzer können in den Einstellungen die **Standortfreigabe jederzeit deaktivieren**.  
 
----
-
 ### 5. Pilot-Testing & Feedback
 - Vor dem offiziellen Launch wird ein Pilot-Test mit mindestens **20 Personen durchgeführt (inkl. Senioren, Jugendlichen, Hundebesitzern).  
 - Es werden mindestens 50 konkrete Feedbackpunkte dokumentiert.  
 - Die häufigsten 5 Probleme aus dem Feedback sind vor Launch behoben.  
-
---- 
 
 ### 6. Usability & Barrierefreiheit
 - Die Schriftgrösse ist skalierbar (oder an das System angepasst).
@@ -138,21 +128,15 @@
 - Die App erfüllt WCAG-Standards (z. B. Farbkontrast für Menschen mit Sehschwäche).  
 - Ein einfacher Onboarding-Screen erklärt beim ersten Start in 3 Schritten, wie die App funktioniert.  
 
----
-
 ### 7. Offline-Funktionalität
 - Die Karte bleibt auch **offline sichtbar**, zumindest mit den letzten geladenen Hotspots.  
 - Zeckenmeldungen können **offline gespeichert** und beim nächsten Internetzugang hochgeladen werden.  
 - Nutzer erhalten einen **Hinweis**, wenn sie ohne Internet keine Live-Daten sehen.  
 
----
-
 ### 8. Wartbarkeit & Erweiterbarkeit
 - Der **Quellcode** ist so strukturiert, dass neue Sprachen oder zusätzliche Features (z. B. Tiermeldungen) ohne komplette Neuentwicklung ergänzt werden können.  
 - Die App verwendet **modulare APIs**.  
 - **Updates** können ohne Datenverlust eingespielt werden.  
-
----
 
 ### 9. Monitoring & Erfolgsmessung
 - Es gibt ein **Analytics-Dashboard** (z. B. Firebase), das anzeigt:  
@@ -171,8 +155,6 @@
 - **Relevant:** Einfache Bedienung = höhere Akzeptanz bei älteren Nutzern.  
 - **Terminiert:** Erreichen bis zur Beta-Version (6 Monate nach Projektstart).  
 
----
-
 ### 2. Mehrsprachigkeit & Inklusion
 - **Spezifisch:** Die App wird in mindestens 3 Sprachen angeboten (Deutsch, Englisch, Französisch), später optional Italienisch.  
 - **Messbar:** Alle Kernfunktionen (Karte, Meldung, Einstellungen) sind sprachlich übersetzt und werden im Usability-Test von Muttersprachlern verstanden.  
@@ -180,16 +162,12 @@
 - **Relevant:** Touristen (wie bei der Persona „Tourismus“) sollen die App ebenfalls nutzen können.  
 - **Terminiert:** Bis zum offiziellen Launch (12 Monate nach Projektstart).  
 
----
-
 ### 3. Community & Datenqualität
 - **Spezifisch:** Aufbau einer Datenbasis durch Nutzerberichte (Crowdsourcing).  
 - **Messbar:** Mindestens 500 Zeckenmeldungen in der ersten Saison (Mai–September/Oktober) durch Nutzer.  
 - **Attraktiv/Erreichbar:** Mit Push-Benachrichtigungen („Warst du heute draussen? Hast du eine Zecke gesehen?“) und einfacher Reporting-Funktion.  
 - **Relevant:** Ohne Daten keine verlässliche Risikokarte → Kernfunktion.  
 - **Terminiert:** Innerhalb der ersten 5 Monate nach Launch.   
-
----
 
 ### 4. Pilot-Testing & Feedback
 - **Spezifisch:** Durchführung eines Pilot-Tests mit mindestens 20 Personen (darunter Senioren, Jugendliche und Hundebesitzer).  
@@ -238,5 +216,9 @@
 - Empfiehlt die App an Freunde oder Eltern anderer Kinder.  
 **Bedürfnis:** Verlässlichkeit & Community-Gefühl  
 
+### Das Angebot
+TickOff ist eine mobile App, die Wanderern, Touristen, Familien und Hundebesitzern hilft, Zeckenrisiken frühzeitig zu erkennen und sicher zu handeln. Die App zeigt aktuelle Zecken-Hotspots auf einer Karte, ermöglicht das einfache Melden eigener Funde, bietet mehrsprachige Erste-Hilfe- und Präventionstipps und funktioniert auch offline. Durch Community-Daten entsteht ein verlässliches Frühwarnsystem, das Gesundheit schützt und Outdoor-Aktivitäten in der Schweiz sicherer macht.
 
+### Schlagzeile
+„Ein Klick. Kein Tick.“
 
