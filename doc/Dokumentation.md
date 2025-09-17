@@ -203,4 +203,40 @@
 - Tharun: Developer (Frontend)  
 - Luca: Developer (Backend)  
 - Terence: Tester  
-- Sebastian: Product Owner, Developer  
+- Sebastian: Product Owner, Developer
+
+---
+
+## 6. Konzept
+
+### Customer Journey für TickOff
+
+#### 1. Awareness
+- Nutzer hört von FSME/Borreliose in den Medien oder durch Arzt/Schule.  
+- Entdeckt die App im App Store oder durch Empfehlungen.  
+**Bedürfnis:** Information & Prävention  
+
+#### 2. Onboarding
+- Erste App-Öffnung mit kurzer Erklärung, warum Zeckenkontrolle wichtig ist.  
+- Option: Push-Erinnerungen aktivieren.  
+**Bedürfnis:** Einfachheit, kein Overload  
+
+#### 3. Erste Nutzung (Zeckenfund)
+- Nutzer trägt einen Zeckenbiss ein, macht ein Foto.  
+- Sieht sofort: Terminplan für Nachkontrollen + Tipps.  
+**Bedürfnis:** Schnell & zuverlässig reagieren können  
+
+#### 4. Laufende Nutzung (Prevention & Monitoring)
+- Nutzer checkt Karte vor einer Wanderung.  
+- Bekommt Tipps (z. B. Kleidung, Schutzmittel).  
+- Erinnerung an Kontrolle nach Biss.  
+**Bedürfnis:** Begleitung im Alltag  
+
+#### 5. Langfristige Bindung
+- Nutzer fühlt Sicherheit und vertraut der App.  
+- Teilt eigene Zeckenmeldungen (Community-Daten).  
+- Empfiehlt die App an Freunde oder Eltern anderer Kinder.  
+**Bedürfnis:** Verlässlichkeit & Community-Gefühl  
+
+
+
