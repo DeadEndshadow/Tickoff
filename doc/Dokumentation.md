@@ -234,6 +234,34 @@ TickOff hat die Möglichkeit mit mehreren Partner zusammenarbeiten:
 **Kostenblöcke:**
 - Betrieb: Monatlich. Die sind relativ Fix da der Betrieb sowieso laufen muss. 
 - Werbung: Die Kosten für die Werbung fallen erst an sofern die Applikation stabil läuft. Bei den Werbungen hat man einen kleinen Spielraum. 
-- Kollaboration: Einmahl/Monatlich. Hier ist es auch Möglich mit den Kosten zu spielen aber nicht so gross wie bei den Werbungen. 
+- Kollaboration: Einmahl/Monatlich. Hier ist es auch Möglich mit den Kosten zu spielen aber nicht so gross wie bei den Werbungen.
+
+### Einnahmen
+
+#### 1. Freemium-Modell (Basis kostenlos, Premium mit Zusatzfunktionen)
+- **Kostenlos:** Karte, Zeckenmeldung, Warnungen, Erste-Hilfe-Tipps.  
+- **Premium (CHF 1.99/Monat):**
+  - Detaillierte Risikokarten (nach Region, Saison, Höhe).  
+  - Persönliche Erinnerungen & Analyse der Aktivitäten.  
+  - Offline-Modus für ganze Kantone.  
+  - Keine Werbung.  
+Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.  
+
+#### 2. Prepaid-Funktion / In-App-Käufe
+- **Kurzzeit-Pass für Feriengäste** (z. B. *„Tourist Pass 7 Tage – CHF 2.00“*).  
+- Ideal für internationale Nutzer, die keine dauerhafte Appbindung wollen.  
+- Aktiviert Premiumfunktionen für die Dauer des Aufenthalts.  
+
+#### 3. Partnerschaften & Sponsoring
+- Kooperationen mit **Versicherungen (z. B. Krankenkassen)**, **Tourismusbüros** oder **Outdoor-Marken**.  
+- Diese Partner zahlen, um in der App präsent zu sein oder **anonymisierte Daten** zu erhalten (z. B. Zeckendichte-Statistiken).  
+- **Beispiele:**
+  - Apothekenwerbung: *„Zeckenschutzmittel jetzt erhältlich bei XY.“*  
+  - Tourismusbüros: *„Willkommen in der zeckenarmen Region Gstaad.“*  
+
+#### 4. Werbung (dezent & thematisch passend)
+- Nur bei der **kostenlosen Version** sichtbar.  
+- **Beispiele:** Zeckenschutzmittel, Outdoor-Kleidung, Apotheken, Reiseversicherungen.  
+- Einnahmen über **Klicks oder Impressionen (CPM/CPC)**.  
 
 
