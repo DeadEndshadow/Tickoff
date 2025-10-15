@@ -187,6 +187,9 @@
 
 ## 6. Konzept
 
+### Schlagzeile
+„Ein Klick. Kein Tick.“
+
 ### Customer Journey für TickOff
 
 #### 1. Awareness
@@ -219,6 +222,18 @@
 ### Das Angebot
 TickOff ist eine mobile App, die Wanderern, Touristen, Familien und Hundebesitzern hilft, Zeckenrisiken frühzeitig zu erkennen und sicher zu handeln. Die App zeigt aktuelle Zecken-Hotspots auf einer Karte, ermöglicht das einfache Melden eigener Funde, bietet mehrsprachige Erste-Hilfe- und Präventionstipps und funktioniert auch offline. Durch Community-Daten entsteht ein verlässliches Frühwarnsystem, das Gesundheit schützt und Outdoor-Aktivitäten in der Schweiz sicherer macht.
 
-### Schlagzeile
-„Ein Klick. Kein Tick.“
+### Zusammenarbeit
+TickOff hat die Möglichkeit mit mehreren Partner zusammenarbeiten:
+- Inselspital
+- Apotheke
+- Bund
+- Sportgeschäft
+- Reise/Wandertourismus Büro
+
+### Kosten
+**Kostenblöcke:**
+- Betrieb: Monatlich. Die sind relativ Fix da der Betrieb sowieso laufen muss. 
+- Werbung: Die Kosten für die Werbung fallen erst an sofern die Applikation stabil läuft. Bei den Werbungen hat man einen kleinen Spielraum. 
+- Kollaboration: Einmahl/Monatlich. Hier ist es auch Möglich mit den Kosten zu spielen aber nicht so gross wie bei den Werbungen. 
+
 
