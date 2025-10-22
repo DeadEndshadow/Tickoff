@@ -50,10 +50,10 @@ und stellt sicher, dass alle Teammitglieder identische Entwicklungsbedingungen h
 | Phase | Zeitraum | Ziele |
 |-------|-----------|-------|
 | **Planung & Design** | Monat 1–2 | UX/UI-Konzept, technische Architektur, Datenschema |
-| **Entwicklung MVP** | Monat 3–5 | Kartenansicht, Zeckenmeldung, Mehrsprachigkeit |
-| **Beta-Test & Feedback** | Monat 6–7 | Pilotversuch mit 20 Testnutzern |
-| **Optimierung & Launch** | Monat 8–9 | Bugfixes, Offline-Modus, App Store Release |
-| **Wartung & Updates** | Ab Monat 10 | Monitoring, neue Features, Partnerintegration |
+| **Entwicklung MVP** | Monat 3 | Kartenansicht, Zeckenmeldung, Mehrsprachigkeit |
+| **Beta-Test & Feedback** | Monat 4 | Pilotversuch mit 20 Testnutzern |
+| **Optimierung & Launch** | Monat 4-5 | Bugfixes, Offline-Modus, App Store Release |
+| **Wartung & Updates** | Ab Monat 5 | Monitoring, neue Features, Partnerintegration |
 
 ---
 
@@ -91,19 +91,7 @@ und stellt sicher, dass alle Teammitglieder identische Entwicklungsbedingungen h
 
 ---
 
-### 6. Zeitplan (übersicht)
-
-| Meilenstein | Termin | Beschreibung |
-|--------------|---------|--------------|
-| Konzept & Design abgeschlossen | Monat 2 | UI-Design, Datenmodell fertig |
-| MVP fertig | Monat 5 | Erste funktionsfähige Version |
-| Beta-Test abgeschlossen | Monat 7 | 20 Testnutzer, Feedback integriert |
-| App-Launch | Monat 9 | Veröffentlichung in App Stores |
-| Erste Partnerschaften aktiv | Monat 10 | Kooperationen mit Apotheken & Tourismusstellen |
-
----
-
-### 7. Risiken & Massnahmen
+### 6. Risiken & Massnahmen
 
 | Risiko | Beschreibung | Gegenmassnahme |
 |--------|---------------|----------------|
@@ -115,7 +103,7 @@ und stellt sicher, dass alle Teammitglieder identische Entwicklungsbedingungen h
 
 ---
 
-### 8. Erfolgskriterien
+### 7. Erfolgskriterien
 
 - App läuft stabil auf Android & iOS.  
 - 80% der Testnutzer bewerten die App mit ≥ 4/5 Sternen.  
