@@ -41,7 +41,7 @@ TickOff ist eine mobile Applikation, die Nutzer in der Schweiz dabei unterstütz
 
 ### Architekturübersicht
 
-XYZ
+![Systemarchitektur von TickOff](doc/data/Architektur-Diagramm.jpg)
 
 Die App verwendet eine Client-Cloud-Architektur, bei der die Geschäftslogik hauptsächlich auf dem Client und einfache Logik im Backend (Firebase Functions) läuft.
 
