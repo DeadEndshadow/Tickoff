@@ -1,119 +1,191 @@
-## Realisierungskonzept
+# Realisierungskonzept
 
-### Ziel
-Die mobile Applikation **TickOff** soll Wanderern, Touristen und Outdoor-Enthusiasten helfen, Zeckenrisiken in der Schweiz frühzeitig zu erkennen, zu melden und sich besser zu schützen.  
-Das Realisierungskonzept beschreibt den technischen Aufbau, den Projektablauf, die Zuständigkeiten und die verwendeten Tools.
+## 1. Ziel der Applikation
+TickOff ist eine mobile Applikation, die Nutzer in der Schweiz dabei unterstützt, Zeckenrisiken zu erkennen, Zeckenfunde zu melden und Präventionsmassnahmen zu ergreifen.  
 
----
-
-### 1. Technische Umsetzung
-
-**Programmiersprache & Framework:**  
-- Flutter (Dart) für Cross-Platform-Entwicklung (Android, iOS, Web).  
-- Ermöglicht eine einheitliche Codebasis und schnelle Weiterentwicklung.  
-
-**Backend & Datenbank:**  
-- Firebase (Cloud Firestore) für Nutzerdaten, Meldungen und Authentifizierung.  
-- Firebase Cloud Functions für Push-Benachrichtigungen und Hotspot-Auswertung.  
-- Geodaten-Integration über **Google Maps API**.  
-
-**Hosting & Infrastruktur:**  
-- Firebase Hosting für App-Backend und statische Daten.  
-- GitHub als Versionsverwaltung, inklusive CI/CD-Pipeline.  
-
-**Datenschutz & Sicherheit:**  
-- Standortdaten werden anonymisiert gespeichert.  
-- DSGVO-konforme Datenverarbeitung.  
-- Option zur Deaktivierung der Standortfreigabe in den App-Einstellungen.  
-
-### 1.1 Einrichten der Entwicklungs- und Laufzeitumgebung
-
-Für die Entwicklung von **TickOff** wird eine einheitliche Entwicklungsumgebung eingerichtet:
-- **Flutter SDK (3.19.0 oder neuer)** auf macOS und Windows  
-- **Android Studio** bzw. **Visual Studio Code** als IDE mit Flutter/Dart-Plugins  
-- **GitHub Repository** zur Versionskontrolle und Teamarbeit  
-- **GitHub Actions** als CI/CD-Pipeline (automatische Tests, Builds)  
-- **Firebase Console** als Laufzeitumgebung für Datenbank, Hosting und Authentifizierung  
-
-Die Umgebung ermöglicht plattformübergreifende Entwicklung (Android, iOS, Web)  
-und stellt sicher, dass alle Teammitglieder identische Entwicklungsbedingungen haben.
+### Ziele:
+- **Gesundheitsschutz:** Risiko von FSME- und Borreliose-Infektionen durch Aufklärung und Warnsystem verringern.  
+- **Community-Datenbank:** Aufbau einer anonymisierten Karte mit Zecken-Hotspots durch Nutzerbeiträge.  
+- **Mehrsprachigkeit:** Deutsch, Englisch und Französisch, um Touristen und Einheimische gleichermassen anzusprechen.  
+- **Einfache Nutzung:** Fokus auf eine minimalistische, verständliche Benutzeroberfläche (UX-first).  
 
 ---
 
-### 2. Entwicklungsprozess
+## 2. Komponenten & Architektur
 
-**Vorgehensmodell:**  
-- Agiles Vorgehen nach **Scrum** mit zweiwöchigen Sprints.  
-- Wöchentliche Teammeetings und Sprint-Reviews.  
+### Hauptkomponenten
+1. **Frontend (Mobile App)**
+   - Framework: Flutter (Dart)
+   - Plattformen: iOS, Android, Web (optional)
+   - Hauptfunktionen:
+     - Zeckenkarte (Google Maps API)
+     - Zecke melden (mit Standort & Zeit)
+     - Einstellungen & Info (Sprache, Erste Hilfe, Datenschutz)
 
-**Phasenübersicht:**
-| Phase | Zeitraum | Ziele |
-|-------|-----------|-------|
-| **Planung & Design** | Monat 1–2 | UX/UI-Konzept, technische Architektur, Datenschema |
-| **Entwicklung MVP** | Monat 3 | Kartenansicht, Zeckenmeldung, Mehrsprachigkeit |
-| **Beta-Test & Feedback** | Monat 4 | Pilotversuch mit 20 Testnutzern |
-| **Optimierung & Launch** | Monat 4-5 | Bugfixes, Offline-Modus, App Store Release |
-| **Wartung & Updates** | Ab Monat 5 | Monitoring, neue Features, Partnerintegration |
+2. **Backend**
+   - Cloud-Lösung: Firebase
+   - Funktionen:
+     - Speicherung & Verwaltung von Zeckenmeldungen (Firestore DB)
+     - Authentifizierung & Autorisierung
+     - Push-Benachrichtigungen
+     - Analyse & Monitoring (Firebase Analytics)
 
----
+3. **API-Integrationen**
+   - **Google Maps API:** Kartendarstellung & Geokoordinaten  
+   - **Health APIs / Behördenfeeds:** Zeckengefahrenzonen (optional)  
+   - **Firebase Cloud Messaging:** Push Notifications  
 
-### 3. Rollen & Verantwortlichkeiten
+4. **Admin Dashboard (optional, Web-basiert)**
+   - Übersicht über Meldungen & Heatmaps  
+   - Zugriff auf Statistiken & Nutzerfeedback  
 
-| Teammitglied | Rolle | Aufgaben |
-|---------------|--------|----------|
-| **Sebastian** | Product Owner / Developer | Projektleitung, Kommunikation, Feature-Planung |
-| **Tharun** | Frontend Developer | UI/UX, Kartenansicht, Benutzerinteraktion |
-| **Luca** | Backend Developer | Firebase, API-Integration, Datenstruktur |
-| **Terence** | Tester | Testfälle, Feedbackauswertung, Qualitätssicherung |
-| **Team** | Zusammenarbeit | Wöchentliche Reviews, Code-Reviews, Bugfixes |
+### Architekturübersicht
 
----
+XYZ
 
-### 4. Tools & Infrastruktur
-
-| Bereich | Tool | Zweck |
-|----------|------|-------|
-| Versionskontrolle | GitHub | Repository, Branching, Pull Requests |
-| CI/CD | GitHub Actions | Automatische Tests & Builds |
-| Projektmanagement | Notion / Trello | Aufgabenplanung & Fortschrittsübersicht |
-| Kommunikation | Discord / Teams | Teamkoordination |
-| Design | Figma | UI-Prototypen |
-| Datenbank & Auth | Firebase | Speicherung, Authentifizierung, Hosting |
+Die App verwendet eine Client-Cloud-Architektur, bei der die Geschäftslogik hauptsächlich auf dem Client und einfache Logik im Backend (Firebase Functions) läuft.
 
 ---
 
-### 5. Qualitätssicherung
+## 3. Technologiestack
 
-- **Code Reviews:** Jeder Merge in den Main-Branch erfolgt nur nach Peer-Review.  
-- **Automatische Tests:** GitHub Actions führt bei jedem Push `flutter test` aus.  
-- **Usability Tests:** Durch reale Testnutzer (Senioren, Wanderer, Touristen).  
-- **Monitoring:** Firebase Analytics zur Auswertung von Nutzung & Stabilität.  
+| Schicht | Technologie | Beschreibung |
+|----------|--------------|---------------|
+| Frontend | Flutter (Dart) | Cross-Plattform Framework |
+| Backend | Firebase | NoSQL-DB, Auth, Functions, Hosting |
+| Authentifizierung | Firebase Auth + OAuth2 | Anmeldung via Google/Apple |
+| Kartenservice | Google Maps API | Darstellung von Zecken-Hotspots |
+| Analyse | Firebase Analytics | Nutzerverhalten & Datenfluss |
+| Versionskontrolle | GitHub | Codeverwaltung & CI/CD |
+| Pipeline | GitHub Actions | Build, Test, Deployment |
 
 ---
 
-### 6. Risiken & Massnahmen
+## 4. Datenmodell & Datenfluss
+
+XYZ
+
+### Datenfluss
+1. Nutzer öffnet App → Standortfreigabe aktivieren.  
+2. App ruft Google Maps + vorhandene Meldungen aus Firestore ab.  
+3. Nutzer meldet eine Zecke → Daten anonymisiert in Firestore gespeichert.  
+4. Backend aktualisiert Hotspot-Karte in Echtzeit.  
+5. Push-Notification an Nutzer in betroffenen Regionen.  
+
+### Datenschutz (DSGVO & ISDS)
+- Keine personenbezogenen Daten werden gespeichert.  
+- Standortdaten werden **nur bei aktiver Meldung** erfasst.  
+- Daten werden verschlüsselt (AES-256, HTTPS).  
+- Nutzer kann Standortfreigabe jederzeit deaktivieren.  
+- Hosting in EU/CH-konformen Rechenzentren (Firebase EU-Region).  
+
+---
+
+## 5. Authentifizierung & Sicherheit
+
+### Authentifizierung & Autorisierung
+- Anonyme Anmeldung (Firebase Auth Anonymous) oder Google/Apple Login (OAuth2).  
+- Keine Pflichtregistrierung erforderlich, um Zecken zu melden.  
+- Zugriffskontrolle über Firebase Security Rules.  
+
+### Datenverschlüsselung
+- **In Ruhe (at rest):** AES-256 Standard in Firestore.  
+- **Während Übertragung:** TLS 1.3 (HTTPS).  
+
+### Sicherheitsrichtlinien
+- Regelmässige Penetrationstests (jährlich).  
+- Security Review bei jedem Major Release.  
+- Automatisierte Sicherheitsprüfungen über GitHub Dependabot.  
+- Backup alle 24 Stunden.  
+- Notfallplan (Disaster Recovery) über Firebase Export & GitHub Backup.  
+
+---
+
+## 6. UI/UX Design
+
+### Interface-Skizze (Beschreibung)
+- **Startansicht:** Karte mit farbigen Hotspots (Grün, Orange, Rot).  
+- **Melden-Button:** zentriert am unteren Rand.  
+- **Einstellungen:** Zugriff auf Sprache, Tipps, Datenschutz.  
+- **Info-Seite:** Erste-Hilfe-Anleitung mit Icons & Bildern.  
+
+### Gestaltung
+- **Farben:**  
+  - Grün (#4CAF50): Sicherheit, Natur  
+  - Rot (#F44336): Gefahr (Hotspot)  
+  - Weiss & Grau: Neutralität und Lesbarkeit  
+
+- **Typografie:**  
+  - Sans Serif (Roboto / Open Sans)  
+  - Klare Hierarchie (H1 für Titel, H2 für Untertitel, Body für Text)  
+
+---
+
+## 7. Projektorganisation & Ressourcen
+
+| Rolle | Name | Aufgabe |
+|--------|------|----------|
+| Product Owner | Sebastian | Konzept, Koordination |
+| Frontend-Entwickler | Tharun | Flutter UI & Logik |
+| Backend-Entwickler | Luca | Firebase & API |
+| Tester | Terence | QA, Bugreporting |
+| Designer | Team gemeinsam | UI/UX, Icons, Layout |
+
+---
+
+## 8. Zeitplan & Meilensteine
+
+| Phase | Zeitraum | Meilenstein |
+|--------|-----------|-------------|
+| Konzept & Design | Monat 1–2 | Wireframes, Architektur |
+| Entwicklung MVP | Monat 3–5 | Karte, Meldung, DB-Anbindung |
+| Testphase (Pilot) | Monat 6 | 20 Testnutzer, Feedback |
+| Beta-Launch | Monat 7–8 | Mehrsprachigkeit, Stabilität |
+| Öffentliches Release | Monat 9 | App Store Veröffentlichung |
+| Wartung & Updates | Ab Monat 10 | Regelmässige Feature-Updates |
+
+---
+
+## 9. Risiken & Herausforderungen
 
 | Risiko | Beschreibung | Gegenmassnahme |
-|--------|---------------|----------------|
-| **Technische Komplexität** | API-Fehler, GPS-Genauigkeit | Frühzeitige Tests & Fallback-Mechanismen |
-| **Datenschutzprobleme** | Standortdaten & DSGVO | Klare Einwilligung & Anonymisierung |
-| **Fehlende Nutzerakzeptanz** | App wird nicht genutzt | Beta-Tests & gezieltes Feedback |
-| **Finanzierungsengpass** | Sponsoren oder Einnahmen fehlen | Freemium-Modell + Tourismuspartner |
-| **Überlastung der Infrastruktur** | Viele gleichzeitige Nutzer | Skalierung über Firebase & Cloud-Funktionen |
+|--------|--------------|----------------|
+| Technologische Komplexität | API oder Firebase-Limits | Skalierung planen, Caching |
+| Datenschutzprobleme | Standortdaten sensibel | DSGVO-konforme Speicherung |
+| Mangel an Testnutzern | Wenig Feedback | Kooperation mit Schulen, Vereinen |
+| Ressourcenknappheit | Zeitaufwand unterschätzt | Agile Planung & Priorisierung |
+| Finanzierung | Anfangs ohne Einnahmen | Sponsoring & Freemiummodell |
 
 ---
 
-### 7. Erfolgskriterien
+## 10. Wartungsplan
 
-- App läuft stabil auf Android & iOS.  
-- 80% der Testnutzer bewerten die App mit ≥ 4/5 Sternen.  
-- Mindestens 1’000 aktive Nutzer innerhalb des ersten Jahres.  
-- 500 Zeckenmeldungen in der ersten Saison.  
-- Mindestens 3 aktive Partner (Apotheke, Tourismus, Versicherung).  
+- Monatliche Funktionsupdates und Bugfixes.  
+- Jährliche Sicherheitsüberprüfung.  
+- Monitoring über Firebase Analytics.  
+- Feedback-System im App-Menü integriert.  
+- Versionierung via GitHub (Release Branches).  
 
 ---
 
-### Fazit
-Das Realisierungskonzept von **TickOff** setzt auf moderne, skalierbare und benutzerfreundliche Technologien.  
-Durch agile Entwicklung, eine klare Rollenverteilung und gezielte Partnerintegration wird sichergestellt,  
-dass die App zuverlässig funktioniert, leicht erweiterbar bleibt und echten Mehrwert für Outdoor-Begeisterte bietet.
+## 11. Supportstruktur
+
+- **Support-Kanal:** In-App Formular (Feedback).  
+- **SLA (Service-Level-Agreement)-Ziel:** Antwort innerhalb von 48 Stunden.  
+- **On-Call-Support:** Nur bei kritischen Ausfällen (über Firebase Alerts).  
+- **Monitoring:** Automatisierte Fehlerlogs (Crashlytics).  
+
+---
+
+## 12. Release-Management
+
+- **Release-Zyklus:** alle 2 Monate (Minor), alle 6 Monate (Major).  
+- **Build & Deploy:** automatisiert über GitHub Actions CI/CD.  
+- **Beta-Version:** über TestFlight (iOS) und Google Play Console (Android).  
+- **Versionierung:** Semantic Versioning (v1.0.0).  
+
+---
+
+## Fazit
+Das Realisierungskonzept von *TickOff* kombiniert eine einfache, zugängliche App-Architektur mit hohen Datenschutz- und Sicherheitsstandards.  
+Durch den modularen Aufbau, den Einsatz von Flutter und Firebase sowie eine klare Projektorganisation ist das Projekt technisch, organisatorisch und wirtschaftlich realisierbar.
