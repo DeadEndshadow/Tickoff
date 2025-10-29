@@ -63,7 +63,7 @@ Die App verwendet eine Client-Cloud-Architektur, bei der die Geschäftslogik hau
 
 ## 4. Datenmodell & Datenfluss
 
-XYZ
+![Systemarchitektur von TickOff](public/Entitäten.jpg)
 
 ### Datenfluss
 1. Nutzer öffnet App → Standortfreigabe aktivieren.  
