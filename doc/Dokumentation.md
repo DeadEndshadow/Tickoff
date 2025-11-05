@@ -264,4 +264,61 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 - **Beispiele:** Zeckenschutzmittel, Outdoor-Kleidung, Apotheken, Reiseversicherungen.  
 - Einnahmen über **Klicks oder Impressionen (CPM/CPC)**.  
 
+# Kompetenz: Analysieren der Abhängigkeiten der Komponenten in Bezug auf den Auslieferungsprozess  
+**Projekt:** TickOff – Zeckenpräventions-App  
+
+---
+
+## 🔹 1. Einstieg – Was ist TickOff?
+- Mobile App zur Zeckenprävention  
+- Zielgruppen: Wanderer, Familien, Hundebesitzer  
+- Funktionen:  
+  - Zecken-Hotspots auf Karte  
+  - Zeckenfunde melden  
+  - Mehrsprachig (DE/EN/FR)  
+  - Offline-Modus verfügbar  
+- Ziel: Sicherheit & Prävention bei Outdoor-Aktivitäten  
+
+---
+
+## 🔹 2. Komponenten & Abhängigkeiten
+- **Frontend:** Flutter-App (UI, Nutzerinteraktion)  
+- **Backend:** Firebase (Datenbank, Authentifizierung, Push-Nachrichten)  
+- **API:** Google Maps API (Kartendarstellung, Standortdaten)  
+- **Abhängigkeiten:**  
+  - Karte funktioniert nur bei stabiler Firebase-Verbindung  
+  - Änderungen an Datenstruktur → Auswirkungen auf Karte & Pushs  
+  - Echtzeitdaten & Meldungen abhängig von Backend-Verfügbarkeit  
+
+---
+
+## 🔹 3. Auslieferungsprozess
+- **Branch-Struktur:** `test`, `develop`, `main`  
+- **Testebenen:**  
+  - Feature-Tests → Integrationstests → Systemtests  
+- **Release-Ablauf:**  
+  - Tests abgeschlossen → Freigabe → App Store Deployment  
+- **Ziel:** Keine Fehler durch Komponenten-Abhängigkeiten  
+- **Phased Release:** zuerst Beta, dann Vollrelease  
+
+---
+
+## 🔹 4. Eigenleistung / Beitrag
+- Schwerpunkt: **Frontend-Entwicklung**  
+- Stabilität bei API-/Datenproblemen (z. B. GPS-Prüfung, Fehlermeldungen)  
+- Analyse der Abhängigkeiten im **Testkonzept**  
+- Mitgearbeitet an:  
+  - Integrationstests (Frontend ↔ Firebase ↔ Maps API)  
+  - Strukturierung des Release-Prozesses  
+
+---
+
+## 🔹 5. Fazit
+- Verständnis für Abhängigkeiten zwischen Komponenten  
+- Wichtigkeit von Tests & Versionierung erkannt  
+- Stabiler Auslieferungsprozess = funktionierende App  
+- Ergebnis: TickOff ist zuverlässig & sicher für Nutzer  
+
+---
+
 
