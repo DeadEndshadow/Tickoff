@@ -264,27 +264,12 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 - **Beispiele:** Zeckenschutzmittel, Outdoor-Kleidung, Apotheken, Reiseversicherungen.  
 - Einnahmen über **Klicks oder Impressionen (CPM/CPC)**.  
 
-# Kompetenz: Analysieren der Abhängigkeiten der Komponenten in Bezug auf den Auslieferungsprozess  
-**Projekt:** TickOff – Zeckenpräventions-App  
+### Analysieren der Abhängigkeiten der Komponenten in Bezug auf den Auslieferungsprozess  
 
----
-
-## 🔹 1. Einstieg – Was ist TickOff?
-- Mobile App zur Zeckenprävention  
-- Zielgruppen: Wanderer, Familien, Hundebesitzer  
-- Funktionen:  
-  - Zecken-Hotspots auf Karte  
-  - Zeckenfunde melden  
-  - Mehrsprachig (DE/EN/FR)  
-  - Offline-Modus verfügbar  
-- Ziel: Sicherheit & Prävention bei Outdoor-Aktivitäten  
-
----
-
-## 🔹 2. Komponenten & Abhängigkeiten
+## 1. Komponenten & Abhängigkeiten
 - **Frontend:** Flutter-App (UI, Nutzerinteraktion)  
 - **Backend:** Firebase (Datenbank, Authentifizierung, Push-Nachrichten)  
-- **API:** Google Maps API (Kartendarstellung, Standortdaten)  
+- **API:** OpenStreetMap API (Kartendarstellung, Standortdaten)  
 - **Abhängigkeiten:**  
   - Karte funktioniert nur bei stabiler Firebase-Verbindung  
   - Änderungen an Datenstruktur → Auswirkungen auf Karte & Pushs  
@@ -292,7 +277,7 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 
 ---
 
-## 🔹 3. Auslieferungsprozess
+## 2. Auslieferungsprozess
 - **Branch-Struktur:** `test`, `develop`, `main`  
 - **Testebenen:**  
   - Feature-Tests → Integrationstests → Systemtests  
@@ -303,7 +288,7 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 
 ---
 
-## 🔹 4. Eigenleistung / Beitrag
+## 3. Eigenleistung / Beitrag
 - Schwerpunkt: **Frontend-Entwicklung**  
 - Stabilität bei API-/Datenproblemen (z. B. GPS-Prüfung, Fehlermeldungen)  
 - Analyse der Abhängigkeiten im **Testkonzept**  
@@ -313,12 +298,11 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 
 ---
 
-## 🔹 5. Fazit
-- Verständnis für Abhängigkeiten zwischen Komponenten  
-- Wichtigkeit von Tests & Versionierung erkannt  
-- Stabiler Auslieferungsprozess = funktionierende App  
-- Ergebnis: TickOff ist zuverlässig & sicher für Nutzer  
+## 4. Strategien zur Minimierung von Abhängigkeitsproblemen
+- **Mock-Services:** Firebase und OpenStreetMap werden im Testumfeld durch Mocks ersetzt, um Ausfälle zu simulieren.  
+- **CI/CD-Pipeline:** Automatische Tests in GitHub Actions prüfen nach jedem Commit, ob Firebase- und API-Verbindungen stabil funktionieren.  
+- **Staging-Umgebung:** Änderungen an Datenstruktur oder Authentifizierung werden zuerst in einer Testumgebung überprüft, bevor sie in „main“ gemergt werden.  
+- **Feature Flags:** Neue Funktionen werden schrittweise aktiviert (Phased Rollout), um Fehler frühzeitig zu erkennen.  
 
----
 
 
