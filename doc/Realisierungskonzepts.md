@@ -146,15 +146,32 @@ Die App verwendet eine Client-Cloud-Architektur, bei der die Geschäftslogik hau
 
 ---
 
-## 9. Risiken & Herausforderungen
+## 9. Risikoanalyse 
 
-| Risiko | Beschreibung | Gegenmassnahme |
-|--------|--------------|----------------|
-| Technologische Komplexität | API oder Firebase-Limits | Skalierung planen, Caching |
-| Datenschutzprobleme | Standortdaten sensibel | DSGVO-konforme Speicherung |
-| Mangel an Testnutzern | Wenig Feedback | Kooperation mit Schulen, Vereinen |
-| Ressourcenknappheit | Zeitaufwand unterschätzt | Agile Planung & Priorisierung |
-| Finanzierung | Anfangs ohne Einnahmen | Sponsoring & Freemiummodell |
+# 7. Technische Risikoanalyse
+
+| ID | Risikobeschrieb | Auswirkung | EW | A | RZ | Analyse / Handlung | Massnahme / Erläuterung | Analyse nach Massnahme | EW | A | RZ | Handlung |
+|----|------------------|-------------|----|---|----|--------------------|--------------------------|------------------------|----|---|----|-----------|
+| R1 | **Ausfall von Firebase-Diensten** | App kann keine Daten abrufen oder speichern, wodurch Meldungen verloren gehen oder Karte leer bleibt. | 3 | 3 | 9 | **Risikominderung** | Nutzung von Firebase Status-Monitor, automatisches Backup der Datenbank alle 24h, Failover-System vorbereitet. | | 2 | 2 | 4 | **Risiko wird akzeptiert** |
+| R2 | **Fehlerhafte Karten-API** | Karte wird nicht geladen, Nutzer können keine Hotspots sehen. | 2 | 3 | 6 | **Risikominderung** | Caching letzter Kartenansicht (Offline-Modus), Anzeige eines Warnhinweises mit Offline-Fallback. | | 2 | 2 | 4 | **Risiko wird akzeptiert** |
+| R3 | **Datenleck oder DSGVO-Verstoss** | Verlust von Vertrauen, rechtliche Konsequenzen, Bussgelder. | 2 | 4 | 8 | **Risikominderung** | Speicherung nur anonymisierter Daten, AES-Verschlüsselung, Standort nur temporär. | | 1 | 3 | 3 | **Risiko wird akzeptiert** |
+| R4 | **Ausfall von Teammitgliedern (Krankheit)** | Verzögerung im Entwicklungs- oder Testprozess. | 3 | 2 | 6 | **Risikominderung** | Code wird täglich gepusht (GitHub), alle Dokumentationen sind im Team geteilt. | | 2 | 2 | 4 | **Risiko wird akzeptiert** |
+| R5 | **Fehlerhafte Benutzerakzeptanz (zu komplexe UI)** | Nutzer verstehen App nicht, verwenden sie nicht weiter. | 3 | 3 | 9 | **Risikominderung** | Frühzeitige Usability-Tests mit Testnutzern, UI-Feedback direkt in der App. | | 2 | 2 | 4 | **Risiko wird akzeptiert** |
+| R6 | **Sicherheitslücke im Code oder API-Zugriff** | Manipulation von Daten, unautorisierte Zugriffe möglich. | 2 | 4 | 8 | **Risikominderung** | Code Review, Security Rules in Firebase, automatische Abhängigkeitsprüfung via Dependabot. | | 1 | 3 | 3 | **Risiko wird akzeptiert** |
+| R7 | **Kosten für API oder Hosting steigen stark an** | Betriebskosten steigen, Freemium-Modell wird unrentabel. | 2 | 3 | 6 | **Risikominderung** | Überwachung der API-Nutzung, Wechseloption auf alternative Kartenanbieter. | | 2 | 2 | 4 | **Risiko wird akzeptiert** |
+
+---
+
+## 7.1 Legende
+
+| Kürzel | Bedeutung | Werte |
+|---------|------------|--------|
+| **EW** | Eintrittswahrscheinlichkeit | 1 = kaum vorstellbar · 2 = unwahrscheinlich · 3 = wahrscheinlich · 4 = hohe Wahrscheinlichkeit · 5 = sehr hohe Wahrscheinlichkeit |
+| **A** | Auswirkungsgrad | 1 = unbedeutend · 2 = gering · 3 = erheblich · 4 = kritisch |
+| **RZ** | Risikozahl (EW × A) | 1–3 = Tief · 4–9 = Mittel · 10–20 = Hoch |
+
+
+
 
 ---
 
