@@ -21,7 +21,7 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.3' 
+          flutter-version: '3.35.3'
 
       - name: Install dependencies
         run: flutter pub get
@@ -35,5 +35,8 @@ jobs:
       - name: Build Android APK
         run: flutter build apk --release
 
-      # - name: Build iOS (no codesign)
-      #  run: flutter build ios --no-codesign
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: tickoff-apk
+          path: tickoff/build/app/outputs/flutter-apk/app-release.apk
