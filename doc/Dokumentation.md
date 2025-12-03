@@ -304,5 +304,157 @@ Touristen und Vielwanderer wären bereit, für Sicherheit & Komfort zu zahlen.
 - **Staging-Umgebung:** Änderungen an Datenstruktur oder Authentifizierung werden zuerst in einer Testumgebung überprüft, bevor sie in „main“ gemergt werden.  
 - **Feature Flags:** Neue Funktionen werden schrittweise aktiviert (Phased Rollout), um Fehler frühzeitig zu erkennen.  
 
+---
+
+### CI/CD Pipeline Dokumentation (GitHub Actions)
+
+## 1. Zweck der CI/CD-Pipeline
+
+Die CI/CD-Pipeline automatisiert den gesamten Entwicklungs- und Auslieferungsprozess der TickOff-Applikation. Sie führt automatisch folgende Schritte aus:
+
+- **Code-Analyse (Linting)** – Prüft den Quellcode auf Formatierungs- und Analysefehler.
+- **Automatische Tests** – Führt Unit Tests aus und erstellt einen Coverage-Report.
+- **Build-Prozess** – Erstellt eine Release-APK für Android.
+- **Artifact-Verwaltung** – Speichert die APK und Testresultate als herunterladbare Artefakte.
+- **Deployment-Prozess** – Führt ein Deployment aus, sobald eine Version getaggt wird (z. B. `v1.0.0`).
+
+Damit wird sichergestellt, dass jede Änderung im Code getestet, analysiert, gebaut und bereit zum Deployment ist, ohne manuelle Eingriffe der Entwickler.
+
+## 2. Warum Automatisierung notwendig ist
+
+Die Automatisierung über GitHub Actions bringt mehrere Vorteile:
+
+- **Konsistenz**: Jede Code-Änderung durchläuft denselben validierten Prozess.
+- **Fehlervermeidung**: Manuelle Builds oder Tests entfallen → weniger menschliche Fehler.
+- **Schnellere Entwicklungszyklen**: Entwickler müssen Builds, Tests und Deploys nicht mehr manuell ausführen.
+- **Transparenz**: Jeder Pipeline-Run ist dokumentiert, sichtbar und jederzeit nachvollziehbar.
+- **Qualitätssicherung**: Fehler werden bereits vor dem Deployment erkannt.
+
+Gerade in einem Teamprojekt wie TickOff wird dadurch sichergestellt, dass Beiträge unterschiedlicher Teammitglieder stets stabil integriert werden können.
+
+## 3. Struktur der YAML-Datei
+
+Die Pipeline besteht aus zwei Jobs: `build` und `deploy`.
+
+### a) Trigger
+
+Die Pipeline läuft automatisch bei:
+
+- jedem Push auf `main`
+- jedem Pull Request auf `main`
+- jeder Version-Tag-Erstellung (`v*`)
+
+### b) Environment Variablen (env:)
+
+Global definierte Variablen:
+
+- `FLUTTER_VERSION` → Welche Flutter-Version verwendet wird
+- `WORKDIR` → Arbeitsverzeichnis der App
+- `BUILD_ENV` → Produktionsmodus
+- `MAPS_API_KEY` → API-Schlüssel (aus Secrets)
+
+### c) Build-Job
+
+Enthält folgende Schritte:
+
+1. Code Checkout
+2. Flutter Setup
+3. Dependency-Installation
+4. Linting (dart format + flutter analyze)
+5. Tests (flutter test)
+6. Coverage-Report hochladen
+7. Build APK
+8. APK als Artefakt hochladen
+
+### d) Deployment-Job
+
+Dieser Job wird nur ausgeführt, wenn ein Tag mit `v*` gepusht wird. Er führt folgende Schritte aus:
+
+1. APK aus dem Build-Job herunterladen
+2. "Deployment" ausführen (z. B. später Play Store)
+3. Log-Ausgabe
+
+Diese Struktur trennt klar zwischen Qualitätssicherung (Build) und Release (Deploy).
+
+## 4. Umgang mit Umgebungsvariablen
+
+Die Pipeline nutzt zwei Arten von Variablen:
+
+### a) Globale Environment-Variablen (`env:`)
+
+Beispiele:
+
+```yaml
+env:
+  FLUTTER_VERSION: 3.35.3
+  WORKDIR: tickoff
+  BUILD_ENV: production
+```
+
+Anwendungsfälle:
+
+- Build-Konfiguration (Flutter-Version, Build-Umgebung)
+- Wiederverwendbarkeit innerhalb der Jobs
+- Zentrale Verwaltung statt mehrfacher Code-Duplikation
+
+### b) Sensitive Variablen aus GitHub Secrets
+
+Beispiel:
+
+```yaml
+MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+```
+
+Diese werden benötigt für:
+
+- API-Keys (z. B. Google Maps)
+- Tokens
+- Passwörter
+
+Secrets sind verschlüsselt, nicht einsehbar und werden sicher injectiert.
+
+### c) Nutzung im Build
+
+Der Google Maps API Key wird in die App kompiliert über:
+
+```bash
+flutter build apk --release --dart-define=MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}
+```
+
+Damit erfüllt die Pipeline auch die Anforderung „Umgebungsvariablen für den Betrieb der Software definieren & verwalten".
+
+## 5. Warum Secrets notwendig sind
+
+Die TickOff-App benötigt API-Schlüssel, z. B.:
+
+- Google Maps API
+- Firebase oder andere externe Dienste
+
+Diese Keys dürfen niemals im Code hardcodiert werden. Risiken bei Hardcoding:
+
+- Missbrauch durch Dritte
+- Kostenexplosion durch unerlaubte API-Nutzung
+- Sicherheitsverletzung / DSGVO-Verstoss
+- Kompromittierter Code im öffentlichen GitHub-Repo
+
+Stattdessen werden Secrets sicher im GitHub Repository verwaltet und nur zur Build-Zeit injected.
+
+## 6. Funktionsweise des Deployment-Triggers
+
+Der Deployment-Job enthält folgende Bedingung:
+
+```yaml
+if: startsWith(github.ref, 'refs/tags/v')
+```
+
+Das bedeutet:
+
+- Der Deploy Job startet nur, wenn eine Version erstellt wird → z. B. `git tag v1.0.0` → `git push origin v1.0.0`
+- Dadurch wird verhindert, dass ungetesteter Code automatisch veröffentlicht wird.
+- Versionen sind eindeutig durch Tags definiert.
+- Der Deploy-Job lädt die gebaute APK herunter und führt ein Deployment-Skript aus.
+
+Dies ist Standardpraxis für professionelle Release-Prozesse.
+
 
 
