@@ -97,20 +97,21 @@ Tests müssen folgende Anforderungen abdecken:
 ## Vollständige Blackbox-Testtabelle  
 *(alle User Stories abgedeckt)*
 
-| ID | User Story | Beschreibung | Testdaten | Vorbedingungen | Schritte | Erwartetes Ergebnis |
-|----|------------|--------------|-----------|----------------|----------|---------------------|
-| BB-01 | Hotspot-Karte | Hotspots korrekt anzeigen | GPS-Position Zürich | App installiert | App starten, Karte öffnen | Hotspots erscheinen <3s |
-| BB-02 | Zeckenmeldung | Standort validieren | – | GPS deaktiviert | Meldung erstellen | Fehlermeldung "Standort aktivieren" |
-| BB-03 | Echtzeitdaten | Neuer Hotspot erscheint sofort | Neuer Hotspot im Backend | App offen | Hotspot hinzufügen | Neuer Hotspot erscheint ohne Neustart |
-| BB-04 | Mehrsprachigkeit | Sprache umstellen | – | App gestartet | Einstellungen → FR | UI in Französisch |
-| BB-05 | Push-Warnung | Warnung bei Hotspot betreten | Koordinaten eines Hotspots | GPS aktiv | Hotspot-Gebiet betreten | Push erscheint |
-| BB-06 | Offline-Modus | Hotspots offline | gespeicherte Hotspots | Offline | App starten | Letzte Hotspots sichtbar |
-| BB-07 | Erste-Hilfe-Info | Inhalte anzeigen | – | App gestartet | Erste Hilfe öffnen | Bilder + Texte korrekt |
-| BB-08 | Navigation | Navigation testen | – | App installiert | Menü → Karte → Meldung → Info | Jede Seite erreichbar |
-| BB-09 | Einstellungen | Sprache & Benachrichtigungen ändern | – | App installiert | Einstellungen ändern | App übernimmt Änderungen |
-| BB-10 | DSGVO | Daten anonymisiert | Testuser | Meldung erfassen | Datenbank prüfen | Keine personenbezogenen Daten gespeichert |
-| BB-11 | Main Page | Startseite wird geladen | – | App neu starten | App starten | Main Page sichtbar (<2s) |
-| BB-12 | Datenbank | Firestore-Verbindung | Test-Hotspot | App online | Lesen/Schreiben testen | Daten werden korrekt gespeichert |
+| ID     | User Story        | Beschreibung                        | Testdaten               | Vorbedingungen        | Schritte                                      | Erwartetes Ergebnis                                   | Akzeptanzkriterien                                                                                   |
+|--------|--------------------|--------------------------------------|--------------------------|------------------------|-----------------------------------------------|--------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| BB-01  | Hotspot-Karte      | Hotspots korrekt anzeigen            | GPS-Position Zürich      | App installiert        | App starten, Karte öffnen                     | Hotspots erscheinen <3s                               | Karte lädt <3s, Hotspots farblich korrekt, Standort sichtbar (falls GPS aktiv), Offline-Daten nutzbar |
+| BB-02  | Zeckenmeldung      | Standort validieren                  | –                        | GPS deaktiviert        | Meldung erstellen                             | Fehlermeldung "Standort aktivieren"                   | Meldung nur mit aktivem GPS möglich, klare Fehlermeldung, keine personenbezogenen Daten gespeichert   |
+| BB-03  | Echtzeitdaten      | Neuer Hotspot erscheint sofort       | Neuer Hotspot im Backend | App offen              | Hotspot hinzufügen                             | Neuer Hotspot erscheint ohne Neustart                 | Echtzeit-Update <3s, keine Duplikate, kein Reload notwendig                                          |
+| BB-04  | Mehrsprachigkeit   | Sprache umstellen                    | –                        | App gestartet          | Einstellungen → FR                            | UI in Französisch                                      | Sprache sofort umgestellt, alle Texte übersetzt, Sprache bleibt nach Neustart                        |
+| BB-05  | Push-Warnung       | Warnung bei Hotspot betreten         | Koordinaten eines Hotspots | GPS aktiv             | Hotspot-Gebiet betreten                       | Push erscheint                                          | Push beim Betreten, keine mehrfachen Pushes, deaktivierbar, datenschutzkonform                       |
+| BB-06  | Offline-Modus      | Hotspots offline anzeigen            | gespeicherte Hotspots    | Offline                | App starten                                   | Letzte Hotspots sichtbar                               | Offline-Hotspots verfügbar, Offline-Hinweis sichtbar, Daten synchronisieren sich später               |
+| BB-07  | Erste-Hilfe-Info   | Inhalte anzeigen                      | –                        | App gestartet          | Erste Hilfe öffnen                            | Bilder + Texte korrekt                                | Inhalte vollständig, offline verfügbar, keine Layoutfehler                                           |
+| BB-08  | Navigation         | Navigation testen                    | –                        | App installiert        | Menü → Karte → Meldung → Info                 | Jede Seite erreichbar                                   | Navigation ohne Fehler, keine Loops, Back-Button funktioniert korrekt                                |
+| BB-09  | Einstellungen      | Sprache & Benachrichtigungen ändern  | –                        | App installiert        | Einstellungen ändern                           | App übernimmt Änderungen                               | Änderungen aktiv sofort, dauerhaft gespeichert, keine Fehler                                         |
+| BB-10  | DSGVO              | Daten anonymisiert speichern         | Testuser                 | Meldung erfassen       | Meldung erstellen → Datenbank prüfen          | Keine personenbezogenen Daten gespeichert              | Keine personenbezogenen Daten, Standort nicht überpräzise, Datenschutzinfo beim Start                 |
+| BB-11  | Main Page          | Startseite wird geladen              | –                        | App neu starten        | App starten                                   | Main Page sichtbar (<2s)                               | Main Page <2s sichtbar, stabil, Fehlermeldung bei fehlendem Netz                                     |
+| BB-12  | Datenbank          | Firestore lesen/schreiben            | Test-Hotspot             | App online             | Lesen/Schreiben testen                        | Daten werden korrekt gespeichert                       | CRUD funktioniert, Verzögerung <300ms, Offline-Cache funktioniert                                    |
+
 
 ---
 
