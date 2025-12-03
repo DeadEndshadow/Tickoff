@@ -1,151 +1,267 @@
 # Testkonzept für TickOff (TickApp)
 
 ## 1. Testobjekt / Projektbeschreibung
-**TickOff** ist eine mobile App, die Wanderern, Touristen, Familien und Hundebesitzern hilft, Zeckenrisiken in der Schweiz frühzeitig zu erkennen und zu melden.  
+**TickOff** ist eine mobile App, die Zeckenhotspots in der Schweiz anzeigt, Meldungen sammelt, Nutzer in Echtzeit warnt und wichtige Erste-Hilfe-Informationen bietet. Die App richtet sich an:
+- Wanderer
+- Touristen
+- Familien
+- Hundebesitzer
+- Outdoor-Sportler
 
-Die App bietet folgende Funktionen:
-- Anzeige von Zecken-Hotspots auf einer Karte (farblich markiert nach Risiko)
-- Zeckenmeldung mit Standort, Zeit und Anzahl Zecken
-- Push-Benachrichtigungen bei Betreten von Hotspot-Gebieten
-- Echtzeit-Aktualisierung der Hotspots
-- Offline-Modus für Hotspots und Meldungen
-- Mehrsprachigkeit (Deutsch, Englisch, Französisch)
-- Bebilderte Erste-Hilfe- und Präventionstipps
-- Einfache Navigation und benutzerfreundliche Oberfläche
-
-**Zweck:** Verbesserung der Sicherheit bei Outdoor-Aktivitäten, Aufbau einer Community-Datenbank und Förderung der Prävention gegen Zeckenbisse.
-
----
-
-## 2. User Stories (zu testende Funktionen)
-- **Hotspot-Karte:** Als Wanderer möchte ich eine farbige Hotspot-Karte sehen, um Zeckenrisiken einzuschätzen.  
-- **Zeckenmeldung:** Als Nutzer möchte ich eine Zecke nur mit aktiviertem Standort melden, damit die Meldung korrekt ist.  
-- **Sprache ändern:** Als Nutzer möchte ich die Sprache ändern können, um die App zu verstehen.  
-- **Push-Benachrichtigungen:** Als Elternteil möchte ich Push-Warnungen bei Hotspots erhalten, um meine Kinder zu schützen.  
-- **Offline-Modus:** Als Wanderer möchte ich die letzten Hotspots auch offline sehen, um ohne Internet informiert zu sein.  
-- **Erste Hilfe & Prävention:** Als Senior möchte ich bebilderte Anleitungen, damit ich im Notfall richtig handle.  
-- **Navigation:** Als Nutzer möchte ich mich in der App klar zurechtfinden, um alle Funktionen einfach zu erreichen.  
-- **Echtzeit-Updates:** Als Nutzer möchte ich, dass neue Hotspot-Daten in Echtzeit angezeigt werden, damit ich immer aktuelle Informationen sehe.  
+**Wichtige Funktionen:**
+- Hotspot-Karte mit farblicher Risikoanzeige
+- Zeckenmeldung erfassen (mit Standortvalidierung)
+- Echtzeit-Updates für Hotspots
+- Push-Benachrichtigungen beim Betreten von Risikogebieten
+- Mehrsprachigkeit (DE/EN/FR)
+- Einstellungen (Benachrichtigungen, Sprache, Datenschutz)
+- Erste-Hilfe-Info-Seite
+- Navigation zwischen allen App-Seiten
+- DSGVO-konforme Datenspeicherung
+- Offline-Modus für Karte & Meldungen
 
 ---
 
-## 3. Systemarchitektur
-- **Frontend:** Flutter-App für Android, iOS und Web  
-- **Backend:** Firebase (Cloud Firestore für Daten, Cloud Functions für Benachrichtigungen und Hotspot-Auswertung)  
-- **APIs:** Google Maps API für die Kartenintegration  
-- **Hosting:** Firebase Hosting  
-- **Verbindung:** App ↔ Firebase (Datenbank, Auth, Cloud Functions) ↔ Google Maps API  
-- **Datenschutz:** Standortdaten anonymisiert, DSGVO-konform  
+# 2. Zu testende User Stories (vollständig abgedeckt)
+
+### **User Stories aus Backlog (alle Features):**
+- **Mehrsprachigkeit**  
+- **Meldungen in Echtzeit**  
+- **Datenbank laut DSGVO**  
+- **Einstellungen verwalten**  
+- **Karten mit Hotspots sehen**  
+- **Zeckenmeldung erfassen**  
+- **Erste-Hilfe-Info-Seite öffnen**  
+- **Navigation durch die App**  
+- **Main Page anzeigen**  
+- **Datenbank einrichten**  
+
+Alle diese Funktionen werden durch Tests abgedeckt (Unit-, Integration-, System-, Blackbox-, Security-Tests).
 
 ---
 
-## 4. Kritikalität der Funktionseinheiten
-
-| Funktionseinheit | Kritikalität | Begründung |
-|------------------|--------------|-------------|
-| Zeckenmeldung | Hoch | Standortfehler oder fehlerhafte Meldung gefährden die Datenqualität |
-| Push-Benachrichtigungen | Mittel | Nutzer könnten keine Warnungen erhalten |
-| Echtzeit-Updates | Hoch | Verzögerte Daten können falsche Sicherheit vermitteln |
-| Offline-Modus | Mittel | Fehlende Daten bei Offline-Nutzung beeinträchtigen Sicherheit |
-| Karte & Hotspots | Hoch | Kernfunktion der App, muss korrekt angezeigt werden |
-| Mehrsprachigkeit | Niedrig | Wichtig für Nutzerfreundlichkeit, aber nicht sicherheitskritisch |
-| Navigation | Mittel | Wichtig für Usability, aber keine Sicherheitsgefahr |
-
-**Risikoanalyse:**  
-- Ungenaue GPS-Daten → falsche Hotspot-Darstellung  
-- Datenschutzverletzung → Vertrauensverlust  
-- App-Absturz bei hoher Nutzerzahl → Datenverlust / schlechte User Experience  
+# 3. Systemarchitektur
+- **Frontend:** Flutter (Android/iOS/Web)
+- **Backend:** Firebase (Firestore, Auth, Cloud Functions, Storage)
+- **APIs:** Google Maps API
+- **Hosting:** Firebase Hosting
+- **Daten:** anonymisiert, DSGVO-konform
+- **Echtzeit:** Firestore Listener + Cloud Functions
 
 ---
 
-## 5. Release-Management
-- **Strategie:** Agile Releases in 2-wöchigen Sprints, Big-Bang-Release erst nach Pilot-Test  
-- **Release-Typen:**  
-  - *Feature-Release*: nach Sprint, intern getestet  
-  - *Emergency Release*: kritische Fehlerbehebung  
-  - *LTS-Version*: alle 6 Monate für stabile Basis  
-- **Deployment:** Phased Release für Beta-Nutzer, Rollback via Firebase-Versionierung  
-- **Dokumentation:** Testergebnisse, Feedback und Bugs vor jedem Release dokumentiert  
+# 4. Kritikalität der Funktionseinheiten  
+(Begründet: Welche Funktionseinheiten sind kritisch und warum?)
+
+| Funktionseinheit | Kritikalität | Grund |
+|------------------|--------------|-------|
+| Hotspot-Karte | Hoch | Hauptfunktion – falsche Daten = Sicherheitsrisiko |
+| Echtzeit-Meldungen | Hoch | Verzögerungen führen zu falscher Risikoeinschätzung |
+| Zeckenmeldung | Hoch | Fehlerhafte Standorterfassung → unbrauchbare Datenbank |
+| Push-Warnungen | Mittel | Nutzer könnte Gefahr übersehen |
+| DSGVO-Datenbank | Hoch | Rechtliche Vorgaben, Datenschutz sehr kritisch |
+| Offline-Modus | Mittel | Nutzer könnte ohne Internet keine Daten haben |
+| Mehrsprachigkeit | Niedrig | Komfort-Funktion, kein Risiko |
+| Erste-Hilfe-Seite | Mittel | Informationen müssen korrekt sein |
+| Navigation | Mittel | Schlechte Navigation = schlechte UX |
+| Einstellungen | Niedrig | Nicht sicherheitskritisch |
 
 ---
 
-## 6. Repository-Management
-- **Branches:**  
-  - `main`: stabile Version  
-  - `develop`: aktuelle Sprint-Entwicklung  
-  - `feature/*`: einzelne Features  
-- **Merge-Strategie:** Pull Requests mit Peer-Review & automatisierten Tests  
-- **Versionierung:** Semantic Versioning (Major.Minor.Patch)  
-- **Tests je Branch:**  
-  - `feature/*`: Unit- & Integrationstests  
-  - `develop`: System- & Usability-Tests  
-  - `main`: Abnahmetests & Blackbox-Test  
+# 5. Anforderungen an die Tests
+Tests müssen folgende Anforderungen abdecken:
+- alle **Akzeptanzkriterien** abprüfen
+- alle **User Stories** sind durch mindestens 1 Testfall abgesichert
+- Tests müssen **reproduzierbar** sein
+- Tests müssen auf **verschiedenen Geräten** laufen (Android/iOS)
+- Tests müssen sowohl **online als auch offline** funktionieren
+- Tests müssen **Fehlerfälle explizit prüfen**  
+- Tests erfüllen **DSGVO-Anforderungen**
 
 ---
 
-## 7. Code-Qualität
-- **Standards:** Flutter/Dart Coding Guidelines  
-- **Code-Reviews:** Jeder Pull Request mindestens ein Peer-Review  
-- **Statische Analyse:** Linter + SonarQube  
-- **Psychologische Sicherheit:** Entwickler dürfen Änderungen gefahrlos testen, ohne Angst vor Regressionen  
+# 6. Testziele
+- Sicherstellen, dass alle Funktionen **vollständig, stabil und korrekt** arbeiten
+- Prüfen der **Karten- und Hotspotfunktionen**
+- Sicherstellen, dass die App **Echtzeitdaten korrekt verarbeitet**
+- Verifikation der **DSGVO-Konformität** (Standort, Anonymisierung)
+- Überprüfung aller **Navigationselemente**
+- Validierung der **Mehrsprachigkeit**
+- Sicherstellen, dass die App **intuitiv und benutzerfreundlich** ist
+- Gewährleistung hoher **Performance und Stabilität**
 
 ---
 
-## 8. Testumgebung und Verfahren
-- **Geräte:** Android (z. B. Samsung A52, Pixel), iPhone (11/14)  
-- **Betriebssysteme:** Android 10+, iOS 14+  
-- **Netzwerke:** WLAN, 4G/5G, Offline  
-- **Testverfahren:** Unit-, Integration-, System-, Usability-, Performance-, Sicherheits- & Pilot-Tests  
-- **Testdaten:** GPS-Koordinaten, simulierte Zeckenmeldungen, verschiedene Nutzerprofile  
-- **Dokumentation:** Testprotokolle, Fehlerberichte, Feedbackbögen  
+# 7. Testfälle (Blackbox)
+
+## Vollständige Blackbox-Testtabelle  
+*(alle User Stories abgedeckt)*
+
+| ID | User Story | Beschreibung | Testdaten | Vorbedingungen | Schritte | Erwartetes Ergebnis |
+|----|------------|--------------|-----------|----------------|----------|---------------------|
+| BB-01 | Hotspot-Karte | Hotspots korrekt anzeigen | GPS-Position Zürich | App installiert | App starten, Karte öffnen | Hotspots erscheinen <3s |
+| BB-02 | Zeckenmeldung | Standort validieren | – | GPS deaktiviert | Meldung erstellen | Fehlermeldung "Standort aktivieren" |
+| BB-03 | Echtzeitdaten | Neuer Hotspot erscheint sofort | Neuer Hotspot im Backend | App offen | Hotspot hinzufügen | Neuer Hotspot erscheint ohne Neustart |
+| BB-04 | Mehrsprachigkeit | Sprache umstellen | – | App gestartet | Einstellungen → FR | UI in Französisch |
+| BB-05 | Push-Warnung | Warnung bei Hotspot betreten | Koordinaten eines Hotspots | GPS aktiv | Hotspot-Gebiet betreten | Push erscheint |
+| BB-06 | Offline-Modus | Hotspots offline | gespeicherte Hotspots | Offline | App starten | Letzte Hotspots sichtbar |
+| BB-07 | Erste-Hilfe-Info | Inhalte anzeigen | – | App gestartet | Erste Hilfe öffnen | Bilder + Texte korrekt |
+| BB-08 | Navigation | Navigation testen | – | App installiert | Menü → Karte → Meldung → Info | Jede Seite erreichbar |
+| BB-09 | Einstellungen | Sprache & Benachrichtigungen ändern | – | App installiert | Einstellungen ändern | App übernimmt Änderungen |
+| BB-10 | DSGVO | Daten anonymisiert | Testuser | Meldung erfassen | Datenbank prüfen | Keine personenbezogenen Daten gespeichert |
+| BB-11 | Main Page | Startseite wird geladen | – | App neu starten | App starten | Main Page sichtbar (<2s) |
+| BB-12 | Datenbank | Firestore-Verbindung | Test-Hotspot | App online | Lesen/Schreiben testen | Daten werden korrekt gespeichert |
 
 ---
 
-## 9. Testarten und Aktivitäten
+# 8. Testdaten
 
-| Testart | Beschreibung | Verantwortlich |
-|----------|--------------|----------------|
-| Unit Test | Einzelne Komponenten testen | Entwickler |
-| Integrationstest | Zusammenspiel von App & Backend | Entwickler |
-| Systemtest | App auf realen Geräten testen | Tester |
-| Usability-Test | Bedienbarkeit, Verständlichkeit, Barrierefreiheit | Tester + Nutzer |
-| Performance-Test | Ladezeiten, Nutzerlast | Entwickler |
-| Sicherheitstest | DSGVO, Anonymisierung, Berechtigungen | Tester |
-| Offline-Test | Hotspots & Meldungen offline testen | Tester |
-| Pilot-Test | 20 reale Nutzer, Feedback sammeln | Team |
+**Benötigte Daten:**
+- GPS-Daten verschiedener Regionen (Zürich, Bern, Tessin, Land)
+- Beispiel-Hotspots:
+  - niedriges Risiko
+  - mittleres Risiko
+  - hohes Risiko
+- Zeckenmeldungen:
+  - 1 Zecke
+  - 2–5 Zecken
+  - >10 Zecken
+- Testnutzer:
+  - Standard-User
+  - Nutzer mit deaktivierten Berechtigungen
+- Mehrsprachige Inhalte
+- Offline gespeicherte Daten (Cache)
+
+Testdaten werden mit:
+- Firestore-Testumgebung  
+- Flutter-Testdaten  
+- GPS-Simulation  
+erstellt.
 
 ---
 
-## 10. Zeitplan der Testaktivitäten
+# 9. Testergebnisse
+Jeder Test liefert:
+- Bestanden / Nicht bestanden
+- Fehlerbeschreibung
+- Geräte- und OS-Version
+- Screenshot oder Video
+- Log-Auszug (Flutter + Firebase)
+- Schritte zur Reproduktion
 
+Alle Ergebnisse werden in **GitHub Issues** dokumentiert.
+
+---
+
+# 10. Testumgebung
+
+**Geräte:**
+- Samsung A52 (Android 12)
+- Google Pixel (Android 13)
+- iPhone 11 (iOS 16)
+- iPhone 14 (iOS 17)
+
+**Netzwerk:**
+- WLAN
+- 4G / 5G
+- Offline
+
+**Backend:**
+- Firestore Testprojekt  
+- Cloud Functions Emulator  
+
+**Tools:**
+- Flutter Test Runner
+- Android Studio & Xcode Simulator
+- Firebase Emulator Suite
+- Google Maps Debug API Key
+
+---
+
+# 11. Testinfrastruktur
+- GitHub Repository mit CI/CD
+- Firebase Hosting + Testdatenbank
+- Flutter Pipelines:
+  - Unit Tests
+  - Integration Tests
+  - Linter
+- Gerätefarm (lokal oder Browserstack optional)
+
+---
+
+# 12. Testverfahren
+- **Blackbox-Tests**  
+- **Unit-Tests (Dart)**  
+- **Integrationstests (Flutter)**  
+- **Systemtests auf echten Geräten**  
+- **Usability-Tests mit echten Nutzern**  
+- **Sicherheitstests** (DSGVO, Standort, Berechtigungen)  
+- **Performance-Tests**  
+- **Regressionstests** vor jedem Release  
+
+---
+
+# 13. Erstellung der Testdaten
+- Firestore Fake-Collection für Testzwecke  
+- GPS-Simulation im Android Emulator  
+- iOS Location Simulation  
+- Manuelle Meldungen durch Tester  
+- Offline-Datensatz durch Caching erzeugt  
+
+---
+
+# 14. Dokumentation der Testergebnisse
+Erfolgt über:
+- GitHub Issues  
+- Screenshots & Logs  
+- Sprint Testing Overview  
+- Testprotokolle (Markdown)  
+- Fehlerberichte (Issue Templates)  
+
+---
+
+# 15. Testarten
+| Testart | Ziel |
+|---------|------|
+| Unit-Test | Komponenten prüfen |
+| Integrationstest | Zusammenspiel App ↔ Backend |
+| Systemtest | Komplette App testen |
+| Usability-Test | Benutzerfreundlichkeit |
+| Sicherheitstest | DSGVO, Datenflüsse |
+| Blackbox-Test | Anforderungen prüfen |
+| Offline-Test | Verhalten ohne Internet |
+| Performance-Test | Geschwindigkeit & Ressourcen |
+| Regressionstest | Sicherstellen, dass alte Features nicht kaputt gehen |
+
+---
+
+# 16. Testaktivitäten
+- Testplanung
+- Testfalldefinition
+- Testdurchführung
+- Fehleranalyse
+- Bugfixing
+- Retest
+- Regressionstest
+- Abnahme
+- Dokumentation
+
+---
+
+# 17. Zeitplan der Tests
 | Phase | Zeitraum | Aktivität |
-|--------|-----------|------------|
-| Sprint 1–2 | Woche 1–4 | Unit- & Integrationstests, Architekturprüfung |
-| Sprint 3 | Woche 5–6 | Usability-Tests & Performance-Vorbereitung |
-| Sprint 4 | Woche 7–8 | Pilot-Test mit 20 Personen, Feedback |
-| Sprint 5 | Woche 9 | Abnahme, Blackbox- & Regressionstests |
-| Sprint 6 | Woche 10 | Release-Vorbereitung & Go-Live |
+|--------|----------|-----------|
+| Sprint 1–2 | Woche 1–4 | Unit & Integration |
+| Sprint 3 | Woche 5–6 | Navigations- & UI-Tests |
+| Sprint 4 | Woche 7–8 | Echtzeit-Tests & Pilotgruppe |
+| Sprint 5 | Woche 9 | Blackbox & DSGVO-Tests |
+| Sprint 6 | Woche 10 | Abnahme & Release |
 
 ---
 
-## 11. Blackbox-Testprotokoll
-
-| Testfall-ID | User Story / Anforderung | Beschreibung | Testdaten | Vorbedingungen | Schritte | Erwartetes Ergebnis |
-|--------------|--------------------------|--------------|------------|----------------|----------|---------------------|
-| **BB-01** | Karte anzeigen | Prüfen, ob Karte Hotspots korrekt lädt | GPS-Koordinaten Zürich | App installiert, GPS aktiv | 1. App starten<br>2. Karte öffnen | Karte zeigt Hotspots in <3 Sekunden |
-| **BB-02** | Zecke melden ohne GPS | Prüfen, ob Fehlermeldung erscheint | – | GPS deaktiviert | Zeckenmeldung versuchen | Fehlermeldung „Standort aktivieren“ |
-| **BB-03** | Sprache ändern | Prüfen der Mehrsprachigkeit | – | App geöffnet | Einstellungen → Sprache: Französisch | Texte & UI in Französisch |
-| **BB-04** | Offline-Modus | Prüfen, ob letzte Hotspots sichtbar sind | Gespeicherte Hotspots | Offline-Modus aktiv | App starten | Letzte Hotspots sichtbar, Hinweis „Keine Live-Daten“ |
-| **BB-05** | Push-Warnung | Prüfen der Benachrichtigungen | GPS-Koordinaten Hotspot | App installiert, Push aktiviert | In Hotspot-Bereich gehen | Push-Nachricht erscheint |
-| **BB-06** | Erste-Hilfe-Seite | Prüfen der Erste-Hilfe-Anzeigen | – | App geöffnet | Erste-Hilfe-Menü öffnen | Bilder und Texte korrekt angezeigt |
-| **BB-07** | Navigation | Prüfen der Navigation & Menüführung | – | App installiert | App öffnen, Menü und Karte aufrufen | Alle Hauptfunktionen erreichbar, keine toten Links |
-| **BB-08** | Echtzeit-Hotspots | Prüfen der Live-Aktualisierung | Hotspot wird im Backend neu erstellt | GPS aktiv, Online-Modus | 1. Karte geöffnet lassen<br>2. Neuen Hotspot einfügen | Neuer Hotspot erscheint ohne App-Neustart |
-
----
-
-## 12. Testziele
-Dieses Testkonzept definiert die **Teststrategie, Testmethoden, Testumgebungen und Verantwortlichkeiten** für die TickOff-App.  
-Durch systematische Planung, klare Rollen und realistische Tests wird sichergestellt, dass die App **funktional, benutzerfreundlich, sicher und stabil** ist.  
-
-Die Erweiterung um Navigation und Echtzeitdaten sorgt für eine vollständige Abdeckung aller im Projekt definierten User Stories.  
-Das Konzept stärkt zudem die **Codequalität**, die **Teamzusammenarbeit** und die **Zuverlässigkeit des Produkts**.
+# 18. Beteiligte Personen
+- **Tester / QA:** 1 Person  
+- **Entwickler:** 1–2 Personen  
+- **Pilotgruppe:** 20 Personen  
+- **Projektleiter:** verantwortlich für Abnahme  
+- **Coach / Lehrperson:** Qualitätskontrolle  
