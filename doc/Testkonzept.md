@@ -143,7 +143,7 @@ Die App bietet folgende Funktionen:
 
 ---
 
-## 12. Fazit
+## 12. Testziele
 Dieses Testkonzept definiert die **Teststrategie, Testmethoden, Testumgebungen und Verantwortlichkeiten** für die TickOff-App.  
 Durch systematische Planung, klare Rollen und realistische Tests wird sichergestellt, dass die App **funktional, benutzerfreundlich, sicher und stabil** ist.  
 
