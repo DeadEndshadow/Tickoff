@@ -3,17 +3,15 @@ name: Flutter CI/CD
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - "v*"            # Deployment only when version tags are created
   pull_request:
     branches: [ "main" ]
-  # Deployment only when a version tag is created (v1.0.0)
-  tag:
-    - "v*"
 
 env:
   FLUTTER_VERSION: 3.35.3
   WORKDIR: tickoff
   BUILD_ENV: production
-  # Secrets (API keys, etc.) stored in GitHub Secrets:
   MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
 
 jobs:
@@ -38,8 +36,7 @@ jobs:
 
       # ----------- LINTING -----------
       - name: Format check (flutter format)
-        run: |
-          flutter format --set-exit-if-changed .
+        run: flutter format --set-exit-if-changed .
 
       - name: Static code analysis (Dart analyze)
         run: flutter analyze --fatal-infos --fatal-warnings
@@ -64,11 +61,12 @@ jobs:
           name: tickoff-apk
           path: tickoff/build/app/outputs/flutter-apk/app-release.apk
 
+
   # ----------- DEPLOYMENT JOB -----------
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v') 
+    if: startsWith(github.ref, 'refs/tags/v')   # Only run when tag starts with "v"
 
     steps:
       - name: Checkout code
@@ -80,3 +78,8 @@ jobs:
           name: tickoff-apk
           path: ./release/
 
+      - name: Simulated Deployment
+        run: |
+          echo "Deploying TickOff version: $GITHUB_REF_NAME"
+          ls -la ./release/
+          echo "Deployment completed (simulation)"
