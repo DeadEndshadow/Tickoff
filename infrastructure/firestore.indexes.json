@@ -1,0 +1,47 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "hotspots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "riskLevel",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "lastUpdated",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "tick_reports",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "timestamp",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "riskLevel",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "hotspots",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "location.lat",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "location.lon",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
