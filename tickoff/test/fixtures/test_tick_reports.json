@@ -1,0 +1,152 @@
+[
+  {
+    "id": "report_001",
+    "timestamp": "2024-06-15T10:30:00Z",
+    "location": {
+      "lat": 47.3769,
+      "lon": 8.5417
+    },
+    "riskLevel": "high",
+    "verified": true,
+    "description": "Multiple tick sightings in forest area",
+    "environment": "forest",
+    "weather": "sunny",
+    "temperature": 24,
+    "anonymized": true
+  },
+  {
+    "id": "report_002",
+    "timestamp": "2024-06-14T14:20:00Z",
+    "location": {
+      "lat": 46.9480,
+      "lon": 7.4474
+    },
+    "riskLevel": "medium",
+    "verified": true,
+    "description": "Tick found on hiking trail",
+    "environment": "trail",
+    "weather": "cloudy",
+    "temperature": 20,
+    "anonymized": true
+  },
+  {
+    "id": "report_003",
+    "timestamp": "2024-06-13T09:15:00Z",
+    "location": {
+      "lat": 47.5596,
+      "lon": 7.5886
+    },
+    "riskLevel": "low",
+    "verified": false,
+    "description": "Single tick sighting in park",
+    "environment": "park",
+    "weather": "sunny",
+    "temperature": 22,
+    "anonymized": true
+  },
+  {
+    "id": "report_004",
+    "timestamp": "2024-06-12T16:45:00Z",
+    "location": {
+      "lat": 46.2044,
+      "lon": 6.1432
+    },
+    "riskLevel": "medium",
+    "verified": true,
+    "description": "Tick found near lake",
+    "environment": "lake",
+    "weather": "partly_cloudy",
+    "temperature": 21,
+    "anonymized": true
+  },
+  {
+    "id": "report_005",
+    "timestamp": "2024-06-15T08:00:00Z",
+    "location": {
+      "lat": 47.0502,
+      "lon": 8.3093
+    },
+    "riskLevel": "high",
+    "verified": true,
+    "description": "High tick activity in meadow area",
+    "environment": "meadow",
+    "weather": "sunny",
+    "temperature": 25,
+    "anonymized": true
+  },
+  {
+    "id": "report_006",
+    "timestamp": "2024-06-11T11:30:00Z",
+    "location": {
+      "lat": 47.2269,
+      "lon": 8.8184
+    },
+    "riskLevel": "medium",
+    "verified": true,
+    "description": "Ticks found on bushes along path",
+    "environment": "bushes",
+    "weather": "rainy",
+    "temperature": 18,
+    "anonymized": true
+  },
+  {
+    "id": "report_007",
+    "timestamp": "2024-06-14T13:15:00Z",
+    "location": {
+      "lat": 46.5197,
+      "lon": 6.6323
+    },
+    "riskLevel": "high",
+    "verified": true,
+    "description": "Multiple tick bites reported",
+    "environment": "forest",
+    "weather": "sunny",
+    "temperature": 23,
+    "anonymized": true
+  },
+  {
+    "id": "report_008",
+    "timestamp": "2024-06-10T15:20:00Z",
+    "location": {
+      "lat": 47.4245,
+      "lon": 9.3767
+    },
+    "riskLevel": "low",
+    "verified": false,
+    "description": "Single unconfirmed sighting",
+    "environment": "urban",
+    "weather": "cloudy",
+    "temperature": 19,
+    "anonymized": true
+  },
+  {
+    "id": "report_009",
+    "timestamp": "2024-06-09T10:00:00Z",
+    "location": {
+      "lat": 47.3769,
+      "lon": 8.5417
+    },
+    "riskLevel": "high",
+    "verified": true,
+    "description": "Tick found after hiking",
+    "environment": "forest",
+    "weather": "sunny",
+    "temperature": 26,
+    "anonymized": true
+  },
+  {
+    "id": "report_010",
+    "timestamp": "2024-06-08T14:30:00Z",
+    "location": {
+      "lat": 46.9480,
+      "lon": 7.4474
+    },
+    "riskLevel": "medium",
+    "verified": true,
+    "description": "Tick on dog after walk",
+    "environment": "trail",
+    "weather": "partly_cloudy",
+    "temperature": 21,
+    "anonymized": true
+  }
+]

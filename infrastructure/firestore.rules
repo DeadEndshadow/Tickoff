@@ -1,0 +1,54 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Hotspots collection - Read by all, write by authenticated users
+    match /hotspots/{hotspotId} {
+      allow read: if true;  // Public read access for hotspot data
+      allow create: if isAuthenticated() && 
+                      request.resource.data.keys().hasAll(['location', 'riskLevel', 'timestamp']) &&
+                      !request.resource.data.keys().hasAny(['userId', 'email', 'name']); // No PII
+      allow update, delete: if false; // Only system can update/delete
+    }
+    
+    // Tick reports collection - Anonymized data only
+    match /tick_reports/{reportId} {
+      allow read: if true;  // Public read access
+      allow create: if isAuthenticated() && 
+                      validateAnonymizedReport(request.resource.data);
+      allow update, delete: if false;
+    }
+    
+    // User settings - Private to user
+    match /users/{userId}/settings/{document=**} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // First aid information - Public read only
+    match /first_aid/{document=**} {
+      allow read: if true;
+      allow write: if false; // Admin only (not implemented in rules)
+    }
+    
+    // Test data collection - For testing only
+    match /test_data/{document=**} {
+      allow read, write: if true; // Unrestricted for testing
+    }
+    
+    // Validation function for anonymized reports
+    function validateAnonymizedReport(data) {
+      return data.keys().hasAll(['location', 'riskLevel', 'timestamp', 'anonymized']) &&
+             data.anonymized == true &&
+             !data.keys().hasAny(['userId', 'email', 'name', 'phone', 'address']);
+    }
+  }
+}
