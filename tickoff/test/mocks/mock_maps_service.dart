@@ -142,7 +142,7 @@ class MockMapsService {
 
   /// Check if coordinates are within Switzerland bounds
   bool isInSwitzerland(double latitude, double longitude) {
-    // Approximate Switzerland bounds
+    // Approximate Switzerland bounds (from TestConfig)
     const double minLat = 45.8;
     const double maxLat = 47.9;
     const double minLon = 5.9;

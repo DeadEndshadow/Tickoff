@@ -114,10 +114,10 @@ class MockFirebaseService {
       ? List<Map<String, dynamic>>.from(_dataStore[collection] as List)
       : [];
     
+    // Remove closed listeners and notify active ones
+    _listeners.removeWhere((listener) => listener.isClosed);
     for (var listener in _listeners) {
-      if (!listener.isClosed) {
-        listener.add(data);
-      }
+      listener.add(data);
     }
   }
 
