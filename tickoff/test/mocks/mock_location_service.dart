@@ -1,6 +1,8 @@
 /// Mock Location Service for testing GPS functionality
 /// 
 /// Simulates GPS location services without requiring actual device hardware
+import 'dart:math' as math;
+
 import 'package:flutter_test/flutter_test.dart';
 
 class MockLocationService {
@@ -77,18 +79,18 @@ class MockLocationService {
     final double dLon = _degreesToRadians(lon2 - lon1);
     
     final double a = 
-      (dLat / 2).sin() * (dLat / 2).sin() +
-      _degreesToRadians(lat1).cos() *
-      _degreesToRadians(lat2).cos() *
-      (dLon / 2).sin() * (dLon / 2).sin();
+      math.sin(dLat / 2) * math.sin(dLat / 2) +
+      math.cos(_degreesToRadians(lat1)) *
+      math.cos(_degreesToRadians(lat2)) *
+      math.sin(dLon / 2) * math.sin(dLon / 2);
     
-    final double c = 2 * (a.sqrt()).asin();
+    final double c = 2 * math.asin(math.sqrt(a));
     
     return earthRadius * c;
   }
 
   double _degreesToRadians(double degrees) {
-    return degrees * (3.14159265359 / 180);
+    return degrees * (math.pi / 180);
   }
 
   /// Reset mock to default state

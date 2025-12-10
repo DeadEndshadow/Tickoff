@@ -3,12 +3,12 @@ name: Flutter Tests (Unit & Integration)
 on:
   push:
     branches:
-      - 'feature/**'
+      - 'feature/*'
       - 'develop'
       - 'main'
   pull_request:
     branches:
-      - 'feature/**'
+      - 'feature/*'
       - 'develop'
       - 'main'
 
