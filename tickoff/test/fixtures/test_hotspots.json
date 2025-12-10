@@ -1,0 +1,114 @@
+[
+  {
+    "id": "hotspot_001",
+    "location": {
+      "lat": 47.3769,
+      "lon": 8.5417
+    },
+    "city": "Zürich",
+    "region": "Zürich",
+    "riskLevel": "high",
+    "reportCount": 25,
+    "lastUpdated": "2024-06-15T10:30:00Z",
+    "verified": true,
+    "radius": 500
+  },
+  {
+    "id": "hotspot_002",
+    "location": {
+      "lat": 46.9480,
+      "lon": 7.4474
+    },
+    "city": "Bern",
+    "region": "Bern",
+    "riskLevel": "medium",
+    "reportCount": 12,
+    "lastUpdated": "2024-06-14T14:20:00Z",
+    "verified": true,
+    "radius": 300
+  },
+  {
+    "id": "hotspot_003",
+    "location": {
+      "lat": 47.5596,
+      "lon": 7.5886
+    },
+    "city": "Basel",
+    "region": "Basel-Stadt",
+    "riskLevel": "low",
+    "reportCount": 5,
+    "lastUpdated": "2024-06-13T09:15:00Z",
+    "verified": false,
+    "radius": 200
+  },
+  {
+    "id": "hotspot_004",
+    "location": {
+      "lat": 46.2044,
+      "lon": 6.1432
+    },
+    "city": "Genève",
+    "region": "Genève",
+    "riskLevel": "medium",
+    "reportCount": 15,
+    "lastUpdated": "2024-06-12T16:45:00Z",
+    "verified": true,
+    "radius": 400
+  },
+  {
+    "id": "hotspot_005",
+    "location": {
+      "lat": 47.0502,
+      "lon": 8.3093
+    },
+    "city": "Luzern",
+    "region": "Luzern",
+    "riskLevel": "high",
+    "reportCount": 30,
+    "lastUpdated": "2024-06-15T08:00:00Z",
+    "verified": true,
+    "radius": 600
+  },
+  {
+    "id": "hotspot_006",
+    "location": {
+      "lat": 47.2269,
+      "lon": 8.8184
+    },
+    "city": "Rapperswil-Jona",
+    "region": "St. Gallen",
+    "riskLevel": "medium",
+    "reportCount": 10,
+    "lastUpdated": "2024-06-11T11:30:00Z",
+    "verified": true,
+    "radius": 350
+  },
+  {
+    "id": "hotspot_007",
+    "location": {
+      "lat": 46.5197,
+      "lon": 6.6323
+    },
+    "city": "Lausanne",
+    "region": "Vaud",
+    "riskLevel": "high",
+    "reportCount": 20,
+    "lastUpdated": "2024-06-14T13:15:00Z",
+    "verified": true,
+    "radius": 450
+  },
+  {
+    "id": "hotspot_008",
+    "location": {
+      "lat": 47.4245,
+      "lon": 9.3767
+    },
+    "city": "St. Gallen",
+    "region": "St. Gallen",
+    "riskLevel": "low",
+    "reportCount": 7,
+    "lastUpdated": "2024-06-10T15:20:00Z",
+    "verified": false,
+    "radius": 250
+  }
+]

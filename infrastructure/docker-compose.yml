@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # Firebase Emulator Suite
+  firebase-emulator:
+    image: andreysenov/firebase-tools:latest
+    container_name: tickoff-firebase-emulator
+    ports:
+      - "4000:4000"   # Emulator UI
+      - "9099:9099"   # Firestore
+      - "9199:9199"   # Storage
+      - "5001:5001"   # Functions
+      - "8085:8085"   # Auth
+    volumes:
+      - ./firebase.json:/home/node/firebase.json
+      - ./firestore.rules:/home/node/firestore.rules
+      - firebase-data:/home/node/.firebase
+    command: firebase emulators:start --project=tickoff-test
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+
+  # Mock API Server (Node.js)
+  mock-api:
+    image: node:20-alpine
+    container_name: tickoff-mock-api
+    working_dir: /app
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./mock-api:/app
+    command: sh -c "npm install && node server.js"
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+
+  # Test Database (PostgreSQL for test data)
+  test-db:
+    image: postgres:15-alpine
+    container_name: tickoff-test-db
+    environment:
+      - POSTGRES_DB=tickoff_test
+      - POSTGRES_USER=tickoff_user
+      - POSTGRES_PASSWORD=tickoff_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tickoff_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: tickoff-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - mock-api
+      - firebase-emulator
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+
+networks:
+  tickoff-network:
+    driver: bridge
+
+volumes:
+  firebase-data:
+  postgres-data:

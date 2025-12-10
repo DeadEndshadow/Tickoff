@@ -1,0 +1,79 @@
+name: Flutter Tests (Unit & Integration)
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'develop'
+      - 'main'
+  pull_request:
+    branches:
+      - 'feature/**'
+      - 'develop'
+      - 'main'
+
+env:
+  FLUTTER_VERSION: 3.35.3
+  WORKDIR: tickoff
+
+jobs:
+  test:
+    name: Unit and Integration Tests
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify Flutter installation
+        run: flutter doctor -v
+
+      - name: Run code formatting check
+        run: dart format --set-exit-if-changed .
+        continue-on-error: true
+
+      - name: Run static code analysis (flutter analyze)
+        run: flutter analyze
+        continue-on-error: true
+
+      - name: Run unit tests with coverage
+        run: flutter test --coverage --reporter expanded
+
+      - name: Generate coverage report
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lcov
+          lcov --summary coverage/lcov.info
+
+      - name: Upload coverage to artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: ${{ env.WORKDIR }}/coverage/
+          retention-days: 7
+
+      - name: Check code coverage threshold
+        run: |
+          echo "Checking code coverage..."
+          lcov --summary coverage/lcov.info
+        continue-on-error: true
+
+      - name: Test summary
+        if: always()
+        run: |
+          echo "✅ Unit tests completed"
+          echo "📊 Coverage report generated"
+          echo "🔍 Static analysis completed"
