@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tickoff/src/pages/history_page.dart';
 import 'package:tickoff/src/pages/riskmap_page.dart';
 import 'package:tickoff/src/pages/settings_page.dart';
+import 'package:tickoff/src/pages/tips_info_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -55,12 +57,6 @@ class HomePage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _buildFeatureCard(
-                    context: context,
-                    icon: Icons.add_circle,
-                    color: Colors.green,
-                    title: "Neuen Stich erfassen",
-                  ),
                   _buildFeatureCard(
                     context: context,
                     icon: Icons.history,
@@ -137,10 +133,20 @@ class HomePage extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          if (title == "Risikokarte") {
+          if (title == 'Risikokarte') {
             Navigator.push(
               context,
               MaterialPageRoute<void>(builder: (context) => const RiskMapPage()),
+            );
+          } else if (title == 'Meine Historie') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (context) => const HistoryPage()),
+            );
+          } else if (title == 'Tipps & Infos') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(builder: (context) => const TipsInfoPage()),
             );
           }
         },

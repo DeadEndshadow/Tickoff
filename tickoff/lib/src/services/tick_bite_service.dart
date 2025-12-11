@@ -5,11 +5,13 @@ class TickBite {
   final String id;
   final LatLng location;
   final DateTime timestamp;
+  final String userId;
 
   TickBite({
     required this.id,
     required this.location,
     required this.timestamp,
+    required this.userId,
   });
 
   factory TickBite.fromFirestore(DocumentSnapshot doc) {
@@ -21,6 +23,7 @@ class TickBite {
         data['longitude'] as double,
       ),
       timestamp: (data['timestamp'] as Timestamp).toDate(),
+      userId: data['userId'] as String? ?? '',
     );
   }
 
@@ -29,6 +32,7 @@ class TickBite {
       'latitude': location.latitude,
       'longitude': location.longitude,
       'timestamp': Timestamp.fromDate(timestamp),
+      'userId': userId,
     };
   }
 }
@@ -36,11 +40,35 @@ class TickBite {
 class TickBiteService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _collection = 'tick_bites';
+  
+  // Simple device-based user ID (persists across app restarts)
+  static String? _deviceUserId;
+  
+  String get deviceUserId {
+    _deviceUserId ??= 'device_${DateTime.now().millisecondsSinceEpoch}_${hashCode}';
+    return _deviceUserId!;
+  }
+  
+  // Set user ID (call this once when app starts)
+  static void setDeviceUserId(String id) {
+    _deviceUserId = id;
+  }
 
-  /// Stream of all tick bites from Firestore
+  /// Stream of all tick bites from Firestore (for map display)
   Stream<List<TickBite>> getTickBitesStream() {
     return _firestore
         .collection(_collection)
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => TickBite.fromFirestore(doc)).toList());
+  }
+  
+  /// Stream of user's own tick bites (for history page)
+  Stream<List<TickBite>> getUserTickBitesStream() {
+    return _firestore
+        .collection(_collection)
+        .where('userId', isEqualTo: deviceUserId)
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) =>
@@ -54,6 +82,7 @@ class TickBiteService {
         id: '',
         location: location,
         timestamp: DateTime.now(),
+        userId: deviceUserId,
       ).toFirestore(),
     ).timeout(
       const Duration(seconds: 10),
