@@ -98,7 +98,7 @@ class HomePage extends StatelessWidget {
           } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SettingsPage()),
+              MaterialPageRoute<void>(builder: (context) => const SettingsPage()),
             );
           } else {
             // Stay on home page
@@ -140,7 +140,7 @@ class HomePage extends StatelessWidget {
           if (title == "Risikokarte") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const RiskMapPage()),
+              MaterialPageRoute<void>(builder: (context) => const RiskMapPage()),
             );
           }
         },

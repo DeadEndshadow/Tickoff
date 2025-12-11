@@ -10,7 +10,7 @@ class MockFirebaseService {
 
   /// Initialize mock Firebase
   Future<void> initialize() async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
   }
 
   /// Add a document to a collection
@@ -19,7 +19,7 @@ class MockFirebaseService {
       throw Exception('Firebase: No internet connection');
     }
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
     
     final String id = 'mock_${DateTime.now().millisecondsSinceEpoch}';
     final Map<String, dynamic> docWithId = {...data, 'id': id};
@@ -40,7 +40,7 @@ class MockFirebaseService {
       throw Exception('Firebase: No internet connection');
     }
 
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     
     if (!_dataStore.containsKey(collection)) {
       return [];
@@ -59,20 +59,20 @@ class MockFirebaseService {
       throw Exception('Firebase: No internet connection');
     }
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
     
     if (!_dataStore.containsKey(collection)) {
       throw Exception('Collection not found');
     }
     
-    final List docs = _dataStore[collection] as List;
+    final List<Map<String, dynamic>> docs = _dataStore[collection] as List<Map<String, dynamic>>;
     final int index = docs.indexWhere((doc) => doc['id'] == docId);
     
     if (index == -1) {
       throw Exception('Document not found');
     }
     
-    docs[index] = {...docs[index], ...data};
+    docs[index] = <String, dynamic>{...docs[index], ...data};
     _notifyListeners(collection);
   }
 
@@ -82,13 +82,13 @@ class MockFirebaseService {
       throw Exception('Firebase: No internet connection');
     }
 
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
     
     if (!_dataStore.containsKey(collection)) {
       throw Exception('Collection not found');
     }
     
-    final List docs = _dataStore[collection] as List;
+    final List<Map<String, dynamic>> docs = _dataStore[collection] as List<Map<String, dynamic>>;
     docs.removeWhere((doc) => doc['id'] == docId);
     _notifyListeners(collection);
   }
@@ -110,9 +110,9 @@ class MockFirebaseService {
 
   /// Notify all listeners of changes
   void _notifyListeners(String collection) {
-    final data = _dataStore.containsKey(collection)
+    final List<Map<String, dynamic>> data = _dataStore.containsKey(collection)
       ? List<Map<String, dynamic>>.from(_dataStore[collection] as List)
-      : [];
+      : <Map<String, dynamic>>[];
     
     // Remove closed listeners and notify active ones
     _listeners.removeWhere((listener) => listener.isClosed);

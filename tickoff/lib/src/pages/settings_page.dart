@@ -23,7 +23,7 @@ class SettingsPage extends StatelessWidget {
             leading: const Icon(Icons.palette),
             title: const Text('Theme'),
             onTap: () {
-              showDialog(
+              showDialog<void>(
                 context: context,
                 builder: (context) {
                   return AlertDialog(

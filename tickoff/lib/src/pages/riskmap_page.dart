@@ -83,7 +83,7 @@ class _RiskMapPageState extends State<RiskMapPage> {
   }
 
   void _showSuccessDialog() {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         icon: const Icon(

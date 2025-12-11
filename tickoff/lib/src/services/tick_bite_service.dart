@@ -55,6 +55,11 @@ class TickBiteService {
         location: location,
         timestamp: DateTime.now(),
       ).toFirestore(),
+    ).timeout(
+      const Duration(seconds: 10),
+      onTimeout: () {
+        throw Exception('Zeitüberschreitung - Bitte überprüfe deine Internetverbindung und Firebase-Konfiguration');
+      },
     );
   }
 

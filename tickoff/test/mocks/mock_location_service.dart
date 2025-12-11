@@ -20,7 +20,7 @@ class MockLocationService {
   /// Get current location
   Future<Map<String, double>?> getCurrentLocation() async {
     // Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
 
     if (!_isGpsEnabled) {
       throw Exception('GPS is disabled');
@@ -62,7 +62,7 @@ class MockLocationService {
 
   /// Request location permission (mock)
   Future<bool> requestLocationPermission() async {
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future<void>.delayed(const Duration(milliseconds: 50));
     return _hasPermission;
   }
 

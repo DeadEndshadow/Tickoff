@@ -81,7 +81,7 @@ void main() {
       final startTime = DateTime.now();
 
       // Act
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
       final steps = TestConfig.firstAidSteps;
       final endTime = DateTime.now();
       final loadTime = endTime.difference(startTime);
@@ -124,9 +124,8 @@ void main() {
       // Arrange
       final steps = TestConfig.firstAidSteps;
       
-      // Act - simulate offline mode
-      final offlineMode = true;
-      final accessibleSteps = offlineMode ? steps : [];
+      // Act - verify steps are available (simulating offline access)
+      final accessibleSteps = List<Map<String, String>>.from(steps);
 
       // Assert
       expect(accessibleSteps, isNotEmpty);

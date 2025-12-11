@@ -59,7 +59,7 @@ void main() {
       });
 
       // Add data after short delay
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
       await firebaseService.addDocument('hotspots', {
         'id': 'test_1',
         'riskLevel': 'high',

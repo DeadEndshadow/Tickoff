@@ -1,0 +1,29 @@
+{
+  "tick_bites": [
+    {
+      "latitude": 47.3769,
+      "longitude": 8.5417,
+      "timestamp": "2025-12-01T10:30:00Z"
+    },
+    {
+      "latitude": 47.3667,
+      "longitude": 8.5500,
+      "timestamp": "2025-12-05T14:15:00Z"
+    },
+    {
+      "latitude": 46.9480,
+      "longitude": 7.4474,
+      "timestamp": "2025-12-08T09:45:00Z"
+    },
+    {
+      "latitude": 46.2044,
+      "longitude": 6.1432,
+      "timestamp": "2025-12-10T16:20:00Z"
+    },
+    {
+      "latitude": 47.5596,
+      "longitude": 7.5886,
+      "timestamp": "2025-12-11T08:00:00Z"
+    }
+  ]
+}

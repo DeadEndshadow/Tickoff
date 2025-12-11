@@ -14,7 +14,7 @@ class MockMapsService {
 
   /// Initialize the maps service
   Future<void> initialize() async {
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future<void>.delayed(const Duration(milliseconds: 200));
     _isInitialized = true;
   }
 
@@ -30,7 +30,7 @@ class MockMapsService {
     }
 
     // Simulate map loading time
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future<void>.delayed(const Duration(milliseconds: 500));
     _isMapLoaded = true;
     return true;
   }
@@ -98,7 +98,7 @@ class MockMapsService {
         'id': hotspot['id'],
         'position': hotspot['location'],
         'riskLevel': hotspot['riskLevel'],
-        'icon': _getIconForRiskLevel(hotspot['riskLevel']),
+        'icon': _getIconForRiskLevel(hotspot['riskLevel'] as String),
       });
     }
   }
@@ -119,7 +119,7 @@ class MockMapsService {
 
   /// Simulate geocoding (address to coordinates)
   Future<Map<String, double>?> geocodeAddress(String address) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     
     // Mock geocoding for Swiss cities
     final Map<String, Map<String, double>> mockGeocodes = {
@@ -134,7 +134,7 @@ class MockMapsService {
 
   /// Simulate reverse geocoding (coordinates to address)
   Future<String?> reverseGeocode(double latitude, double longitude) async {
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     
     // Simple mock implementation
     return 'Mock Address, Switzerland';

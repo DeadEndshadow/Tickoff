@@ -86,7 +86,7 @@ void main() {
       expect(firebaseService.isOnline(), isFalse);
 
       // Act
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       firebaseService.setOnlineState(true);
 
       // Assert
