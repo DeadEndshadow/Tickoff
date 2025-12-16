@@ -3,6 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/services/notification_controller.dart';
 import 'package:tickoff/src/services/tick_bite_service.dart';
 
 class RiskMapPage extends StatefulWidget {
@@ -19,8 +21,10 @@ class _RiskMapPageState extends State<RiskMapPage> {
   bool _isLoading = false;
   bool _isAddMode = false;
 
-  static final LatLng _initialCenter =
-      LatLng(37.42796133580664, -122.085749655962);
+  static final LatLng _initialCenter = LatLng(
+    37.42796133580664,
+    -122.085749655962,
+  );
   static const double _initialZoom = 14.4746;
   static const double _circleRadiusMeters = 100.0; // Fixed radius in meters
 
@@ -61,13 +65,23 @@ class _RiskMapPageState extends State<RiskMapPage> {
     try {
       await _tickBiteService.addTickBite(location);
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
+
+        // Show notification popup if enabled
+        NotificationController.showTickBiteNotification(
+          context,
+          title: l10n.newTickBiteTitle,
+          message: l10n.newTickBiteMessage,
+        );
+
         _showSuccessDialog();
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Fehler beim Speichern: $e'),
+            content: Text('${l10n.errorSaving}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -83,22 +97,17 @@ class _RiskMapPageState extends State<RiskMapPage> {
   }
 
   void _showSuccessDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        icon: const Icon(
-          Icons.check_circle,
-          color: Colors.green,
-          size: 64,
-        ),
-        title: const Text('Erfolgreich gespeichert!'),
-        content: const Text(
-          'Der Zeckenstich wurde erfolgreich gemeldet und auf der Karte markiert.',
-        ),
+        icon: const Icon(Icons.check_circle, color: Colors.green, size: 64),
+        title: Text(l10n.successfullySaved),
+        content: Text(l10n.tickBiteSavedMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: Text(l10n.ok),
           ),
         ],
       ),
@@ -106,23 +115,25 @@ class _RiskMapPageState extends State<RiskMapPage> {
   }
 
   void _toggleAddMode() {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => _isAddMode = !_isAddMode);
     if (_isAddMode) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Tippe auf die Karte, um einen Zeckenstich zu markieren'),
+        SnackBar(
+          content: Text(l10n.tapToMark),
           backgroundColor: Colors.blue,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
   }
 
   void _addAtCurrentLocation() async {
+    final l10n = AppLocalizations.of(context)!;
     if (_currentLocation == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Standort wird ermittelt...'),
+        SnackBar(
+          content: Text(l10n.locationLoading),
           backgroundColor: Colors.orange,
         ),
       );
@@ -134,13 +145,14 @@ class _RiskMapPageState extends State<RiskMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title: const Text(
-          'Risiko Karte',
+        title: Text(
+          l10n.riskMap,
           textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -168,7 +180,8 @@ class _RiskMapPageState extends State<RiskMapPage> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     userAgentPackageName: 'com.example.tickoff',
                   ),
                   CircleLayer(
@@ -213,14 +226,14 @@ class _RiskMapPageState extends State<RiskMapPage> {
                   color: Colors.blue,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.touch_app, color: Colors.white),
-                    SizedBox(width: 8),
+                    const Icon(Icons.touch_app, color: Colors.white),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Tippe auf die Karte, um Zeckenstich zu markieren',
-                        style: TextStyle(color: Colors.white),
+                        l10n.tapToMark,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ],
@@ -230,9 +243,7 @@ class _RiskMapPageState extends State<RiskMapPage> {
           if (_isLoading)
             Container(
               color: Colors.black.withValues(alpha: 0.3),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),
@@ -260,7 +271,7 @@ class _RiskMapPageState extends State<RiskMapPage> {
                     ),
                   )
                 : const Icon(Icons.my_location),
-            label: const Text('Hier melden'),
+            label: Text(l10n.reportHere),
           ),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tickoff/l10n/app_localizations.dart';
 import 'package:tickoff/src/services/tick_bite_service.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -13,20 +14,21 @@ class _HistoryPageState extends State<HistoryPage> {
   final TickBiteService _tickBiteService = TickBiteService();
 
   Future<void> _deleteTickBite(TickBite tickBite) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Eintrag löschen?'),
-        content: const Text('Möchtest du diesen Zeckenstich-Eintrag wirklich löschen?'),
+        title: Text(l10n.deleteEntryTitle),
+        content: Text(l10n.deleteEntryMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Löschen'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -37,8 +39,8 @@ class _HistoryPageState extends State<HistoryPage> {
         await _tickBiteService.deleteTickBite(tickBite.id);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Eintrag gelöscht'),
+            SnackBar(
+              content: Text(l10n.entryDeleted),
               backgroundColor: Colors.green,
             ),
           );
@@ -47,7 +49,7 @@ class _HistoryPageState extends State<HistoryPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Fehler beim Löschen: $e'),
+              content: Text('${l10n.errorDeleting}: $e'),
               backgroundColor: Colors.red,
             ),
           );
@@ -58,12 +60,13 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        title: const Text(
-          'Meine Historie',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        title: Text(
+          l10n.myHistory,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -85,7 +88,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
-                    'Fehler beim Laden',
+                    l10n.errorLoading,
                     style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
@@ -106,27 +109,17 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.history,
-                    size: 80,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.history, size: 80, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'Keine Einträge vorhanden',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
+                    l10n.noEntries,
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Melde einen Zeckenstich auf der Risikokarte,\num ihn hier zu sehen.',
+                    l10n.noEntriesDescription,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -141,7 +134,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: Text(
-                    'Deine Zeckenstiche (${tickBites.length})',
+                    '${l10n.yourTickBites} (${tickBites.length})',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -188,10 +181,7 @@ class _HistoryPageState extends State<HistoryPage> {
                       const SizedBox(height: 2),
                       Text(
                         'Koordinaten: ${tickBite.location.latitude.toStringAsFixed(4)}, ${tickBite.location.longitude.toStringAsFixed(4)}',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
                       ),
                     ],
                   ),
