@@ -456,5 +456,42 @@ Das bedeutet:
 
 Dies ist Standardpraxis für professionelle Release-Prozesse.
 
+## 7. Deployment-Praktik
+
+### Eingesetzte Deployment-Strategie
+
+Da es sich bei *TickOff* um eine **mobile Applikation** handelt, kommen klassische Deployment-Strategien wie *Blue-Green-Deployment* oder *Rolling Updates*, die üblicherweise bei Webservern oder Backend-Systemen zum Einsatz kommen, **nicht zur Anwendung**.
+
+Stattdessen basiert das Deployment auf einer **versionierten Auslieferung über die offiziellen App-Stores** (Google Play Store, Apple App Store). Diese ermöglichen von Haus aus eine **kontrollierte, gestufte Veröffentlichung** (Phased Rollout), wodurch sich Risiken beim Update von Nutzergeräten reduzieren lassen.
+
+### Ablauf des Deployment-Prozesses
+
+Der Auslieferungsprozess erfolgt konsistent und automatisiert über die CI/CD-Pipeline auf GitHub:
+
+1. **Versionstagging:** Eine neue Version wird durch das Anlegen eines Git-Tags in der Form `vX.Y.Z` ausgelöst.
+2. **Pipeline-Ausführung:** Die GitHub Actions Pipeline erkennt das Tag, baut automatisiert ein signiertes Android-APK (und später IPA).
+3. **Verifikation:** Vor dem Build werden statische Codeanalysen, Unit-Tests und Coverage-Checks durchgeführt.
+4. **Artefakt-Erstellung:** Das finale Build-Artefakt wird als Artefakt gespeichert und kann aus der Pipeline heruntergeladen werden.
+5. **Deployment (manuell oder automatisch):** Die APK wird im nächsten Schritt über die Google Play Console für geschlossene oder offene Tests hochgeladen.
+
+### Begründung der Strategie
+
+Die Wahl dieser Strategie ist begründet durch:
+
+- **Technologische Plattform:** Mobile Apps werden nicht direkt auf Servern betrieben, sondern müssen über Stores ausgeliefert werden.
+- **Distributionsmodell:** App-Stores bieten erprobte Infrastruktur für Update-Management, Rückmeldungen und Fehlerberichte.
+- **Stabilität & Nutzerfreundlichkeit:** Phased Rollouts ermöglichen es, Updates zunächst an eine kleinere Nutzergruppe auszurollen und bei Erfolg breiter zu verteilen.
+
+### Konsistenz & Wiederholbarkeit
+
+Die Deployment-Praktik ist durch folgende Punkte konsistent umgesetzt:
+
+- Jeder Release erfolgt ausschliesslich über Git-Tags (`v1.0.0`, `v1.1.0`, ...).
+- Der Build-Prozess ist vollständig automatisiert.
+- Es werden keine manuell erstellten Artefakte verteilt.
+- Alle Umgebungsvariablen und Secrets sind definiert und versioniert im CI-Setup integriert.
+
+
+
 
 
