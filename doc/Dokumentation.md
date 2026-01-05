@@ -458,7 +458,7 @@ Dies ist Standardpraxis für professionelle Release-Prozesse.
 
 ## 7. Deployment-Praktik
 
-### Eingesetzte Deployment-Strategie
+### 5.1 Eingesetzte Deployment-Strategie
 
 Da es sich bei *TickOff* um eine **mobile Applikation** handelt, kommen klassische Deployment-Strategien wie *Blue-Green-Deployment* oder *Rolling Updates*, die üblicherweise bei Webservern oder Backend-Systemen zum Einsatz kommen, **nicht zur Anwendung**.
 
@@ -490,6 +490,130 @@ Die Deployment-Praktik ist durch folgende Punkte konsistent umgesetzt:
 - Der Build-Prozess ist vollständig automatisiert.
 - Es werden keine manuell erstellten Artefakte verteilt.
 - Alle Umgebungsvariablen und Secrets sind definiert und versioniert im CI-Setup integriert.
+ 
+### 5.2 Services für die Auslieferung
+
+### Eingesetzte Infrastruktur-Services
+
+Für die Auslieferung der TickOff-Applikation werden ausschliesslich **verwaltete Cloud- und Plattform-Services** eingesetzt. Es wird bewusst auf den Betrieb eigener Serverinfrastruktur verzichtet, da es sich um eine mobile Applikation mit serverlosem Backend handelt.
+
+Die folgenden Services kommen zum Einsatz:
+
+- **Firebase (Google Cloud)**
+  - Firestore (Datenbank)
+  - Firebase Authentication
+  - Firebase Cloud Messaging (Push-Benachrichtigungen)
+  - Hosting und Skalierung werden vollständig durch Firebase übernommen
+- **Google Maps API**
+  - Darstellung der Karten und Hotspots
+- **GitHub Actions**
+  - Automatisierter Build-, Test- und Release-Prozess
+- **Google Play Store / Apple App Store**
+  - Verteilung der mobilen Applikation an Endnutzer
+
+Da keine eigenen Server betrieben werden, sind **Load Balancer, Reverse Proxies oder virtuelle Maschinen** (AWS EC2, Azure VMs etc.) nicht erforderlich.
+
+### Automatisierung der Infrastruktur
+
+Tools wie **Ansible oder Terraform** werden in diesem Projekt nicht eingesetzt. Der Grund dafür ist, dass keine eigene Infrastruktur provisioniert oder verwaltet werden muss.  
+Alle benötigten Dienste werden als **Platform-as-a-Service (PaaS)** genutzt und automatisch skaliert.
+
+Diese Entscheidung reduziert:
+- Betriebsaufwand
+- Wartungskosten
+- Sicherheitsrisiken
+- Komplexität der Infrastruktur
+
+### Wartbarkeit und Skalierbarkeit
+
+Die Wartbarkeit und Skalierbarkeit wird durch folgende Massnahmen sichergestellt:
+
+- Nutzung von **verwalteten Cloud-Services** mit automatischer Skalierung
+- Klare Trennung zwischen Client (Flutter App) und Backend (Firebase)
+- Zentrale Konfiguration über Cloud-Dienste
+- Keine manuelle Serverkonfiguration notwendig
+
+Die Servicekonfiguration ist dokumentiert und nachvollziehbar, wodurch langfristige Wartbarkeit gewährleistet ist.
+
+---
+
+### 5.3 Komponenten für die Auslieferung
+
+### Bereitgestellte Softwarekomponenten
+
+Die folgenden Softwarekomponenten werden für die Auslieferung von TickOff verwendet:
+
+- **Flutter Mobile Applikation**
+  - Android APK (Release-Version)
+  - (Optional später: iOS IPA)
+- **Firebase SDKs**
+  - Datenbank, Authentifizierung, Push-Dienste
+- **Externe APIs**
+  - Google Maps API
+
+Die Applikation wird in einer **Produktionsumgebung** betrieben, die durch die App Stores und Firebase bereitgestellt wird.
+
+### Abhängigkeiten und Konfiguration
+
+Alle Abhängigkeiten werden automatisiert installiert und konfiguriert:
+
+- Dart- und Flutter-Abhängigkeiten via `flutter pub get`
+- Externe Konfigurationen (z. B. API-Keys) über Umgebungsvariablen
+- Keine manuelle Konfiguration auf Zielsystemen erforderlich
+
+Die korrekte Installation und Konfiguration der Abhängigkeiten wird durch den CI/CD-Prozess sichergestellt.
+
+### Artefakt-Verwaltung
+
+Anstelle eines klassischen Container- oder Artefakt-Repositorys wird **GitHub Actions Artifacts** verwendet:
+
+- Die APK wird im Build-Prozess erstellt
+- Das gleiche Artefakt wird für Tests und Deployment verwendet
+- Keine erneuten Builds zwischen Test und Release
+
+Dadurch wird sichergestellt, dass **immer exakt dieselbe Version** der Applikation ausgeliefert wird, die zuvor getestet wurde.
+
+Ein Container-Registry (z. B. GitLab Container Registry) ist nicht erforderlich, da keine Container-basierten Komponenten deployt werden.
+
+---
+
+### 5.4 Paketieren / Auslieferungsprozess
+
+### Paketierungsstrategie
+
+Die TickOff-Applikation wird als **Android APK** paketiert.  
+Das APK stellt ein vollständig eigenständiges Installationspaket dar und enthält:
+
+- Applikationscode
+- Abhängigkeiten
+- Ressourcen und Assets
+- Laufzeitkonfigurationen
+
+Die Erstellung des Installationspakets erfolgt automatisiert über den folgenden Build-Schritt:
+
+flutter build apk --release
+
+### Docker-Container werden bewusst nicht eingesetzt, da mobile Applikationen nicht containerisiert ausgeliefert werden.
+
+Qualitätssicherung vor Auslieferung
+
+Vor der Paketierung werden folgende Qualitätssicherungs-Massnahmen durchgeführt:
+- Code-Formatprüfung
+- Statische Codeanalyse
+- Automatisierte Unit Tests
+- Coverage-Erstellung
+
+Ein Build wird nur erstellt, wenn alle vorherigen Schritte erfolgreich abgeschlossen wurden.
+
+### Wiederholbarkeit und Dokumentation
+Der gesamte Auslieferungsprozess ist folgendermasse dokumentiert und automatisiert:
+- Einheitlicher Build-Prozess über CI/CD
+- Feste Flutter-Version
+- Definierte Umgebungsvariablen
+- Versionierung über Git-Tags
+
+Dadurch ist sichergestellt, dass der Prozess jederzeit reproduzierbar ist und neue Versionen konsistent ausgeliefert werden können.
+
 
 
 
