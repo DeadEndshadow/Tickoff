@@ -39,7 +39,7 @@ jobs:
         run: dart format --output=none .
 
       - name: Static code analysis (Dart analyze)
-        run: flutter analyze || true
+        run: flutter analyze --fatal-infos --fatal-warnings
 
       # ----------- TESTS -------------
       - name: Run unit tests
