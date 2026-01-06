@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/pages/history_page.dart';
 import 'package:tickoff/src/pages/riskmap_page.dart';
 import 'package:tickoff/src/pages/settings_page.dart';
+import 'package:tickoff/src/pages/tips_info_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static const String title = 'Tickoff';
-  
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.light
           ? Colors.grey[100]
           : Colors.grey[900],
       appBar: AppBar(
-
-        title: const Text(
-          "Tickoff",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
+        title: Text(
+          l10n.appTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
         ),
         centerTitle: true,
         backgroundColor: Colors.red,
@@ -31,18 +32,17 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Willkommen 👋",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              l10n.welcome,
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
-              "Behalte Zeckenstiche im Blick und bleib gesund.",
+              l10n.welcomeSubtitle,
               style: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color?.withOpacity(0.7),
                 fontSize: 16,
               ),
             ),
@@ -57,27 +57,24 @@ class HomePage extends StatelessWidget {
                 children: [
                   _buildFeatureCard(
                     context: context,
-                    icon: Icons.add_circle,
-                    color: Colors.green,
-                    title: "Neuen Stich erfassen",
-                  ),
-                  _buildFeatureCard(
-                    context: context,
                     icon: Icons.history,
                     color: Colors.orange,
-                    title: "Meine Historie",
+                    title: l10n.myHistory,
+                    pageType: 'history',
                   ),
                   _buildFeatureCard(
                     context: context,
                     icon: Icons.map,
                     color: Colors.blue,
-                    title: "Risikokarte",
+                    title: l10n.riskMap,
+                    pageType: 'riskmap',
                   ),
                   _buildFeatureCard(
                     context: context,
                     icon: Icons.lightbulb,
                     color: Colors.purple,
-                    title: "Tipps & Infos",
+                    title: l10n.tipsAndInfo,
+                    pageType: 'tips',
                   ),
                 ],
               ),
@@ -94,33 +91,29 @@ class HomePage extends StatelessWidget {
         currentIndex: 0,
         onTap: (index) {
           if (index == 1) {
-
-          } else if (index == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SettingsPage()),
+              MaterialPageRoute<void>(
+                builder: (context) => const SettingsPage(),
+              ),
             );
           } else {
             // Stay on home page
           }
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+            icon: const Icon(Icons.home),
+            label: l10n.home,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: "Erinnerungen",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings_outlined),
-            activeIcon: Icon(Icons.settings),
-            label: "Einstellungen",
+            icon: const Icon(Icons.settings_outlined),
+            activeIcon: const Icon(Icons.settings),
+            label: l10n.settings,
           ),
         ],
       ),
-  );
+    );
   }
 
   Widget _buildFeatureCard({
@@ -128,19 +121,34 @@ class HomePage extends StatelessWidget {
     required Color color,
     required String title,
     required BuildContext context,
+    required String pageType,
   }) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          if (title == "Risikokarte") {
+          if (pageType == 'riskmap') {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const RiskMapPage()),
+              MaterialPageRoute<void>(
+                builder: (context) => const RiskMapPage(),
+              ),
+            );
+          } else if (pageType == 'history') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => const HistoryPage(),
+              ),
+            );
+          } else if (pageType == 'tips') {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => const TipsInfoPage(),
+              ),
             );
           }
         },

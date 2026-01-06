@@ -1,0 +1,86 @@
+[
+  {
+    "id": "first_aid_001",
+    "step": 1,
+    "title_de": "Zecke entfernen",
+    "title_en": "Remove the tick",
+    "title_fr": "Enlever la tique",
+    "description_de": "Zecke mit Pinzette oder Zeckenkarte so nah wie möglich an der Haut greifen und vorsichtig herausziehen. Nicht drehen oder quetschen.",
+    "description_en": "Grasp the tick with tweezers or a tick card as close to the skin as possible and carefully pull it out. Do not twist or squeeze.",
+    "description_fr": "Saisir la tique avec une pince ou une carte à tiques aussi près de la peau que possible et retirer avec précaution. Ne pas tourner ni presser.",
+    "imageUrl": "/assets/images/remove_tick.png",
+    "duration": "1-2 minutes"
+  },
+  {
+    "id": "first_aid_002",
+    "step": 2,
+    "title_de": "Desinfektion",
+    "title_en": "Disinfection",
+    "title_fr": "Désinfection",
+    "description_de": "Einstichstelle mit Desinfektionsmittel oder Alkohol reinigen. Hände gründlich waschen.",
+    "description_en": "Clean the bite site with disinfectant or alcohol. Wash hands thoroughly.",
+    "description_fr": "Nettoyer le site de la piqûre avec un désinfectant ou de l'alcool. Se laver les mains soigneusement.",
+    "imageUrl": "/assets/images/disinfect.png",
+    "duration": "1 minute"
+  },
+  {
+    "id": "first_aid_003",
+    "step": 3,
+    "title_de": "Zecke aufbewahren",
+    "title_en": "Store the tick",
+    "title_fr": "Conserver la tique",
+    "description_de": "Zecke in verschlossenem Behälter aufbewahren (optional für spätere Analyse). Datum und Ort notieren.",
+    "description_en": "Store the tick in a sealed container (optional for later analysis). Note the date and location.",
+    "description_fr": "Conserver la tique dans un récipient fermé (en option pour une analyse ultérieure). Noter la date et le lieu.",
+    "imageUrl": "/assets/images/store_tick.png",
+    "duration": "1 minute"
+  },
+  {
+    "id": "first_aid_004",
+    "step": 4,
+    "title_de": "Stichstelle beobachten",
+    "title_en": "Monitor the bite site",
+    "title_fr": "Surveiller le site de piqûre",
+    "description_de": "Beobachten Sie die Einstichstelle für 4-6 Wochen auf Rötungen, Schwellungen oder einen sich ausbreitenden roten Ring (Erythema migrans).",
+    "description_en": "Monitor the bite site for 4-6 weeks for redness, swelling, or an expanding red ring (erythema migrans).",
+    "description_fr": "Surveiller le site de piqûre pendant 4 à 6 semaines pour des rougeurs, un gonflement ou un anneau rouge qui s'étend (érythème migrant).",
+    "imageUrl": "/assets/images/monitor.png",
+    "duration": "4-6 weeks"
+  },
+  {
+    "id": "first_aid_005",
+    "step": 5,
+    "title_de": "Symptome beachten",
+    "title_en": "Watch for symptoms",
+    "title_fr": "Surveiller les symptômes",
+    "description_de": "Achten Sie auf grippeähnliche Symptome: Fieber, Kopfschmerzen, Müdigkeit, Muskel- und Gelenkschmerzen.",
+    "description_en": "Watch for flu-like symptoms: fever, headache, fatigue, muscle and joint pain.",
+    "description_fr": "Surveiller les symptômes pseudo-grippaux : fièvre, maux de tête, fatigue, douleurs musculaires et articulaires.",
+    "imageUrl": "/assets/images/symptoms.png",
+    "duration": "ongoing"
+  },
+  {
+    "id": "first_aid_006",
+    "step": 6,
+    "title_de": "Arzt aufsuchen",
+    "title_en": "See a doctor",
+    "title_fr": "Consulter un médecin",
+    "description_de": "Bei Auftreten von Symptomen oder einem sich ausbreitenden roten Ring sofort einen Arzt aufsuchen. FSME-Impfung prüfen.",
+    "description_en": "If symptoms appear or a red ring spreads, see a doctor immediately. Check TBE vaccination status.",
+    "description_fr": "Si des symptômes apparaissent ou si un anneau rouge s'étend, consultez un médecin immédiatement. Vérifier le statut de vaccination contre la FSME.",
+    "imageUrl": "/assets/images/doctor.png",
+    "duration": "as needed"
+  },
+  {
+    "id": "first_aid_007",
+    "step": 7,
+    "title_de": "Prävention",
+    "title_en": "Prevention",
+    "title_fr": "Prévention",
+    "description_de": "Tragen Sie lange Kleidung, verwenden Sie Insektenschutzmittel, bleiben Sie auf Wegen und kontrollieren Sie sich nach Outdoor-Aktivitäten.",
+    "description_en": "Wear long clothing, use insect repellent, stay on paths, and check yourself after outdoor activities.",
+    "description_fr": "Porter des vêtements longs, utiliser un répulsif anti-insectes, rester sur les sentiers et se contrôler après les activités en plein air.",
+    "imageUrl": "/assets/images/prevention.png",
+    "duration": "always"
+  }
+]
