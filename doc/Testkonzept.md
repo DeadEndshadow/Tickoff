@@ -177,6 +177,20 @@ Alle Ergebnisse werden in **GitHub Issues** dokumentiert.
 - Firebase Emulator Suite
 - Google Maps Debug API Key
 
+### Serverbasierte Testumgebung (Lernzweck)
+
+Zusätzlich zur lokalen Testumgebung wird ein externer Cloud-Server bei Hetzner (Typ: cx32) eingesetzt.
+Der Server ist ausschliesslich für Lern- und Testzwecke vorgesehen und wird nicht für den produktiven Betrieb der Applikation verwendet.
+
+Auf dem Server ist Docker installiert, um eine reproduzierbare und isolierte Testumgebung bereitzustellen.
+Dies ermöglicht:
+- konsistente Testbedingungen unabhängig vom lokalen Entwicklerrechner
+- einfache Wiederherstellung der Umgebung
+- Nachvollziehbarkeit für Tests und Demonstrationen
+
+Die Nutzung erfolgt bewusst getrennt vom produktiven Firebase-System.
+Regelmässige Backups der relevanten Konfigurationsdateien werden durchgeführt, da der Server jederzeit entfernt werden kann.
+
 ---
 
 # 11. Testinfrastruktur
