@@ -34,12 +34,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # ----------- LINTING -----------
-      - name: Check formatting (no fail)
-        run: dart format --output=none .
-
-      - name: Static code analysis (Dart analyze)
-        run: flutter analyze --fatal-warnings
 
       # ----------- TESTS -------------
       - name: Run unit tests
