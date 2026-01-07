@@ -504,7 +504,7 @@ Die folgenden Services kommen zum Einsatz:
   - Firebase Authentication
   - Firebase Cloud Messaging (Push-Benachrichtigungen)
   - Hosting und Skalierung werden vollständig durch Firebase übernommen
-- **Google Maps API**
+- **OpenStreet Maps API**
   - Darstellung der Karten und Hotspots
 - **GitHub Actions**
   - Automatisierter Build-, Test- und Release-Prozess
@@ -549,7 +549,7 @@ Die folgenden Softwarekomponenten werden für die Auslieferung von TickOff verwe
 - **Firebase SDKs**
   - Datenbank, Authentifizierung, Push-Dienste
 - **Externe APIs**
-  - Google Maps API
+  - OpenStreet Maps API
 
 Die Applikation wird in einer **Produktionsumgebung** betrieben, die durch die App Stores und Firebase bereitgestellt wird.
 
