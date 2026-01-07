@@ -72,8 +72,14 @@ jobs:
           name: tickoff-apk
           path: ./release/
 
+      - name: List downloaded files
+        run: ls -la ./release/
+
       - name: Rename APK with version
         run: mv ./release/app-release.apk ./release/tickoff-${GITHUB_REF_NAME}.apk
+
+      - name: Verify APK exists
+        run: ls -la ./release/
 
       - name: Create GitHub Release and upload APK
         uses: softprops/action-gh-release@v2
