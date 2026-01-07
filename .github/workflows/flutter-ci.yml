@@ -66,20 +66,24 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')   # Only run when tag starts with "v"
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      contents: write
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Download APK artifact from build stage
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: tickoff-apk
           path: ./release/
 
-      - name: Simulated Deployment
-        run: |
-          echo "Deploying TickOff version: $GITHUB_REF_NAME"
-          ls -la ./release/
-          echo "Deployment completed (simulation)"
+      - name: Rename APK with version
+        run: mv ./release/app-release.apk ./release/tickoff-${GITHUB_REF_NAME}.apk
+
+      - name: Create GitHub Release and upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release/tickoff-${GITHUB_REF_NAME}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
