@@ -86,3 +86,45 @@ Diese Features sind nice-to-have, aber nicht notwendig für den Marktstart.
 - Offline-Funktion (#17)
 - Performance-Optimierung
 - Tests > 80 % Coverage
+
+# Gamification-Konzept für TickOff
+
+## 1. Badges & Achievements (low effort, high impact)
+
+### Beispiele
+- **First Report** – Erster Zeckenfund wurde gemeldet  
+- **Explorer** – Risikokarte in 5 verschiedenen Regionen angesehen  
+- **Safety First** – Erste-Hilfe-Informationen mindestens 3 Mal aufgerufen  
+- **Pet Protector** – Zecken in der Nähe von Hunde-Spaziergebieten gemeldet  
+- **Spring Watcher** – Aktiv während der Haupt-Zeckensaison  
+
+### Warum dieses System funktioniert
+- Keine personenbezogenen Daten erforderlich  
+- Technisch einfach umzusetzen  
+- Fördert sinnvolle und gewünschte App-Nutzung  
+- Speicherung lokal oder anonym möglich → DSGVO-konform  
+
+---
+
+## 2. Level-System basierend auf Aufmerksamkeit statt Meldungen
+
+Anstatt viele Zeckenmeldungen zu belohnen (falscher Anreiz), basiert das Level-System auf verantwortungsbewusstem Verhalten.
+
+### Level-Beispiel
+- **Level 1: Observer** – Nutzt Karte und Informationsseiten  
+- **Level 2: Aware Hiker** – Prüft die Risikokarte vor Spaziergängen  
+- **Level 3: Community Helper** – Reicht verifizierte Meldungen ein  
+- **Level 4: Risk Scout** – Aktiv in mehreren Regionen unterwegs  
+
+### Zentrale Regel
+Level steigen durch:
+- Nutzung der Risikokarte  
+- Aufrufe der Erste-Hilfe- und Informationsseiten  
+- Regelmässige, zeitnahe Risikoüberprüfung  
+
+Nicht durch:
+- Anzahl der Zeckenbisse  
+- Häufigkeit persönlicher Betroffenheit  
+
+Dieses System fördert Prävention, Aufmerksamkeit und Community-Beitrag statt riskantes Verhalten.
+
