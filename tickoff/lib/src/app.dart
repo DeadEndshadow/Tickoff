@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tickoff/l10n/app_localizations.dart';
 import 'package:tickoff/src/pages/home_page.dart';
+import 'package:tickoff/src/pages/login_page.dart';
+import 'package:tickoff/src/pages/register_page.dart';
 import 'package:tickoff/src/services/locale_controller.dart';
 import 'package:tickoff/src/services/theme_controller.dart';
 
@@ -39,7 +41,13 @@ class MyApp extends StatelessWidget {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              home: const HomePage(),
+              // Named routes
+              initialRoute: '/',
+              routes: {
+                '/': (context) => const HomePage(),
+                '/login': (context) => const LoginPage(),
+                '/register': (context) => const RegisterPage(),
+              },
             );
           },
         );

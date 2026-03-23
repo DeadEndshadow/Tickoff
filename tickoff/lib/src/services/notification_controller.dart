@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'api_service.dart';
 
 class NotificationController {
   NotificationController._internal();
@@ -9,6 +10,7 @@ class NotificationController {
   final ValueNotifier<bool> notificationsEnabled = ValueNotifier(true);
 
   static const String _notificationKey = 'notifications_enabled';
+  static const String _deviceTokenKey = 'fcm_device_token';
 
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -26,6 +28,35 @@ class NotificationController {
   }
 
   bool get isEnabled => notificationsEnabled.value;
+
+  /// Register a device token with the push notification service.
+  /// Call this after obtaining the FCM/APNs token from the platform.
+  Future<void> registerDeviceToken(String token, {String platform = 'android'}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_deviceTokenKey, token);
+    try {
+      await ApiService.instance.post('/api/notifications/register-device', {
+        'deviceToken': token,
+        'platform': platform,
+      });
+    } catch (_) {
+      // Backend unavailable – token stored locally for later retry
+    }
+  }
+
+  /// Unregister the stored device token from the push notification service.
+  Future<void> unregisterDeviceToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(_deviceTokenKey);
+    if (token != null) {
+      try {
+        await ApiService.instance.delete('/api/notifications/unregister-device', {
+          'deviceToken': token,
+        });
+      } catch (_) {}
+      await prefs.remove(_deviceTokenKey);
+    }
+  }
 
   /// Show an in-app notification popup for a new tick bite
   static void showTickBiteNotification(
