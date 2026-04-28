@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tickoff/src/services/auth_service.dart';
+import 'package:tickoff/src/services/guest_session.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,7 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -18,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _identifierController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     final error = await AuthService.instance.login(
-      email: _emailController.text.trim(),
+      identifier: _identifierController.text.trim(),
       password: _passwordController.text,
     );
 
@@ -44,8 +45,9 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false;
       });
     } else {
+      GuestSession.endGuestSession();
       // Navigate to home on success
-      Navigator.of(context).pushReplacementNamed('/');
+      Navigator.of(context).pushReplacementNamed('/home');
     }
   }
 
@@ -81,22 +83,19 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Email
+                  // Email or username
                   TextFormField(
-                    controller: _emailController,
+                    controller: _identifierController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
-                      labelText: 'E-Mail',
-                      prefixIcon: Icon(Icons.email_outlined),
+                      labelText: 'E-Mail oder Benutzername',
+                      prefixIcon: Icon(Icons.person_outlined),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte E-Mail eingeben';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Ungültige E-Mail-Adresse';
+                        return 'Bitte E-Mail oder Benutzername eingeben';
                       }
                       return null;
                     },
@@ -166,8 +165,10 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Guest / skip button
                   TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushReplacementNamed('/'),
+                    onPressed: () {
+                      GuestSession.startGuestSession();
+                      Navigator.of(context).pushReplacementNamed('/home');
+                    },
                     child: Text(
                       'Ohne Anmeldung fortfahren',
                       style: TextStyle(color: theme.colorScheme.outline),

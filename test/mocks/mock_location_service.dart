@@ -5,8 +5,6 @@ library mock_location_service;
 
 import 'dart:math' as math;
 
-import 'package:flutter_test/flutter_test.dart';
-
 class MockLocationService {
   double? _latitude;
   double? _longitude;

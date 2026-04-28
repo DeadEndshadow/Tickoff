@@ -10,6 +10,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -20,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -37,6 +39,9 @@ class _RegisterPageState extends State<RegisterPage> {
     final error = await AuthService.instance.register(
       email: _emailController.text.trim(),
       password: _passwordController.text,
+      username: _usernameController.text.trim().isEmpty
+          ? null
+          : _usernameController.text.trim(),
     );
 
     if (!mounted) return;
@@ -47,7 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _isLoading = false;
       });
     } else {
-      Navigator.of(context).pushReplacementNamed('/');
+      Navigator.of(context).pushReplacementNamed('/home');
     }
   }
 
@@ -80,6 +85,28 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
+
+                  // Username (optional)
+                  TextFormField(
+                    controller: _usernameController,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      labelText: 'Benutzername (optional)',
+                      prefixIcon: Icon(Icons.person_outlined),
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value != null && value.isNotEmpty && value.length < 3) {
+                        return 'Benutzername muss mindestens 3 Zeichen haben';
+                      }
+                      if (value != null && value.isNotEmpty &&
+                          !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                        return 'Nur Buchstaben, Zahlen und _ erlaubt';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
 
                   // Email
                   TextFormField(

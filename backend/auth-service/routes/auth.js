@@ -38,18 +38,26 @@ router.post(
   validate({
     email: { required: true, type: 'string', pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
     password: { required: true, type: 'string', minLength: 8 },
+    username: { required: false, type: 'string', minLength: 3 },
   }),
   async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email, password, username } = req.body;
 
       const existing = await User.findByEmail(email);
       if (existing) {
         return res.status(409).json({ error: 'Email already registered' });
       }
 
+      if (username) {
+        const existingUsername = await User.findByUsername(username);
+        if (existingUsername) {
+          return res.status(409).json({ error: 'Username already taken' });
+        }
+      }
+
       const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-      const user = await User.create(email, passwordHash);
+      const user = await User.create(email, passwordHash, username);
 
       const accessToken = generateAccessToken(user.id, user.email);
       const refreshToken = generateRefreshToken(user.id);
@@ -68,14 +76,14 @@ router.post(
 router.post(
   '/login',
   validate({
-    email: { required: true, type: 'string' },
+    identifier: { required: true, type: 'string' },
     password: { required: true, type: 'string' },
   }),
   async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { identifier, password } = req.body;
 
-      const user = await User.findByEmail(email);
+      const user = await User.findByIdentifier(identifier);
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }

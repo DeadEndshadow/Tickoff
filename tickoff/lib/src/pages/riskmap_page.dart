@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/services/guest_session.dart';
 import 'package:tickoff/src/services/notification_controller.dart';
 import 'package:tickoff/src/services/tick_bite_service.dart';
 
@@ -247,7 +248,9 @@ class _RiskMapPageState extends State<RiskMapPage> {
             ),
         ],
       ),
-      floatingActionButton: Column(
+      floatingActionButton: GuestSession.isGuest
+          ? null
+          : Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(

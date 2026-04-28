@@ -16,6 +16,28 @@ const User = {
   },
 
   /**
+   * Find a user by username.
+   */
+  async findByUsername(username) {
+    const { rows } = await pool.query(
+      'SELECT * FROM users WHERE username = $1 LIMIT 1',
+      [username],
+    );
+    return rows[0] || null;
+  },
+
+  /**
+   * Find a user by email or username (for login).
+   */
+  async findByIdentifier(identifier) {
+    const { rows } = await pool.query(
+      'SELECT * FROM users WHERE email = $1 OR username = $1 LIMIT 1',
+      [identifier],
+    );
+    return rows[0] || null;
+  },
+
+  /**
    * Find a user by ID.
    */
   async findById(id) {
@@ -29,10 +51,10 @@ const User = {
   /**
    * Create a new user with a hashed password.
    */
-  async create(email, passwordHash) {
+  async create(email, passwordHash, username) {
     const { rows } = await pool.query(
-      'INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email, created_at',
-      [email, passwordHash],
+      'INSERT INTO users (email, username, password_hash) VALUES ($1, $2, $3) RETURNING id, email, username, created_at',
+      [email, username || null, passwordHash],
     );
     return rows[0];
   },

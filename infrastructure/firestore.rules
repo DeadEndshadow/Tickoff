@@ -43,6 +43,21 @@ service cloud.firestore {
     match /test_data/{document=**} {
       allow read, write: if true; // Unrestricted for testing
     }
+
+    // Auth collection - Custom auth (no Firebase Auth used)
+    match /Auth/{userId} {
+      allow create: if true; // Registration open to all
+      allow read: if true;   // Needed for login lookups
+      allow update: if true; // Token refresh on login/logout
+      allow delete: if false;
+    }
+
+    // tick_bites collection - Public read, write for all
+    match /tick_bites/{biteId} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if false;
+    }
     
     // Validation function for anonymized reports
     function validateAnonymizedReport(data) {

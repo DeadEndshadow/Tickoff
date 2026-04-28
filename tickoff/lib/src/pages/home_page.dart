@@ -4,6 +4,7 @@ import 'package:tickoff/src/pages/history_page.dart';
 import 'package:tickoff/src/pages/riskmap_page.dart';
 import 'package:tickoff/src/pages/settings_page.dart';
 import 'package:tickoff/src/pages/tips_info_page.dart';
+import 'package:tickoff/src/services/guest_session.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -55,13 +56,14 @@ class HomePage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _buildFeatureCard(
-                    context: context,
-                    icon: Icons.history,
-                    color: Colors.orange,
-                    title: l10n.myHistory,
-                    pageType: 'history',
-                  ),
+                  if (!GuestSession.isGuest)
+                    _buildFeatureCard(
+                      context: context,
+                      icon: Icons.history,
+                      color: Colors.orange,
+                      title: l10n.myHistory,
+                      pageType: 'history',
+                    ),
                   _buildFeatureCard(
                     context: context,
                     icon: Icons.map,
