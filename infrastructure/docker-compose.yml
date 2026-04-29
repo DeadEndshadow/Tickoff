@@ -33,8 +33,12 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=8080
+      - RABBITMQ_URL=amqp://tickoff:tickoff@rabbitmq:5672
     networks:
       - tickoff-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     restart: unless-stopped
 
   # Test Database (PostgreSQL for test data)
@@ -59,6 +63,48 @@ services:
       timeout: 5s
       retries: 5
 
+  # Message Queue (RabbitMQ)
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: tickoff-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI (http://localhost:15672)
+    environment:
+      - RABBITMQ_DEFAULT_USER=tickoff
+      - RABBITMQ_DEFAULT_PASS=tickoff
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Analytics Service (Python)
+  analytics-service:
+    build:
+      context: ./analytics-service
+      dockerfile: Dockerfile
+    container_name: tickoff-analytics
+    ports:
+      - "8090:8090"   # Analytics REST API
+    environment:
+      - RABBITMQ_URL=amqp://tickoff:tickoff@rabbitmq:5672
+      - POSTGRES_URL=postgresql://tickoff_user:tickoff_password@test-db:5432/tickoff_test
+      - PORT=8090
+    networks:
+      - tickoff-network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      test-db:
+        condition: service_healthy
+    restart: unless-stopped
+
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
@@ -71,6 +117,7 @@ services:
     depends_on:
       - mock-api
       - firebase-emulator
+      - analytics-service
     networks:
       - tickoff-network
     restart: unless-stopped
@@ -82,3 +129,4 @@ networks:
 volumes:
   firebase-data:
   postgres-data:
+  rabbitmq-data:
