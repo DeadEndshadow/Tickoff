@@ -1,57 +1,50 @@
 /**
- * RabbitMQ publisher for TickOff events.
+ * Kafka publisher for TickOff events.
  * Used by the Notification Service to push events into the message queue.
  */
 
-const amqp = require('amqplib');
+const { Kafka } = require('kafkajs');
 
-const RABBITMQ_URL  = process.env.RABBITMQ_URL || 'amqp://tickoff:tickoff@localhost:5672';
-const EXCHANGE_NAME = 'tickoff.exchange';
-const ROUTING_KEY   = 'tickoff.events';
+const KAFKA_BROKERS = (process.env.KAFKA_BROKERS || 'localhost:9092').split(',');
+const TOPIC         = 'tickoff.events';
 
-let channel = null;
+const kafka    = new Kafka({ clientId: 'mock-api', brokers: KAFKA_BROKERS });
+const producer = kafka.producer();
+
+let connected = false;
 
 async function connect() {
     try {
-        const conn = await amqp.connect(RABBITMQ_URL);
-        channel = await conn.createChannel();
-        await channel.assertExchange(EXCHANGE_NAME, 'topic', { durable: true });
-        console.log('✅ RabbitMQ connected');
-
-        conn.on('error', (err) => {
-            console.error('RabbitMQ connection error:', err.message);
-            channel = null;
-            setTimeout(connect, 5000); // reconnect
-        });
+        await producer.connect();
+        connected = true;
+        console.log('✅ Kafka producer connected');
     } catch (err) {
-        console.error('RabbitMQ connection failed:', err.message, '— retrying in 5s');
+        console.error('Kafka connection failed:', err.message, '— retrying in 5s');
         setTimeout(connect, 5000);
     }
 }
 
 /**
- * Publish an event to the message queue.
+ * Publish an event to the Kafka topic.
  * @param {string} eventType  e.g. "tick_report" | "notification_sent"
  * @param {object} payload    Event-specific data
  */
-function publish(eventType, payload) {
-    if (!channel) {
-        console.warn('RabbitMQ not ready, dropping event:', eventType);
+async function publish(eventType, payload) {
+    if (!connected) {
+        console.warn('Kafka not ready, dropping event:', eventType);
         return false;
     }
 
     const message = JSON.stringify({
-        event_type: eventType,
+        event_type:   eventType,
         payload,
         published_at: new Date().toISOString(),
     });
 
-    channel.publish(
-        EXCHANGE_NAME,
-        ROUTING_KEY,
-        Buffer.from(message),
-        { persistent: true },
-    );
+    await producer.send({
+        topic:    TOPIC,
+        messages: [{ value: message }],
+    });
 
     console.log(`📤 Published event: ${eventType}`);
     return true;

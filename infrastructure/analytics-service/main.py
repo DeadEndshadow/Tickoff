@@ -1,6 +1,6 @@
 """
 TickOff Analytics Service
-Consumes events from RabbitMQ and stores analytics data in PostgreSQL.
+Consumes events from Kafka and stores analytics data in PostgreSQL.
 """
 
 import os
@@ -9,11 +9,10 @@ import logging
 import threading
 from datetime import datetime
 
-import pika
+from confluent_kafka import Consumer, KafkaError
 import psycopg2
 import psycopg2.extras
 from flask import Flask, jsonify
-from urllib.parse import urlparse
 
 # ── Logging ────────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -23,12 +22,10 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-RABBITMQ_URL  = os.getenv("RABBITMQ_URL",  "amqp://tickoff:tickoff@localhost:5672")
-POSTGRES_URL  = os.getenv("POSTGRES_URL",  "postgresql://tickoff_user:tickoff_password@localhost:5432/tickoff_test")
+KAFKA_BROKERS = os.getenv("KAFKA_BROKERS", "localhost:9092")
+KAFKA_TOPIC   = os.getenv("KAFKA_TOPIC",   "tickoff.events")
+POSTGRES_URL  = os.getenv("POSTGRES_URL",  "postgresql://tickoff_user:tickoff_password@localhost:5432/tickoff")
 PORT          = int(os.getenv("PORT", 8090))
-
-QUEUE_NAME    = "tickoff.events"      # Notification Service publishes here
-EXCHANGE_NAME = "tickoff.exchange"    # Topic exchange
 
 # ── Database ───────────────────────────────────────────────────────────────────
 def get_db():
@@ -73,14 +70,8 @@ def handle_tick_report(payload: dict, conn):
     """Store stats when a new tick report is submitted."""
     with conn.cursor() as cur:
         cur.execute(
-            """
-            INSERT INTO tick_report_stats (region, risk_level)
-            VALUES (%s, %s)
-            """,
-            (
-                payload.get("region", "unknown"),
-                payload.get("riskLevel", "unknown"),
-            ),
+            "INSERT INTO tick_report_stats (region, risk_level) VALUES (%s, %s)",
+            (payload.get("region", "unknown"), payload.get("riskLevel", "unknown")),
         )
     log.info("tick_report stored: region=%s risk=%s",
              payload.get("region"), payload.get("riskLevel"))
@@ -90,10 +81,7 @@ def handle_notification_sent(payload: dict, conn):
     """Store stats when a push notification is sent."""
     with conn.cursor() as cur:
         cur.execute(
-            """
-            INSERT INTO notification_stats (notification_type)
-            VALUES (%s)
-            """,
+            "INSERT INTO notification_stats (notification_type) VALUES (%s)",
             (payload.get("type", "unknown"),),
         )
     log.info("notification_sent stored: type=%s", payload.get("type"))
@@ -105,75 +93,62 @@ EVENT_HANDLERS = {
 }
 
 
-# ── RabbitMQ Consumer ──────────────────────────────────────────────────────────
-def on_message(channel, method, properties, body):
-    """Called for every message received from the queue."""
-    try:
-        data       = json.loads(body)
-        event_type = data.get("event_type", "unknown")
-        payload    = data.get("payload", {})
+# ── Kafka Consumer ─────────────────────────────────────────────────────────────
+def process_message(data: dict):
+    """Process a single decoded Kafka message."""
+    event_type = data.get("event_type", "unknown")
+    payload    = data.get("payload", {})
 
-        log.info("Received event: %s", event_type)
+    log.info("Received event: %s", event_type)
 
-        conn = get_db()
-        with conn:
-            # Always log the raw event
-            with conn.cursor() as cur:
-                cur.execute(
-                    "INSERT INTO analytics_events (event_type, payload) VALUES (%s, %s)",
-                    (event_type, json.dumps(payload)),
-                )
+    conn = get_db()
+    with conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO analytics_events (event_type, payload) VALUES (%s, %s)",
+                (event_type, json.dumps(payload)),
+            )
 
-            # Run the specific handler if we have one
-            handler = EVENT_HANDLERS.get(event_type)
-            if handler:
-                handler(payload, conn)
-            else:
-                log.warning("No handler for event type: %s", event_type)
+        handler = EVENT_HANDLERS.get(event_type)
+        if handler:
+            handler(payload, conn)
+        else:
+            log.warning("No handler for event type: %s", event_type)
 
-        conn.close()
-        channel.basic_ack(delivery_tag=method.delivery_tag)
-
-    except Exception as e:
-        log.error("Failed to process message: %s", e)
-        # Negative-ack so RabbitMQ requeues the message
-        channel.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+    conn.close()
 
 
 def start_consumer():
-    """Connect to RabbitMQ and start consuming in a background thread."""
-    params = pika.URLParameters(RABBITMQ_URL)
-    params.heartbeat = 60
+    """Connect to Kafka and consume messages in a background thread."""
+    consumer = Consumer({
+        "bootstrap.servers": KAFKA_BROKERS,
+        "group.id":          "analytics-service",
+        "auto.offset.reset": "earliest",
+    })
+    consumer.subscribe([KAFKA_TOPIC])
+    log.info("Kafka consumer started, subscribed to topic: %s", KAFKA_TOPIC)
 
     while True:
         try:
-            connection = pika.BlockingConnection(params)
-            channel    = connection.channel()
+            msg = consumer.poll(timeout=1.0)
 
-            channel.exchange_declare(
-                exchange=EXCHANGE_NAME,
-                exchange_type="topic",
-                durable=True,
-            )
-            channel.queue_declare(queue=QUEUE_NAME, durable=True)
-            channel.queue_bind(
-                queue=QUEUE_NAME,
-                exchange=EXCHANGE_NAME,
-                routing_key="tickoff.#",
-            )
+            if msg is None:
+                continue
 
-            channel.basic_qos(prefetch_count=1)
-            channel.basic_consume(queue=QUEUE_NAME, on_message_callback=on_message)
+            if msg.error():
+                if msg.error().code() == KafkaError._PARTITION_EOF:
+                    continue
+                log.error("Kafka error: %s", msg.error())
+                continue
 
-            log.info("Analytics consumer started, waiting for events...")
-            channel.start_consuming()
+            data = json.loads(msg.value().decode("utf-8"))
+            process_message(data)
 
-        except pika.exceptions.AMQPConnectionError as e:
-            log.error("RabbitMQ connection lost: %s — retrying in 5s", e)
-            import time; time.sleep(5)
+        except Exception as e:
+            log.error("Failed to process message: %s", e)
 
 
-# ── REST API (read-only analytics endpoints) ───────────────────────────────────
+# ── REST API ───────────────────────────────────────────────────────────────────
 app = Flask(__name__)
 
 
@@ -234,10 +209,8 @@ def get_notification_stats():
 if __name__ == "__main__":
     init_db()
 
-    # Start RabbitMQ consumer in background thread
     consumer_thread = threading.Thread(target=start_consumer, daemon=True)
     consumer_thread.start()
 
-    # Start Flask API
     log.info("Analytics API starting on port %d", PORT)
     app.run(host="0.0.0.0", port=PORT)
