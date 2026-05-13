@@ -1,0 +1,25 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Analytics Service (Python/Flask - your service)
+  - job_name: analytics-service
+    static_configs:
+      - targets: ["analytics-service:8090"]
+    metrics_path: /metrics
+
+  # Kafka metrics via kafka-exporter
+  - job_name: kafka
+    static_configs:
+      - targets: ["kafka-exporter:9308"]
+
+  # PostgreSQL metrics
+  - job_name: postgres
+    static_configs:
+      - targets: ["postgres-exporter:9187"]
+
+  # Prometheus itself
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

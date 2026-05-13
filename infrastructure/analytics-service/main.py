@@ -1,6 +1,7 @@
 """
 TickOff Analytics Service
 Consumes events from Kafka and stores analytics data in PostgreSQL.
+Exposes Prometheus metrics at /metrics.
 """
 
 import os
@@ -13,6 +14,9 @@ from confluent_kafka import Consumer, KafkaError
 import psycopg2
 import psycopg2.extras
 from flask import Flask, jsonify
+from prometheus_client import Counter, Histogram, make_wsgi_app, REGISTRY
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+import time
 
 # ── Logging ────────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -27,14 +31,38 @@ KAFKA_TOPIC   = os.getenv("KAFKA_TOPIC",   "tickoff.events")
 POSTGRES_URL  = os.getenv("POSTGRES_URL",  "postgresql://tickoff_user:tickoff_password@localhost:5432/tickoff")
 PORT          = int(os.getenv("PORT", 8090))
 
+# ── Prometheus Metrics ─────────────────────────────────────────────────────────
+EVENTS_RECEIVED = Counter(
+    "tickoff_events_received_total",
+    "Total number of events received from Kafka",
+    ["event_type"],
+)
+PROCESSING_ERRORS = Counter(
+    "tickoff_processing_errors_total",
+    "Total number of event processing errors",
+)
+EVENT_PROCESSING_TIME = Histogram(
+    "tickoff_event_processing_seconds",
+    "Time spent processing a Kafka event",
+    ["event_type"],
+)
+HTTP_REQUESTS = Counter(
+    "flask_http_request_total",
+    "Total HTTP requests to the analytics API",
+    ["method", "endpoint", "status"],
+)
+HTTP_REQUEST_DURATION = Histogram(
+    "flask_http_request_duration_seconds",
+    "HTTP request duration",
+    ["method", "endpoint"],
+)
+
 # ── Database ───────────────────────────────────────────────────────────────────
 def get_db():
-    """Open a new PostgreSQL connection."""
     return psycopg2.connect(POSTGRES_URL)
 
 
 def init_db():
-    """Create analytics tables if they don't exist yet."""
     conn = get_db()
     with conn:
         with conn.cursor() as cur:
@@ -67,7 +95,6 @@ def init_db():
 
 # ── Event Handlers ─────────────────────────────────────────────────────────────
 def handle_tick_report(payload: dict, conn):
-    """Store stats when a new tick report is submitted."""
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO tick_report_stats (region, risk_level) VALUES (%s, %s)",
@@ -78,7 +105,6 @@ def handle_tick_report(payload: dict, conn):
 
 
 def handle_notification_sent(payload: dict, conn):
-    """Store stats when a push notification is sent."""
     with conn.cursor() as cur:
         cur.execute(
             "INSERT INTO notification_stats (notification_type) VALUES (%s)",
@@ -95,31 +121,36 @@ EVENT_HANDLERS = {
 
 # ── Kafka Consumer ─────────────────────────────────────────────────────────────
 def process_message(data: dict):
-    """Process a single decoded Kafka message."""
     event_type = data.get("event_type", "unknown")
     payload    = data.get("payload", {})
 
     log.info("Received event: %s", event_type)
+    EVENTS_RECEIVED.labels(event_type=event_type).inc()
 
-    conn = get_db()
-    with conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO analytics_events (event_type, payload) VALUES (%s, %s)",
-                (event_type, json.dumps(payload)),
-            )
-
-        handler = EVENT_HANDLERS.get(event_type)
-        if handler:
-            handler(payload, conn)
-        else:
-            log.warning("No handler for event type: %s", event_type)
-
-    conn.close()
+    start = time.time()
+    try:
+        conn = get_db()
+        with conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "INSERT INTO analytics_events (event_type, payload) VALUES (%s, %s)",
+                    (event_type, json.dumps(payload)),
+                )
+            handler = EVENT_HANDLERS.get(event_type)
+            if handler:
+                handler(payload, conn)
+            else:
+                log.warning("No handler for event type: %s", event_type)
+        conn.close()
+    except Exception as e:
+        PROCESSING_ERRORS.inc()
+        log.error("Failed to process message: %s", e)
+        raise
+    finally:
+        EVENT_PROCESSING_TIME.labels(event_type=event_type).observe(time.time() - start)
 
 
 def start_consumer():
-    """Connect to Kafka and consume messages in a background thread."""
     consumer = Consumer({
         "bootstrap.servers": KAFKA_BROKERS,
         "group.id":          "analytics-service",
@@ -131,25 +162,43 @@ def start_consumer():
     while True:
         try:
             msg = consumer.poll(timeout=1.0)
-
             if msg is None:
                 continue
-
             if msg.error():
                 if msg.error().code() == KafkaError._PARTITION_EOF:
                     continue
                 log.error("Kafka error: %s", msg.error())
                 continue
-
             data = json.loads(msg.value().decode("utf-8"))
             process_message(data)
-
         except Exception as e:
-            log.error("Failed to process message: %s", e)
+            log.error("Consumer error: %s", e)
 
 
 # ── REST API ───────────────────────────────────────────────────────────────────
 app = Flask(__name__)
+
+
+@app.before_request
+def start_timer():
+    from flask import g, request
+    g.start_time = time.time()
+
+
+@app.after_request
+def record_request_metrics(response):
+    from flask import g, request
+    duration = time.time() - g.get("start_time", time.time())
+    HTTP_REQUESTS.labels(
+        method=request.method,
+        endpoint=request.path,
+        status=response.status_code,
+    ).inc()
+    HTTP_REQUEST_DURATION.labels(
+        method=request.method,
+        endpoint=request.path,
+    ).observe(duration)
+    return response
 
 
 @app.get("/health")
@@ -159,7 +208,6 @@ def health():
 
 @app.get("/api/analytics/events")
 def get_events():
-    """Return the last 100 raw analytics events."""
     conn = get_db()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("""
@@ -175,7 +223,6 @@ def get_events():
 
 @app.get("/api/analytics/tick-reports")
 def get_tick_report_stats():
-    """Return tick report counts grouped by region and risk level."""
     conn = get_db()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("""
@@ -191,7 +238,6 @@ def get_tick_report_stats():
 
 @app.get("/api/analytics/notifications")
 def get_notification_stats():
-    """Return notification counts grouped by type."""
     conn = get_db()
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("""
@@ -212,5 +258,11 @@ if __name__ == "__main__":
     consumer_thread = threading.Thread(target=start_consumer, daemon=True)
     consumer_thread.start()
 
+    # Mount /metrics endpoint via Prometheus WSGI middleware
+    app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
+        "/metrics": make_wsgi_app()
+    })
+
     log.info("Analytics API starting on port %d", PORT)
-    app.run(host="0.0.0.0", port=PORT)
+    from werkzeug.serving import run_simple
+    run_simple("0.0.0.0", PORT, app.wsgi_app)
