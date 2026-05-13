@@ -1,0 +1,122 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: TickOff Alerts
+    folder: TickOff
+    interval: 1m
+    rules:
+
+      # KPI 1: Kafka Consumer Lag
+      - uid: alert-kafka-lag
+        title: "Kafka Consumer Lag Too High"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: kafka_consumergroup_lag{consumergroup="analytics-service"}
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              refId: C
+              type: threshold
+              conditions:
+                - evaluator:
+                    params: [100]
+                    type: gt
+                  query:
+                    params: [A]
+        noDataState: NoData
+        execErrState: Alerting
+        for: 2m
+        annotations:
+          summary: "Kafka consumer lag is above 100"
+          description: "The analytics-service is not keeping up with Kafka messages."
+        labels:
+          severity: warning
+
+      # KPI 2: Analytics Processing Errors
+      - uid: alert-processing-errors
+        title: "Analytics Processing Errors Detected"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: increase(tickoff_processing_errors_total[5m])
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              refId: C
+              type: threshold
+              conditions:
+                - evaluator:
+                    params: [1]
+                    type: gte
+                  query:
+                    params: [A]
+        noDataState: NoData
+        execErrState: Alerting
+        for: 0m
+        annotations:
+          summary: "Analytics service is throwing processing errors"
+          description: "Errors detected in the last 5 minutes"
+        labels:
+          severity: critical
+
+      # KPI 3: PostgreSQL Active Connections
+      - uid: alert-postgres-connections
+        title: "PostgreSQL High Connection Count"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: prometheus
+            model:
+              expr: pg_stat_activity_count{datname="tickoff"}
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              refId: C
+              type: threshold
+              conditions:
+                - evaluator:
+                    params: [10]
+                    type: gt
+                  query:
+                    params: [A]
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1m
+        annotations:
+          summary: "PostgreSQL has more than 10 active connections"
+          description: "Current active connections above threshold"
+        labels:
+          severity: warning
