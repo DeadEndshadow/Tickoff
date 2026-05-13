@@ -41,9 +41,9 @@ services:
     image: postgres:15-alpine
     container_name: tickoff-postgres
     environment:
-      - POSTGRES_DB=tickoff
-      - POSTGRES_USER=tickoff_user
-      - POSTGRES_PASSWORD=tickoff_password
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -53,7 +53,7 @@ services:
       - tickoff-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tickoff_user -d tickoff"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -64,11 +64,11 @@ services:
     image: andreysenov/firebase-tools:latest
     container_name: tickoff-firebase-emulator
     ports:
-      - "4000:4000"   # Emulator UI
-      - "9099:9099"   # Firestore
-      - "9199:9199"   # Storage
-      - "5001:5001"   # Functions
-      - "8085:8085"   # Auth
+      - "4000:4000"
+      - "9099:9099"
+      - "9199:9199"
+      - "5001:5001"
+      - "8085:8085"
     volumes:
       - ./firebase.json:/home/node/firebase.json
       - ./firestore.rules:/home/node/firestore.rules
@@ -79,122 +79,27 @@ services:
     restart: unless-stopped
 
   # ─── Backend Services ───────────────────────────────────────────────────────
+  # TODO: uncomment when backend/ folder exists (Terence / Tharun / Luca)
 
-  auth-service:
-    build:
-      context: ../backend
-      dockerfile: auth-service/Dockerfile
-    container_name: tickoff-auth-service
-    ports:
-      - "3001:3001"
-    environment:
-      - NODE_ENV=production
-      - AUTH_SERVICE_PORT=3001
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=tickoff
-      - POSTGRES_USER=tickoff_user
-      - POSTGRES_PASSWORD=tickoff_password
-      - JWT_SECRET=${JWT_SECRET:-tickoff-jwt-secret-dev}
-      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET:-tickoff-refresh-secret-dev}
-      - JWT_EXPIRY=${JWT_EXPIRY:-15m}
-      - JWT_REFRESH_EXPIRY=${JWT_REFRESH_EXPIRY:-7d}
-      - KAFKA_BROKERS=kafka:29092
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
-    networks:
-      - tickoff-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3001/health || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+  # auth-service:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: auth-service/Dockerfile
 
-  tickmap-service:
-    build:
-      context: ../backend
-      dockerfile: tickmap-service/Dockerfile
-    container_name: tickoff-tickmap-service
-    ports:
-      - "3002:3002"
-    environment:
-      - NODE_ENV=production
-      - TICKMAP_SERVICE_PORT=3002
-      - FIREBASE_PROJECT_ID=tickoff-test
-      - FIRESTORE_EMULATOR_HOST=firebase-emulator:9099
-      - KAFKA_BROKERS=kafka:29092
-    depends_on:
-      firebase-emulator:
-        condition: service_started
-      kafka:
-        condition: service_healthy
-    networks:
-      - tickoff-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3002/health || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+  # tickmap-service:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: tickmap-service/Dockerfile
 
-  push-service:
-    build:
-      context: ../backend
-      dockerfile: push-service/Dockerfile
-    container_name: tickoff-push-service
-    ports:
-      - "3003:3003"
-    environment:
-      - NODE_ENV=production
-      - PUSH_SERVICE_PORT=3003
-      - FIREBASE_PROJECT_ID=tickoff-test
-      - KAFKA_BROKERS=kafka:29092
-      - FCM_SERVER_KEY=${FCM_SERVER_KEY:-}
-    depends_on:
-      kafka:
-        condition: service_healthy
-    networks:
-      - tickoff-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3003/health || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+  # push-service:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: push-service/Dockerfile
 
-  user-service:
-    build:
-      context: ../backend
-      dockerfile: user-service/Dockerfile
-    container_name: tickoff-user-service
-    ports:
-      - "3004:3004"
-    environment:
-      - NODE_ENV=production
-      - USER_SERVICE_PORT=3004
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB=tickoff
-      - POSTGRES_USER=tickoff_user
-      - POSTGRES_PASSWORD=tickoff_password
-      - KAFKA_BROKERS=kafka:29092
-    depends_on:
-      postgres:
-        condition: service_healthy
-      kafka:
-        condition: service_healthy
-    networks:
-      - tickoff-network
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3004/health || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
+  # user-service:
+  #   build:
+  #     context: ../backend
+  #     dockerfile: user-service/Dockerfile
 
   # ─── Analytics Service (Sebastian) ─────────────────────────────────────────
 
@@ -208,7 +113,7 @@ services:
     environment:
       - KAFKA_BROKERS=kafka:29092
       - KAFKA_TOPIC=tickoff.events
-      - POSTGRES_URL=postgresql://tickoff_user:tickoff_password@postgres:5432/tickoff
+      - POSTGRES_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
       - PORT=8090
     networks:
       - tickoff-network
@@ -241,6 +146,72 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # ─── Monitoring ─────────────────────────────────────────────────────────────
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: tickoff-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=7d"
+    networks:
+      - tickoff-network
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: tickoff-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    networks:
+      - tickoff-network
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # Kafka metrics exporter
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: tickoff-kafka-exporter
+    command:
+      - "--kafka.server=kafka:29092"
+    ports:
+      - "9308:9308"
+    networks:
+      - tickoff-network
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # PostgreSQL metrics exporter
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.15.0
+    container_name: tickoff-postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+    networks:
+      - tickoff-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
   # ─── Nginx Reverse Proxy ────────────────────────────────────────────────────
 
   nginx:
@@ -252,10 +223,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
-      - auth-service
-      - tickmap-service
-      - push-service
-      - user-service
       - mock-api
       - firebase-emulator
       - analytics-service
@@ -270,3 +237,5 @@ networks:
 volumes:
   firebase-data:
   postgres-data:
+  prometheus-data:
+  grafana-data:
