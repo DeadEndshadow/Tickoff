@@ -23,6 +23,7 @@ const express = require('express');
 const cors    = require('cors');
 const bcrypt  = require('bcryptjs');
 const jwt     = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 const { Pool } = require('pg');
 const { Kafka } = require('kafkajs');
 
@@ -104,6 +105,25 @@ app.use((req, _res, next) => {
   next();
 });
 
+// ── Rate Limiting ──────────────────────────────────────────────────────────────
+// Strict limit on auth endpoints to prevent brute-force attacks
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
+// General API rate limit
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
 // ── Health ─────────────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'auth-service', timestamp: new Date().toISOString() });
@@ -115,7 +135,7 @@ app.get('/health', (_req, res) => {
  * Response 201: { token, user: { id, email, displayName, role } }
  * Response 409: if e-mail already registered
  */
-app.post('/auth/register', async (req, res) => {
+app.post('/auth/register', authLimiter, async (req, res) => {
   const { email, password, displayName } = req.body;
 
   if (!email || !password) {
@@ -160,7 +180,7 @@ app.post('/auth/register', async (req, res) => {
  *   Calling login multiple times with valid credentials always returns a fresh
  *   token without any unintended side-effects.
  */
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', authLimiter, async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -185,9 +205,9 @@ app.post('/auth/login', async (req, res) => {
     }
 
     const token = signToken(user);
-    const { password_hash, ...safeUser } = user;
+    const { password_hash, ...userWithoutPassword } = user;
 
-    return res.json({ token, user: safeUser });
+    return res.json({ token, user: userWithoutPassword });
   } catch (err) {
     console.error('[auth] login error:', err.message);
     return res.status(500).json({ error: 'Login failed' });
@@ -202,7 +222,7 @@ app.post('/auth/login', async (req, res) => {
  *
  * Used by other services to validate tokens without sharing the secret.
  */
-app.get('/auth/verify', (req, res) => {
+app.get('/auth/verify', apiLimiter, (req, res) => {
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
@@ -223,7 +243,7 @@ app.get('/auth/verify', (req, res) => {
  * Header: Authorization: Bearer <token>
  * Response 200: { id, email, displayName, role, createdAt }
  */
-app.get('/auth/me', async (req, res) => {
+app.get('/auth/me', apiLimiter, async (req, res) => {
   const authHeader = req.headers.authorization || '';
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 

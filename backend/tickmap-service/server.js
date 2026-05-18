@@ -25,6 +25,7 @@
 const express = require('express');
 const cors    = require('cors');
 const axios   = require('axios');
+const rateLimit = require('express-rate-limit');
 const { Pool }  = require('pg');
 const { Kafka } = require('kafkajs');
 
@@ -146,22 +147,49 @@ app.use((req, _res, next) => {
   next();
 });
 
+// ── Rate Limiting ──────────────────────────────────────────────────────────────
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later.' },
+});
+
 // ── Health ─────────────────────────────────────────────────────────────────────
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', service: 'tickmap-service', timestamp: new Date().toISOString() });
 });
 
-// ── GET /api/hotspots ──────────────────────────────────────────────────────────
-app.get('/api/hotspots', async (req, res) => {
-  const { riskLevel, verified, region } = req.query;
+// ── Query helper ───────────────────────────────────────────────────────────────
+/**
+ * Builds a WHERE clause and parameter list from a map of { column: value } pairs.
+ * String values use ILIKE for partial matching; others use strict equality.
+ */
+function buildWhereClause(filters) {
   const conditions = [];
   const values     = [];
+  for (const [col, val] of Object.entries(filters)) {
+    if (val === undefined || val === null) continue;
+    if (col.endsWith('_ilike')) {
+      conditions.push(`${col.replace('_ilike', '')} ILIKE $${conditions.length + 1}`);
+      values.push(`%${val}%`);
+    } else {
+      conditions.push(`${col} = $${conditions.length + 1}`);
+      values.push(val);
+    }
+  }
+  return { where: conditions.length ? `WHERE ${conditions.join(' AND ')}` : '', values };
+}
 
-  if (riskLevel)            { conditions.push(`risk_level = $${conditions.length + 1}`);  values.push(riskLevel); }
-  if (verified !== undefined){ conditions.push(`verified = $${conditions.length + 1}`);   values.push(verified === 'true'); }
-  if (region)               { conditions.push(`region ILIKE $${conditions.length + 1}`);  values.push(`%${region}%`); }
-
-  const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+// ── GET /api/hotspots ──────────────────────────────────────────────────────────
+app.get('/api/hotspots', apiLimiter, async (req, res) => {
+  const { riskLevel, verified, region } = req.query;
+  const { where, values } = buildWhereClause({
+    risk_level:    riskLevel,
+    verified:      verified !== undefined ? verified === 'true' : undefined,
+    region_ilike:  region,
+  });
 
   try {
     const result = await pool.query(
@@ -179,7 +207,7 @@ app.get('/api/hotspots', async (req, res) => {
 });
 
 // ── GET /api/hotspots/:id ──────────────────────────────────────────────────────
-app.get('/api/hotspots/:id', async (req, res) => {
+app.get('/api/hotspots/:id', apiLimiter, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT id, latitude, longitude, city, region, risk_level AS "riskLevel",
@@ -198,7 +226,7 @@ app.get('/api/hotspots/:id', async (req, res) => {
 });
 
 // ── POST /api/hotspots ─────────────────────────────────────────────────────────
-app.post('/api/hotspots', requireAuth, async (req, res) => {
+app.post('/api/hotspots', apiLimiter, requireAuth, async (req, res) => {
   const { latitude, longitude, city, region, riskLevel, radius } = req.body;
 
   if (latitude == null || longitude == null) {
@@ -231,7 +259,7 @@ app.post('/api/hotspots', requireAuth, async (req, res) => {
  * Idempotent upsert: calling this endpoint multiple times with the same body
  * always results in the same database state.  Uses INSERT … ON CONFLICT DO UPDATE.
  */
-app.put('/api/hotspots/:id', requireAuth, async (req, res) => {
+app.put('/api/hotspots/:id', apiLimiter, requireAuth, async (req, res) => {
   const { id } = req.params;
   const { latitude, longitude, city, region, riskLevel, verified, radius } = req.body;
 
@@ -268,7 +296,7 @@ app.put('/api/hotspots/:id', requireAuth, async (req, res) => {
 
 // ── DELETE /api/hotspots/:id ───────────────────────────────────────────────────
 /** Idempotent: deleting a non-existent resource is still 204. */
-app.delete('/api/hotspots/:id', requireAuth, async (req, res) => {
+app.delete('/api/hotspots/:id', apiLimiter, requireAuth, async (req, res) => {
   try {
     await pool.query('DELETE FROM hotspots WHERE id = $1', [req.params.id]);
     res.status(204).send();
@@ -279,15 +307,12 @@ app.delete('/api/hotspots/:id', requireAuth, async (req, res) => {
 });
 
 // ── GET /api/reports ───────────────────────────────────────────────────────────
-app.get('/api/reports', async (req, res) => {
+app.get('/api/reports', apiLimiter, async (req, res) => {
   const { riskLevel, region } = req.query;
-  const conditions = [];
-  const values     = [];
-
-  if (riskLevel) { conditions.push(`risk_level = $${conditions.length + 1}`); values.push(riskLevel); }
-  if (region)    { conditions.push(`region ILIKE $${conditions.length + 1}`); values.push(`%${region}%`); }
-
-  const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  const { where, values } = buildWhereClause({
+    risk_level:   riskLevel,
+    region_ilike: region,
+  });
 
   try {
     const result = await pool.query(
@@ -305,7 +330,7 @@ app.get('/api/reports', async (req, res) => {
 });
 
 // ── POST /api/reports ──────────────────────────────────────────────────────────
-app.post('/api/reports', async (req, res) => {
+app.post('/api/reports', apiLimiter, async (req, res) => {
   // Anonymisation guard – no personal data allowed
   if (req.body.userId || req.body.email || req.body.name) {
     return res.status(400).json({ error: 'Personal data not allowed. Reports must be anonymised.' });
