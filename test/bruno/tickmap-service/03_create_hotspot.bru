@@ -1,0 +1,45 @@
+meta {
+  name: Create Hotspot
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/hotspots
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+body:json {
+  {
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "city": "Zürich",
+    "region": "Zürich",
+    "riskLevel": "high",
+    "radius": 500
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.id: isDefined
+  res.body.riskLevel: eq high
+}
+
+script:post-response {
+  bru.setVar("hotspotId", res.body.id);
+}
+
+docs {
+  Creates a new tick hotspot. Requires JWT authentication.
+  The new hotspot is also published as a `hotspot_created` event on Kafka.
+}

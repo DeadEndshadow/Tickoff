@@ -1,0 +1,28 @@
+meta {
+  name: List Hotspots
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/hotspots
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}
+
+docs {
+  Returns all hotspots. Supports optional query parameters:
+    - riskLevel: filter by risk level (low | medium | high)
+    - verified:  filter by verification status (true | false)
+    - region:    filter by region name (partial match)
+  This endpoint is public and does not require authentication.
+}

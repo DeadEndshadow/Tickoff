@@ -1,0 +1,27 @@
+meta {
+  name: List Reports
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/reports
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}
+
+docs {
+  Returns all tick reports (max 200). Supports optional query parameters:
+    - riskLevel: filter by risk level (low | medium | high)
+    - region:    filter by region name (partial match)
+  Public endpoint – no authentication required.
+}

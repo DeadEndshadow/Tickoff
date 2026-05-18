@@ -1,0 +1,44 @@
+meta {
+  name: Submit Tick Report
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/reports
+  body: json
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+body:json {
+  {
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "region": "Zürich",
+    "riskLevel": "high",
+    "environment": "forest",
+    "weather": "sunny",
+    "temperature": 22,
+    "description": "Found a tick near the trail entrance"
+  }
+}
+
+assert {
+  res.status: eq 201
+  res.body.id: isDefined
+  res.body.anonymized: eq true
+}
+
+script:post-response {
+  bru.setVar("reportId", res.body.id);
+}
+
+docs {
+  Submits an anonymised tick report. Public endpoint – no authentication required.
+  Personal data (userId, email, name) is rejected with 400.
+  The report is also published as a `tick_report` event on Kafka.
+}

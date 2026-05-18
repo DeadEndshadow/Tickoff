@@ -14,6 +14,7 @@ from confluent_kafka import Consumer, KafkaError
 import psycopg2
 import psycopg2.extras
 from flask import Flask, jsonify
+from flask_cors import CORS
 from prometheus_client import Counter, Histogram, make_wsgi_app, REGISTRY
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 import time
@@ -177,6 +178,7 @@ def start_consumer():
 
 # ── REST API ───────────────────────────────────────────────────────────────────
 app = Flask(__name__)
+CORS(app)  # Allow cross-origin requests from all origins
 
 
 @app.before_request

@@ -3,10 +3,22 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
-  # Analytics Service (Python/Flask - your service)
+  # Analytics Service (Python/Flask)
   - job_name: analytics-service
     static_configs:
       - targets: ["analytics-service:8090"]
+    metrics_path: /metrics
+
+  # Auth Service (Node.js/Express)
+  - job_name: auth-service
+    static_configs:
+      - targets: ["auth-service:3001"]
+    metrics_path: /metrics
+
+  # TickMap Service (Node.js/Express)
+  - job_name: tickmap-service
+    static_configs:
+      - targets: ["tickmap-service:3002"]
     metrics_path: /metrics
 
   # Kafka metrics via kafka-exporter

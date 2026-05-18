@@ -1,0 +1,28 @@
+meta {
+  name: Delete Hotspot (Idempotent)
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/api/hotspots/{{hotspotId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+assert {
+  res.status: eq 204
+}
+
+docs {
+  Deletes a hotspot by ID. Requires JWT authentication.
+  Idempotent: deleting a non-existent ID still returns 204.
+}

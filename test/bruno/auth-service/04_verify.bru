@@ -1,0 +1,31 @@
+meta {
+  name: Verify Token
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/auth/verify
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3001
+}
+
+assert {
+  res.status: eq 200
+  res.body.valid: eq true
+  res.body.user.email: isDefined
+}
+
+docs {
+  Validates a JWT Bearer token.
+  Used by other microservices (e.g. TickMap) to verify tokens without
+  sharing the JWT secret. Returns { valid: true, user: { sub, email, role } }.
+}

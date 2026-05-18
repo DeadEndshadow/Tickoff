@@ -1,0 +1,20 @@
+{
+  "name": "tickoff-tickmap-service",
+  "version": "1.0.0",
+  "description": "TickOff TickMap Service – manages tick hotspots and reports",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "kafkajs": "^2.2.4",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

@@ -1,0 +1,38 @@
+meta {
+  name: Login
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3001
+}
+
+body:json {
+  {
+    "email": "test@tickoff.ch",
+    "password": "Secret123!"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.token: isDefined
+  res.body.user.email: eq test@tickoff.ch
+}
+
+script:post-response {
+  bru.setVar("authToken", res.body.token);
+}
+
+docs {
+  Authenticates a user and returns a JWT token.
+  Idempotent: multiple calls with valid credentials each return a new token
+  without any unintended side effects on the database.
+}
