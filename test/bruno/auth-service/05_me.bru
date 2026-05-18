@@ -1,0 +1,30 @@
+meta {
+  name: Get Current User
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/auth/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3001
+}
+
+assert {
+  res.status: eq 200
+  res.body.email: isDefined
+  res.body.role: isDefined
+}
+
+docs {
+  Returns the profile of the currently authenticated user.
+  Requires a valid JWT Bearer token in the Authorization header.
+}

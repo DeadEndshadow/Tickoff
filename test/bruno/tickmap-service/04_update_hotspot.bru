@@ -1,0 +1,44 @@
+meta {
+  name: Update Hotspot (Idempotent)
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/hotspots/{{hotspotId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{authToken}}
+}
+
+vars:pre-request {
+  baseUrl: http://localhost:3002
+}
+
+body:json {
+  {
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "city": "Zürich",
+    "region": "Zürich",
+    "riskLevel": "medium",
+    "verified": true,
+    "radius": 300
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body.riskLevel: eq medium
+  res.body.verified: eq true
+}
+
+docs {
+  Idempotent upsert of a hotspot.
+  Uses PostgreSQL INSERT … ON CONFLICT DO UPDATE so that repeating the same
+  request always produces the same database state without unintended side effects.
+  Requires JWT authentication.
+}

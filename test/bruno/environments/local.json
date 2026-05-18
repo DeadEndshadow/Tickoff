@@ -1,0 +1,30 @@
+{
+  "version": "1",
+  "name": "Local",
+  "variables": [
+    {
+      "name": "authBaseUrl",
+      "value": "http://localhost:3001",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "name": "tickmapBaseUrl",
+      "value": "http://localhost:3002",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "name": "authToken",
+      "value": "",
+      "type": "text",
+      "enabled": true
+    },
+    {
+      "name": "hotspotId",
+      "value": "",
+      "type": "text",
+      "enabled": true
+    }
+  ]
+}
