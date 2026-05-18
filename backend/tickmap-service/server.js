@@ -104,6 +104,11 @@ async function publishEvent(eventType, payload) {
   }
 }
 
+// ── ID helper ──────────────────────────────────────────────────────────────────
+function generateId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+}
+
 // ── Auth Middleware ────────────────────────────────────────────────────────────
 /**
  * Validates JWT by calling the Auth Service's /auth/verify endpoint.
@@ -233,7 +238,7 @@ app.post('/api/hotspots', apiLimiter, requireAuth, async (req, res) => {
     return res.status(400).json({ error: 'latitude and longitude are required' });
   }
 
-  const id = `hotspot_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  const id = generateId('hotspot');
 
   try {
     const result = await pool.query(
@@ -342,7 +347,7 @@ app.post('/api/reports', apiLimiter, async (req, res) => {
     return res.status(400).json({ error: 'latitude and longitude are required' });
   }
 
-  const id = `report_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  const id = generateId('report');
 
   try {
     const result = await pool.query(
