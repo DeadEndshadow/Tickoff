@@ -32,139 +32,447 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final currentLanguage = LocaleController.instance.getLanguageName(
+      LocaleController.instance.locale.value.languageCode,
+    );
+    final accountSummary = GuestSession.isGuest
+        ? l10n.createAccountSubtitle
+        : _loadingUserData
+            ? l10n.account
+            : ((_userData?['email'] as String?)?.isNotEmpty == true
+                ? _userData!['email'] as String
+                : l10n.account);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settings), backgroundColor: Colors.red),
-      body: ListView(
-        children: [
-          // Language Section
-          _buildSectionHeader(context, l10n.language),
-          ListTile(
-            leading: const Icon(Icons.language),
-            title: Text(l10n.language),
-            subtitle: Text(
-              LocaleController.instance.getLanguageName(
-                LocaleController.instance.locale.value.languageCode,
-              ),
-            ),
-            onTap: () => _showLanguageDialog(context, l10n),
-          ),
-          const Divider(),
-
-          // Theme Section
-          _buildSectionHeader(context, l10n.theme),
-          ListTile(
-            leading: const Icon(Icons.palette),
-            title: Text(l10n.theme),
-            subtitle: Text(_getThemeName(context, l10n)),
-            onTap: () => _showThemeDialog(context, l10n),
-          ),
-          const Divider(),
-
-          // Notifications Section
-          _buildSectionHeader(context, l10n.notifications),
-          ValueListenableBuilder<bool>(
-            valueListenable: NotificationController.instance.notificationsEnabled,
-            builder: (context, enabled, _) {
-              return SwitchListTile(
-                secondary: Icon(
-                  enabled ? Icons.notifications_active : Icons.notifications_off,
-                  color: enabled ? Colors.green : Colors.grey,
+      appBar: AppBar(title: Text(l10n.settings)),
+      body: Container(
+        decoration: _pageDecoration(context),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+          children: [
+            _buildSettingsHero(context, l10n, accountSummary, currentLanguage),
+            const SizedBox(height: 16),
+            _buildSettingsSection(
+              context,
+              icon: Icons.language_rounded,
+              title: l10n.language,
+              children: [
+                _buildSettingsTile(
+                  context,
+                  icon: Icons.language_rounded,
+                  title: l10n.language,
+                  subtitle: currentLanguage,
+                  collapseSubtitleIntoTitle: true,
+                  showLeadingIcon: false,
+                  onTap: () => _showLanguageDialog(context, l10n),
                 ),
-                title: Text(l10n.enableNotifications),
-                subtitle: Text(l10n.notificationsEnabledDesc),
-                value: enabled,
-                onChanged: (value) =>
-                    NotificationController.instance.setNotificationsEnabled(value),
-              );
-            },
-          ),
-          const Divider(),
-
-
-
-          // Account Section
-          _buildSectionHeader(context, l10n.account),
-          if (GuestSession.isGuest) ...[
-            ListTile(
-              leading: const Icon(Icons.person_add, color: Colors.green),
-              title: Text(l10n.createAccount),
-              subtitle: Text(l10n.createAccountSubtitle),
-              onTap: () => Navigator.of(context).pushNamed('/register'),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.login, color: Colors.blue),
-              title: Text(l10n.login),
-              subtitle: Text(l10n.loginSubtitle),
-              onTap: () => Navigator.of(context).pushReplacementNamed('/login'),
-            ),
-          ] else ...[
-            if (_loadingUserData)
-              const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else ...[
-              ListTile(
-                leading: const Icon(Icons.email_outlined),
-                title: Text(l10n.email),
-                subtitle: Text((_userData?['email'] as String?) ?? '—'),
-                trailing: const Icon(Icons.edit, size: 18),
-                onTap: () => _showEditEmailDialog(context),
-              ),
-              ListTile(
-                leading: const Icon(Icons.person_outlined),
-                title: Text(l10n.username),
-                subtitle: Text(
-                  (_userData?['username'] as String?)?.isNotEmpty == true
-                      ? _userData!['username'] as String
-                      : '—',
+            const SizedBox(height: 16),
+            _buildSettingsSection(
+              context,
+              icon: Icons.palette_outlined,
+              title: l10n.theme,
+              children: [
+                _buildSettingsTile(
+                  context,
+                  icon: Icons.palette_outlined,
+                  title: l10n.theme,
+                  subtitle: _getThemeName(context, l10n),
+                  collapseSubtitleIntoTitle: true,
+                  showLeadingIcon: false,
+                  onTap: () => _showThemeDialog(context, l10n),
                 ),
-                trailing: const Icon(Icons.edit, size: 18),
-                onTap: () => _showEditUsernameDialog(context),
-              ),
-              ListTile(
-                leading: const Icon(Icons.lock_outlined),
-                title: Text(l10n.changePassword),
-                onTap: () => _showChangePasswordDialog(context),
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.logout, color: Colors.orange),
-                title: Text(l10n.logout, style: const TextStyle(color: Colors.orange)),
-                onTap: () => _confirmLogout(context),
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete_forever, color: Colors.red),
-                title: Text(l10n.deleteAccount, style: const TextStyle(color: Colors.red)),
-                onTap: () => _showDeleteAccountDialog(context),
-              ),
-            ],
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildSettingsSection(
+              context,
+              icon: Icons.notifications_active_outlined,
+              title: l10n.notifications,
+              subtitle: l10n.notificationsEnabledDesc,
+              children: [
+                ValueListenableBuilder<bool>(
+                  valueListenable: NotificationController.instance.notificationsEnabled,
+                  builder: (context, enabled, _) {
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 2,
+                      ),
+                      leading: _buildIconBubble(
+                        context,
+                        enabled
+                            ? Icons.notifications_active_outlined
+                            : Icons.notifications_off_outlined,
+                        enabled
+                            ? Theme.of(context).colorScheme.secondary
+                            : Theme.of(context).colorScheme.outline,
+                      ),
+                      title: Text(l10n.enableNotifications),
+                      subtitle: Text(l10n.notificationsEnabledDesc),
+                      trailing: Switch.adaptive(
+                        value: enabled,
+                        onChanged: (value) => NotificationController.instance
+                            .setNotificationsEnabled(value),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildSettingsSection(
+              context,
+              icon: Icons.person_outline_rounded,
+              title: l10n.account,
+              subtitle: accountSummary,
+              children: [
+                if (GuestSession.isGuest) ...[
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.person_add_alt_1_rounded,
+                    title: l10n.createAccount,
+                    subtitle: l10n.createAccountSubtitle,
+                    accent: Colors.green,
+                    onTap: () => Navigator.of(context).pushNamed('/register'),
+                  ),
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.login_rounded,
+                    title: l10n.login,
+                    subtitle: l10n.loginSubtitle,
+                    accent: Theme.of(context).colorScheme.secondary,
+                    onTap: () =>
+                        Navigator.of(context).pushReplacementNamed('/login'),
+                  ),
+                ] else if (_loadingUserData) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ] else ...[
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.email_outlined,
+                    title: l10n.email,
+                    subtitle: (_userData?['email'] as String?) ?? '—',
+                    trailing: const Icon(Icons.edit_rounded, size: 18),
+                    onTap: () => _showEditEmailDialog(context),
+                  ),
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.person_outline_rounded,
+                    title: l10n.username,
+                    subtitle: (_userData?['username'] as String?)?.isNotEmpty == true
+                        ? _userData!['username'] as String
+                        : '—',
+                    trailing: const Icon(Icons.edit_rounded, size: 18),
+                    onTap: () => _showEditUsernameDialog(context),
+                  ),
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.lock_outline_rounded,
+                    title: l10n.changePassword,
+                    onTap: () => _showChangePasswordDialog(context),
+                  ),
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.logout_rounded,
+                    title: l10n.logout,
+                    accent: Colors.orange,
+                    titleColor: Colors.orange,
+                    onTap: () => _confirmLogout(context),
+                  ),
+                  _buildSettingsTile(
+                    context,
+                    icon: Icons.delete_forever_rounded,
+                    title: l10n.deleteAccount,
+                    accent: Colors.red,
+                    titleColor: Colors.red,
+                    onTap: () => _showDeleteAccountDialog(context),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 16),
+            _buildSettingsSection(
+              context,
+              icon: Icons.info_outline_rounded,
+              title: l10n.aboutApp,
+              children: [
+                _buildSettingsTile(
+                  context,
+                  icon: Icons.info_outline_rounded,
+                  title: l10n.aboutApp,
+                  subtitle: '${l10n.version} 1.0.0',
+                  collapseSubtitleIntoTitle: true,
+                  showLeadingIcon: false,
+                  onTap: () => _showAboutDialog(context, l10n),
+                ),
+              ],
+            ),
           ],
+        ),
+      ),
+    );
+  }
 
-          // About Section
-          _buildSectionHeader(context, l10n.aboutApp),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: Text(l10n.aboutApp),
-            onTap: () => _showAboutDialog(context, l10n),
-          ),
-          const Divider(),
+  BoxDecoration _pageDecoration(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          if (isDark) const Color(0xFF0D1412) else theme.scaffoldBackgroundColor,
+          if (isDark)
+            const Color(0xFF13201C)
+          else
+            scheme.tertiary.withValues(alpha: 0.12),
+          if (isDark)
+            const Color(0xFF1A2522)
+          else
+            scheme.secondary.withValues(alpha: 0.08),
         ],
       ),
     );
   }
 
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).colorScheme.primary,
+  Widget _buildSettingsHero(
+    BuildContext context,
+    AppLocalizations l10n,
+    String accountSummary,
+    String currentLanguage,
+  ) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isLight = theme.brightness == Brightness.light;
+    final isDark = theme.brightness == Brightness.dark;
+    final heroTextColor = isLight ? const Color(0xFF17332C) : scheme.onSurface;
+    final heroMutedColor = heroTextColor.withValues(alpha: 0.76);
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: theme.cardColor.withValues(alpha: isDark ? 0.98 : 0.92),
+        border: Border.all(
+          color: scheme.outline.withValues(alpha: isDark ? 0.14 : 0.08),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.18)
+                : scheme.primary.withValues(alpha: 0.08),
+            blurRadius: isDark ? 24 : 28,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _buildIconBubble(
+                context,
+                Icons.tune_rounded,
+                scheme.primary,
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.settings,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: heroTextColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      accountSummary,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: heroMutedColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _buildMetaChip(context, Icons.language_rounded, currentLanguage),
+              _buildMetaChip(context, Icons.palette_outlined, _getThemeName(context, l10n)),
+              _buildMetaChip(
+                context,
+                GuestSession.isGuest ? Icons.person_outline_rounded : Icons.verified_user_rounded,
+                GuestSession.isGuest ? l10n.login : l10n.account,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsSection(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    required List<Widget> children,
+  }) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isDark = theme.brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor.withValues(alpha: isDark ? 0.98 : 0.92),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: scheme.outline.withValues(alpha: isDark ? 0.14 : 0.08)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                _buildIconBubble(context, icon, scheme.primary),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: theme.textTheme.titleLarge),
+                      if (subtitle != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: scheme.onSurface.withValues(alpha: 0.68),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            for (var index = 0; index < children.length; index++) ...[
+              if (index > 0)
+                Divider(
+                  height: 1,
+                  color: scheme.outline.withValues(alpha: 0.08),
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: children[index],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    required VoidCallback onTap,
+    Color? accent,
+    Color? titleColor,
+    Widget? trailing,
+    bool showLeadingIcon = true,
+    bool collapseSubtitleIntoTitle = false,
+  }) {
+    final scheme = Theme.of(context).colorScheme;
+    final resolvedAccent = accent ?? scheme.primary;
+    final effectiveTitle = collapseSubtitleIntoTitle && subtitle != null
+        ? subtitle
+        : title;
+    final effectiveSubtitle = collapseSubtitleIntoTitle ? null : subtitle;
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      leading: showLeadingIcon ? _buildIconBubble(context, icon, resolvedAccent) : null,
+      title: Text(
+        effectiveTitle,
+        style: TextStyle(
+          color: titleColor,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      subtitle: effectiveSubtitle != null ? Text(effectiveSubtitle) : null,
+      trailing:
+          trailing ?? Icon(Icons.chevron_right_rounded, color: scheme.outline),
+      onTap: onTap,
+    );
+  }
+
+  Widget _buildIconBubble(
+    BuildContext context,
+    IconData icon,
+    Color color, {
+    bool filled = false,
+  }) {
+    final fillColor = filled ? color : color.withValues(alpha: 0.12);
+
+    return Container(
+      width: 44,
+      height: 44,
+      decoration: BoxDecoration(
+        color: fillColor,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Icon(icon, color: filled ? Colors.white : color, size: 22),
+    );
+  }
+
+  Widget _buildMetaChip(BuildContext context, IconData icon, String label) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final isLight = theme.brightness == Brightness.light;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: isLight
+            ? Colors.white.withValues(alpha: 0.42)
+            : const Color(0xFF0F1A17).withValues(alpha: 0.74),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(
+          color: isLight
+              ? Colors.white.withValues(alpha: 0.12)
+              : Colors.white.withValues(alpha: 0.08),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: scheme.primary),
+          const SizedBox(width: 8),
+          Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: scheme.onSurface,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }

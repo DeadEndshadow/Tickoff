@@ -509,20 +509,14 @@ class _RiskMapPageState extends State<RiskMapPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.red,
         title: Text(
           l10n.riskMap,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          tooltip: 'Back',
-          onPressed: () {
-            Navigator.of(context).maybePop();
-          },
+          style: theme.textTheme.titleLarge,
         ),
       ),
       body: Stack(
@@ -605,19 +599,42 @@ class _RiskMapPageState extends State<RiskMapPage> {
               left: 16,
               right: 16,
               child: Container(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
+                  color: theme.cardColor.withValues(alpha: 0.96),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: scheme.primary.withValues(alpha: 0.12),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.08),
+                      blurRadius: 20,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.touch_app, color: Colors.white),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: scheme.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Icon(
+                        Icons.touch_app_rounded,
+                        color: scheme.primary,
+                      ),
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         l10n.tapToMark,
-                        style: const TextStyle(color: Colors.white),
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -634,33 +651,39 @@ class _RiskMapPageState extends State<RiskMapPage> {
       floatingActionButton: GuestSession.isGuest
           ? null
           : Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'add_mode',
-            onPressed: _isLoading ? null : _toggleAddMode,
-            backgroundColor: _isAddMode ? Colors.blue : Colors.grey,
-            child: Icon(_isAddMode ? Icons.close : Icons.add_location),
-          ),
-          const SizedBox(height: 12),
-          FloatingActionButton.extended(
-            heroTag: 'add_current',
-            onPressed: _isLoading ? null : _addAtCurrentLocation,
-            backgroundColor: Colors.red,
-            icon: _isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                      strokeWidth: 2,
-                    ),
-                  )
-                : const Icon(Icons.my_location),
-            label: Text(l10n.reportHere),
-          ),
-        ],
-      ),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  heroTag: 'add_mode',
+                  onPressed: _isLoading ? null : _toggleAddMode,
+                  backgroundColor:
+                      _isAddMode ? scheme.primary : theme.cardColor,
+                  foregroundColor:
+                      _isAddMode ? scheme.onPrimary : scheme.onSurface,
+                  child: Icon(
+                    _isAddMode ? Icons.close_rounded : Icons.add_location_alt_rounded,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                FloatingActionButton.extended(
+                  heroTag: 'add_current',
+                  onPressed: _isLoading ? null : _addAtCurrentLocation,
+                  backgroundColor: scheme.primary,
+                  foregroundColor: scheme.onPrimary,
+                  icon: _isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Icon(Icons.my_location_rounded),
+                  label: Text(l10n.reportHere),
+                ),
+              ],
+            ),
     );
   }
 }
