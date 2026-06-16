@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/services/auth_error_localizer.dart';
 import 'package:tickoff/src/services/auth_service.dart';
 import 'package:tickoff/src/services/guest_session.dart';
 
@@ -53,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -88,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _identifierController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'E-Mail oder Benutzername',
+                    decoration: InputDecoration(
+                      labelText: l10n.emailOrUsername,
                       prefixIcon: Icon(Icons.person_outlined),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte E-Mail oder Benutzername eingeben';
+                        return l10n.enterEmailOrUsername;
                       }
                       return null;
                     },
@@ -109,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _login(),
                     decoration: InputDecoration(
-                      labelText: 'Passwort',
+                      labelText: l10n.password,
                       prefixIcon: const Icon(Icons.lock_outlined),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
@@ -124,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte Passwort eingeben';
+                        return l10n.enterPassword;
                       }
                       return null;
                     },
@@ -135,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (_errorMessage != null) ...[
                     const SizedBox(height: 8),
                     Text(
-                      _errorMessage!,
+                      localizeAuthError(l10n, _errorMessage!),
                       style: TextStyle(color: theme.colorScheme.error),
                       textAlign: TextAlign.center,
                     ),
@@ -152,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Anmelden'),
+                        : Text(l10n.login),
                   ),
                   const SizedBox(height: 12),
 
@@ -160,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushReplacementNamed('/register'),
-                    child: const Text('Noch kein Konto? Jetzt registrieren'),
+                    child: Text(l10n.noAccountRegisterNow),
                   ),
 
                   // Guest / skip button
@@ -170,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.of(context).pushReplacementNamed('/home');
                     },
                     child: Text(
-                      'Ohne Anmeldung fortfahren',
+                      l10n.continueWithoutLogin,
                       style: TextStyle(color: theme.colorScheme.outline),
                     ),
                   ),

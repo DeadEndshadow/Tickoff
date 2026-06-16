@@ -214,6 +214,270 @@ abstract class AppLocalizations {
   /// **'Benachrichtigungseinstellungen'**
   String get notificationSettings;
 
+  /// No description provided for @account.
+  ///
+  /// In de, this message translates to:
+  /// **'Konto'**
+  String get account;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In de, this message translates to:
+  /// **'Konto erstellen'**
+  String get createAccount;
+
+  /// No description provided for @createAccountSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Jetzt registrieren und alle Funktionen nutzen'**
+  String get createAccountSubtitle;
+
+  /// No description provided for @login.
+  ///
+  /// In de, this message translates to:
+  /// **'Anmelden'**
+  String get login;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In de, this message translates to:
+  /// **'Bereits ein Konto? Hier einloggen'**
+  String get loginSubtitle;
+
+  /// No description provided for @email.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail'**
+  String get email;
+
+  /// No description provided for @username.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername'**
+  String get username;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwort ändern'**
+  String get changePassword;
+
+  /// No description provided for @logout.
+  ///
+  /// In de, this message translates to:
+  /// **'Abmelden'**
+  String get logout;
+
+  /// No description provided for @deleteAccount.
+  ///
+  /// In de, this message translates to:
+  /// **'Konto löschen'**
+  String get deleteAccount;
+
+  /// No description provided for @logoutConfirmMessage.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du dich wirklich abmelden?'**
+  String get logoutConfirmMessage;
+
+  /// No description provided for @editEmail.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail ändern'**
+  String get editEmail;
+
+  /// No description provided for @newEmail.
+  ///
+  /// In de, this message translates to:
+  /// **'Neue E-Mail'**
+  String get newEmail;
+
+  /// No description provided for @editUsername.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername ändern'**
+  String get editUsername;
+
+  /// No description provided for @newUsername.
+  ///
+  /// In de, this message translates to:
+  /// **'Neuer Benutzername'**
+  String get newUsername;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Aktuelles Passwort'**
+  String get currentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Neues Passwort'**
+  String get newPassword;
+
+  /// No description provided for @minEightCharacters.
+  ///
+  /// In de, this message translates to:
+  /// **'Mindestens 8 Zeichen'**
+  String get minEightCharacters;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwort bestätigen'**
+  String get confirmPassword;
+
+  /// No description provided for @password.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwort'**
+  String get password;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwörter stimmen nicht überein'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @passwordChangedSuccessfully.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwort erfolgreich geändert'**
+  String get passwordChangedSuccessfully;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In de, this message translates to:
+  /// **'Diese Aktion kann nicht rückgängig gemacht werden. Bitte gib dein Passwort zur Bestätigung ein.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @emailOrUsername.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail oder Benutzername'**
+  String get emailOrUsername;
+
+  /// No description provided for @enterEmailOrUsername.
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte E-Mail oder Benutzername eingeben'**
+  String get enterEmailOrUsername;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte Passwort eingeben'**
+  String get enterPassword;
+
+  /// No description provided for @noAccountRegisterNow.
+  ///
+  /// In de, this message translates to:
+  /// **'Noch kein Konto? Jetzt registrieren'**
+  String get noAccountRegisterNow;
+
+  /// No description provided for @continueWithoutLogin.
+  ///
+  /// In de, this message translates to:
+  /// **'Ohne Anmeldung fortfahren'**
+  String get continueWithoutLogin;
+
+  /// No description provided for @usernameOptional.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername (optional)'**
+  String get usernameOptional;
+
+  /// No description provided for @usernameMinThree.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername muss mindestens 3 Zeichen haben'**
+  String get usernameMinThree;
+
+  /// No description provided for @usernameAllowedChars.
+  ///
+  /// In de, this message translates to:
+  /// **'Nur Buchstaben, Zahlen und _ erlaubt'**
+  String get usernameAllowedChars;
+
+  /// No description provided for @enterEmail.
+  ///
+  /// In de, this message translates to:
+  /// **'Bitte E-Mail eingeben'**
+  String get enterEmail;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In de, this message translates to:
+  /// **'Ungültige E-Mail-Adresse'**
+  String get invalidEmail;
+
+  /// No description provided for @passwordMinEight.
+  ///
+  /// In de, this message translates to:
+  /// **'Passwort muss mindestens 8 Zeichen haben'**
+  String get passwordMinEight;
+
+  /// No description provided for @alreadyRegisteredLogin.
+  ///
+  /// In de, this message translates to:
+  /// **'Bereits registriert? Anmelden'**
+  String get alreadyRegisteredLogin;
+
+  /// No description provided for @emailAlreadyRegistered.
+  ///
+  /// In de, this message translates to:
+  /// **'E-Mail bereits registriert'**
+  String get emailAlreadyRegistered;
+
+  /// No description provided for @usernameAlreadyTaken.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername bereits vergeben'**
+  String get usernameAlreadyTaken;
+
+  /// No description provided for @invalidCredentials.
+  ///
+  /// In de, this message translates to:
+  /// **'Ungültige Anmeldedaten'**
+  String get invalidCredentials;
+
+  /// No description provided for @usernameCannotBeEmpty.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzername darf nicht leer sein'**
+  String get usernameCannotBeEmpty;
+
+  /// No description provided for @notLoggedIn.
+  ///
+  /// In de, this message translates to:
+  /// **'Nicht angemeldet'**
+  String get notLoggedIn;
+
+  /// No description provided for @userNotFound.
+  ///
+  /// In de, this message translates to:
+  /// **'Benutzer nicht gefunden'**
+  String get userNotFound;
+
+  /// No description provided for @currentPasswordIncorrect.
+  ///
+  /// In de, this message translates to:
+  /// **'Aktuelles Passwort ist falsch'**
+  String get currentPasswordIncorrect;
+
+  /// No description provided for @wrongPassword.
+  ///
+  /// In de, this message translates to:
+  /// **'Falsches Passwort'**
+  String get wrongPassword;
+
+  /// No description provided for @errorWithDetails.
+  ///
+  /// In de, this message translates to:
+  /// **'Fehler: {details}'**
+  String errorWithDetails(Object details);
+
   /// No description provided for @aboutApp.
   ///
   /// In de, this message translates to:
@@ -255,6 +519,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'OK'**
   String get ok;
+
+  /// No description provided for @register.
+  ///
+  /// In de, this message translates to:
+  /// **'Registrieren'**
+  String get register;
 
   /// No description provided for @history.
   ///
@@ -375,6 +645,18 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Deine Zeckenstiche'**
   String get yourTickBites;
+
+  /// No description provided for @timeAt.
+  ///
+  /// In de, this message translates to:
+  /// **'Uhrzeit: {time} Uhr'**
+  String timeAt(Object time);
+
+  /// No description provided for @coordinatesAt.
+  ///
+  /// In de, this message translates to:
+  /// **'Koordinaten: {coordinates}'**
+  String coordinatesAt(Object coordinates);
 
   /// No description provided for @noEntriesDescription.
   ///

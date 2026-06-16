@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/services/auth_error_localizer.dart';
 import 'package:tickoff/src/services/auth_service.dart';
 import 'package:tickoff/src/services/guest_session.dart';
 import 'package:tickoff/src/services/locale_controller.dart';
@@ -83,18 +84,18 @@ class _SettingsPageState extends State<SettingsPage> {
 
 
           // Account Section
-          _buildSectionHeader(context, 'Konto'),
+          _buildSectionHeader(context, l10n.account),
           if (GuestSession.isGuest) ...[
             ListTile(
               leading: const Icon(Icons.person_add, color: Colors.green),
-              title: const Text('Konto erstellen'),
-              subtitle: const Text('Jetzt registrieren und alle Funktionen nutzen'),
+              title: Text(l10n.createAccount),
+              subtitle: Text(l10n.createAccountSubtitle),
               onTap: () => Navigator.of(context).pushNamed('/register'),
             ),
             ListTile(
               leading: const Icon(Icons.login, color: Colors.blue),
-              title: const Text('Anmelden'),
-              subtitle: const Text('Bereits ein Konto? Hier einloggen'),
+              title: Text(l10n.login),
+              subtitle: Text(l10n.loginSubtitle),
               onTap: () => Navigator.of(context).pushReplacementNamed('/login'),
             ),
           ] else ...[
@@ -106,14 +107,14 @@ class _SettingsPageState extends State<SettingsPage> {
             else ...[
               ListTile(
                 leading: const Icon(Icons.email_outlined),
-                title: const Text('E-Mail'),
+                title: Text(l10n.email),
                 subtitle: Text((_userData?['email'] as String?) ?? '—'),
                 trailing: const Icon(Icons.edit, size: 18),
                 onTap: () => _showEditEmailDialog(context),
               ),
               ListTile(
                 leading: const Icon(Icons.person_outlined),
-                title: const Text('Benutzername'),
+                title: Text(l10n.username),
                 subtitle: Text(
                   (_userData?['username'] as String?)?.isNotEmpty == true
                       ? _userData!['username'] as String
@@ -124,18 +125,18 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               ListTile(
                 leading: const Icon(Icons.lock_outlined),
-                title: const Text('Passwort ändern'),
+                title: Text(l10n.changePassword),
                 onTap: () => _showChangePasswordDialog(context),
               ),
               const Divider(),
               ListTile(
                 leading: const Icon(Icons.logout, color: Colors.orange),
-                title: const Text('Abmelden', style: TextStyle(color: Colors.orange)),
+                title: Text(l10n.logout, style: const TextStyle(color: Colors.orange)),
                 onTap: () => _confirmLogout(context),
               ),
               ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
-                title: const Text('Konto löschen', style: TextStyle(color: Colors.red)),
+                title: Text(l10n.deleteAccount, style: const TextStyle(color: Colors.red)),
                 onTap: () => _showDeleteAccountDialog(context),
               ),
             ],
@@ -182,15 +183,16 @@ class _SettingsPageState extends State<SettingsPage> {
   // ─── Account dialogs ──────────────────────────────────────────────────────
 
   void _confirmLogout(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Abmelden'),
-        content: const Text('Möchtest du dich wirklich abmelden?'),
+        title: Text(l10n.logout),
+        content: Text(l10n.logoutConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Abbrechen'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(backgroundColor: Colors.orange),
@@ -200,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
               GuestSession.endGuestSession();
               if (mounted) Navigator.of(context).pushReplacementNamed('/');
             },
-            child: const Text('Abmelden'),
+            child: Text(l10n.logout),
           ),
         ],
       ),
@@ -208,21 +210,22 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showEditEmailDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: _userData?['email'] as String? ?? '');
     String? error;
     showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('E-Mail ändern'),
+          title: Text(l10n.editEmail),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: controller,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Neue E-Mail',
+                decoration: InputDecoration(
+                  labelText: l10n.newEmail,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -233,18 +236,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Abbrechen')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.cancel)),
             FilledButton(
               onPressed: () async {
                 final err = await AuthService.instance.updateEmail(controller.text.trim());
                 if (err != null) {
-                  setDialogState(() => error = err);
+                  setDialogState(() => error = localizeAuthError(l10n, err));
                 } else {
                   Navigator.of(ctx).pop();
                   _loadUserData();
                 }
               },
-              child: const Text('Speichern'),
+              child: Text(l10n.save),
             ),
           ],
         ),
@@ -253,20 +256,21 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showEditUsernameDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: _userData?['username'] as String? ?? '');
     String? error;
     showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Benutzername ändern'),
+          title: Text(l10n.editUsername),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: controller,
-                decoration: const InputDecoration(
-                  labelText: 'Neuer Benutzername',
+                decoration: InputDecoration(
+                  labelText: l10n.newUsername,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -277,18 +281,18 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Abbrechen')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.cancel)),
             FilledButton(
               onPressed: () async {
                 final err = await AuthService.instance.updateUsername(controller.text.trim());
                 if (err != null) {
-                  setDialogState(() => error = err);
+                  setDialogState(() => error = localizeAuthError(l10n, err));
                 } else {
                   Navigator.of(ctx).pop();
                   _loadUserData();
                 }
               },
-              child: const Text('Speichern'),
+              child: Text(l10n.save),
             ),
           ],
         ),
@@ -297,6 +301,7 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showChangePasswordDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final currentCtrl = TextEditingController();
     final newCtrl = TextEditingController();
     final confirmCtrl = TextEditingController();
@@ -305,15 +310,15 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Passwort ändern'),
+          title: Text(l10n.changePassword),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: currentCtrl,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Aktuelles Passwort',
+                decoration: InputDecoration(
+                  labelText: l10n.currentPassword,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -321,9 +326,9 @@ class _SettingsPageState extends State<SettingsPage> {
               TextField(
                 controller: newCtrl,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Neues Passwort',
-                  helperText: 'Mindestens 8 Zeichen',
+                decoration: InputDecoration(
+                  labelText: l10n.newPassword,
+                  helperText: l10n.minEightCharacters,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -331,8 +336,8 @@ class _SettingsPageState extends State<SettingsPage> {
               TextField(
                 controller: confirmCtrl,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Passwort bestätigen',
+                decoration: InputDecoration(
+                  labelText: l10n.confirmPassword,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -343,11 +348,11 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Abbrechen')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.cancel)),
             FilledButton(
               onPressed: () async {
                 if (newCtrl.text != confirmCtrl.text) {
-                  setDialogState(() => error = 'Passwörter stimmen nicht überein');
+                  setDialogState(() => error = l10n.passwordsDoNotMatch);
                   return;
                 }
                 final err = await AuthService.instance.changePassword(
@@ -355,17 +360,17 @@ class _SettingsPageState extends State<SettingsPage> {
                   newPassword: newCtrl.text,
                 );
                 if (err != null) {
-                  setDialogState(() => error = err);
+                  setDialogState(() => error = localizeAuthError(l10n, err));
                 } else {
                   Navigator.of(ctx).pop();
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Passwort erfolgreich geändert')),
+                      SnackBar(content: Text(l10n.passwordChangedSuccessfully)),
                     );
                   }
                 }
               },
-              child: const Text('Speichern'),
+              child: Text(l10n.save),
             ),
           ],
         ),
@@ -374,26 +379,27 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showDeleteAccountDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final passwordCtrl = TextEditingController();
     String? error;
     showDialog<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          title: const Text('Konto löschen'),
+          title: Text(l10n.deleteAccount),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Diese Aktion kann nicht rückgängig gemacht werden. Bitte gib dein Passwort zur Bestätigung ein.',
-                style: TextStyle(fontSize: 13),
+              Text(
+                l10n.deleteAccountWarning,
+                style: const TextStyle(fontSize: 13),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: passwordCtrl,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Passwort',
+                decoration: InputDecoration(
+                  labelText: l10n.password,
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -404,20 +410,20 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: const Text('Abbrechen')),
+            TextButton(onPressed: () => Navigator.of(ctx).pop(), child: Text(l10n.cancel)),
             FilledButton(
               style: FilledButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () async {
                 final err = await AuthService.instance.deleteAccount(passwordCtrl.text);
                 if (err != null) {
-                  setDialogState(() => error = err);
+                  setDialogState(() => error = localizeAuthError(l10n, err));
                 } else {
                   Navigator.of(ctx).pop();
                   GuestSession.endGuestSession();
                   if (mounted) Navigator.of(context).pushReplacementNamed('/');
                 }
               },
-              child: const Text('Konto löschen'),
+              child: Text(l10n.deleteAccount),
             ),
           ],
         ),
@@ -433,43 +439,70 @@ class _SettingsPageState extends State<SettingsPage> {
       builder: (context) {
         return AlertDialog(
           title: Text(l10n.selectLanguage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<String>(
-                value: 'de',
-                groupValue: LocaleController.instance.locale.value.languageCode,
-                onChanged: (v) {
-                  if (v != null) LocaleController.instance.setGerman();
-                  Navigator.of(context).pop();
-                },
-                title: Text(l10n.german),
-                secondary: const Text('🇩🇪', style: TextStyle(fontSize: 24)),
-              ),
-              RadioListTile<String>(
-                value: 'en',
-                groupValue: LocaleController.instance.locale.value.languageCode,
-                onChanged: (v) {
-                  if (v != null) LocaleController.instance.setEnglish();
-                  Navigator.of(context).pop();
-                },
-                title: Text(l10n.english),
-                secondary: const Text('🇬🇧', style: TextStyle(fontSize: 24)),
-              ),
-              RadioListTile<String>(
-                value: 'fr',
-                groupValue: LocaleController.instance.locale.value.languageCode,
-                onChanged: (v) {
-                  if (v != null) LocaleController.instance.setFrench();
-                  Navigator.of(context).pop();
-                },
-                title: Text(l10n.french),
-                secondary: const Text('🇫🇷', style: TextStyle(fontSize: 24)),
-              ),
-            ],
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildLanguageOption(
+                  context: context,
+                  value: 'de',
+                  label: l10n.german,
+                  flag: '🇩🇪',
+                  onSelected: LocaleController.instance.setGerman,
+                ),
+                _buildLanguageOption(
+                  context: context,
+                  value: 'en',
+                  label: l10n.english,
+                  flag: '🇬🇧',
+                  onSelected: LocaleController.instance.setEnglish,
+                ),
+                _buildLanguageOption(
+                  context: context,
+                  value: 'fr',
+                  label: l10n.french,
+                  flag: '🇫🇷',
+                  onSelected: LocaleController.instance.setFrench,
+                ),
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildLanguageOption({
+    required BuildContext context,
+    required String value,
+    required String label,
+    required String flag,
+    required VoidCallback onSelected,
+  }) {
+    return RadioListTile<String>(
+      value: value,
+      groupValue: LocaleController.instance.locale.value.languageCode,
+      onChanged: (selected) {
+        if (selected == null) return;
+        onSelected();
+        Navigator.of(context).pop();
+      },
+      contentPadding: EdgeInsets.zero,
+      title: Row(
+        children: [
+          Expanded(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(flag, style: const TextStyle(fontSize: 24)),
+        ],
+      ),
     );
   }
 

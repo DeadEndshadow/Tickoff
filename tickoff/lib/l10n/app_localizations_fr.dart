@@ -67,6 +67,148 @@ class AppLocalizationsFr extends AppLocalizations {
   String get notificationSettings => 'Paramètres de Notification';
 
   @override
+  String get account => 'Compte';
+
+  @override
+  String get createAccount => 'Créer un compte';
+
+  @override
+  String get createAccountSubtitle =>
+      'Inscrivez-vous maintenant et utilisez toutes les fonctionnalités';
+
+  @override
+  String get login => 'Se connecter';
+
+  @override
+  String get loginSubtitle => 'Vous avez déjà un compte ? Connectez-vous ici';
+
+  @override
+  String get email => 'E-mail';
+
+  @override
+  String get username => 'Nom d\'utilisateur';
+
+  @override
+  String get changePassword => 'Changer le mot de passe';
+
+  @override
+  String get logout => 'Se déconnecter';
+
+  @override
+  String get deleteAccount => 'Supprimer le compte';
+
+  @override
+  String get logoutConfirmMessage => 'Voulez-vous vraiment vous déconnecter ?';
+
+  @override
+  String get editEmail => 'Modifier l\'e-mail';
+
+  @override
+  String get newEmail => 'Nouvel e-mail';
+
+  @override
+  String get editUsername => 'Modifier le nom d\'utilisateur';
+
+  @override
+  String get newUsername => 'Nouveau nom d\'utilisateur';
+
+  @override
+  String get currentPassword => 'Mot de passe actuel';
+
+  @override
+  String get newPassword => 'Nouveau mot de passe';
+
+  @override
+  String get minEightCharacters => 'Au moins 8 caractères';
+
+  @override
+  String get confirmPassword => 'Confirmer le mot de passe';
+
+  @override
+  String get password => 'Mot de passe';
+
+  @override
+  String get passwordsDoNotMatch => 'Les mots de passe ne correspondent pas';
+
+  @override
+  String get passwordChangedSuccessfully => 'Mot de passe modifié avec succès';
+
+  @override
+  String get deleteAccountWarning =>
+      'Cette action est irréversible. Veuillez saisir votre mot de passe pour confirmer.';
+
+  @override
+  String get emailOrUsername => 'E-mail ou nom d\'utilisateur';
+
+  @override
+  String get enterEmailOrUsername =>
+      'Veuillez saisir votre e-mail ou votre nom d\'utilisateur';
+
+  @override
+  String get enterPassword => 'Veuillez saisir votre mot de passe';
+
+  @override
+  String get noAccountRegisterNow =>
+      'Pas encore de compte ? Inscrivez-vous maintenant';
+
+  @override
+  String get continueWithoutLogin => 'Continuer sans se connecter';
+
+  @override
+  String get usernameOptional => 'Nom d\'utilisateur (facultatif)';
+
+  @override
+  String get usernameMinThree =>
+      'Le nom d\'utilisateur doit contenir au moins 3 caractères';
+
+  @override
+  String get usernameAllowedChars =>
+      'Seules les lettres, les chiffres et _ sont autorisés';
+
+  @override
+  String get enterEmail => 'Veuillez saisir votre e-mail';
+
+  @override
+  String get invalidEmail => 'Adresse e-mail invalide';
+
+  @override
+  String get passwordMinEight =>
+      'Le mot de passe doit contenir au moins 8 caractères';
+
+  @override
+  String get alreadyRegisteredLogin => 'Déjà inscrit ? Se connecter';
+
+  @override
+  String get emailAlreadyRegistered => 'E-mail déjà enregistré';
+
+  @override
+  String get usernameAlreadyTaken => 'Nom d\'utilisateur déjà utilisé';
+
+  @override
+  String get invalidCredentials => 'Identifiants invalides';
+
+  @override
+  String get usernameCannotBeEmpty =>
+      'Le nom d\'utilisateur ne peut pas être vide';
+
+  @override
+  String get notLoggedIn => 'Non connecté';
+
+  @override
+  String get userNotFound => 'Utilisateur introuvable';
+
+  @override
+  String get currentPasswordIncorrect => 'Le mot de passe actuel est incorrect';
+
+  @override
+  String get wrongPassword => 'Mot de passe incorrect';
+
+  @override
+  String errorWithDetails(Object details) {
+    return 'Erreur : $details';
+  }
+
+  @override
   String get aboutApp => 'À Propos';
 
   @override
@@ -87,6 +229,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get register => 'S\'inscrire';
 
   @override
   String get history => 'Historique';
@@ -150,6 +295,16 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get yourTickBites => 'Vos Morsures de Tiques';
+
+  @override
+  String timeAt(Object time) {
+    return 'Heure : $time';
+  }
+
+  @override
+  String coordinatesAt(Object coordinates) {
+    return 'Coordonnées : $coordinates';
+  }
 
   @override
   String get noEntriesDescription =>

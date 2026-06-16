@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tickoff/l10n/app_localizations.dart';
+import 'package:tickoff/src/services/auth_error_localizer.dart';
 import 'package:tickoff/src/services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -58,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -78,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Konto erstellen',
+                    l10n.createAccount,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -90,18 +93,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextFormField(
                     controller: _usernameController,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'Benutzername (optional)',
+                    decoration: InputDecoration(
+                      labelText: l10n.usernameOptional,
                       prefixIcon: Icon(Icons.person_outlined),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value != null && value.isNotEmpty && value.length < 3) {
-                        return 'Benutzername muss mindestens 3 Zeichen haben';
+                        return l10n.usernameMinThree;
                       }
                       if (value != null && value.isNotEmpty &&
                           !RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
-                        return 'Nur Buchstaben, Zahlen und _ erlaubt';
+                        return l10n.usernameAllowedChars;
                       }
                       return null;
                     },
@@ -113,18 +116,18 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      labelText: 'E-Mail',
+                    decoration: InputDecoration(
+                      labelText: l10n.email,
                       prefixIcon: Icon(Icons.email_outlined),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte E-Mail eingeben';
+                        return l10n.enterEmail;
                       }
                       if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$')
                           .hasMatch(value)) {
-                        return 'Ungültige E-Mail-Adresse';
+                        return l10n.invalidEmail;
                       }
                       return null;
                     },
@@ -137,9 +140,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: _obscurePassword,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
-                      labelText: 'Passwort',
+                      labelText: l10n.password,
                       prefixIcon: const Icon(Icons.lock_outlined),
-                      helperText: 'Mindestens 8 Zeichen',
+                      helperText: l10n.minEightCharacters,
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -153,10 +156,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte Passwort eingeben';
+                        return l10n.enterPassword;
                       }
                       if (value.length < 8) {
-                        return 'Passwort muss mindestens 8 Zeichen haben';
+                        return l10n.passwordMinEight;
                       }
                       return null;
                     },
@@ -170,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _register(),
                     decoration: InputDecoration(
-                      labelText: 'Passwort bestätigen',
+                      labelText: l10n.confirmPassword,
                       prefixIcon: const Icon(Icons.lock_outlined),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
@@ -185,7 +188,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                     validator: (value) {
                       if (value != _passwordController.text) {
-                        return 'Passwörter stimmen nicht überein';
+                        return l10n.passwordsDoNotMatch;
                       }
                       return null;
                     },
@@ -195,7 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (_errorMessage != null) ...[
                     const SizedBox(height: 12),
                     Text(
-                      _errorMessage!,
+                      localizeAuthError(l10n, _errorMessage!),
                       style: TextStyle(color: theme.colorScheme.error),
                       textAlign: TextAlign.center,
                     ),
@@ -212,7 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Registrieren'),
+                        : Text(l10n.register),
                   ),
                   const SizedBox(height: 12),
 
@@ -220,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextButton(
                     onPressed: () =>
                         Navigator.of(context).pushReplacementNamed('/login'),
-                    child: const Text('Bereits registriert? Anmelden'),
+                    child: Text(l10n.alreadyRegisteredLogin),
                   ),
                 ],
               ),

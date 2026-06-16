@@ -67,6 +67,142 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationSettings => 'Benachrichtigungseinstellungen';
 
   @override
+  String get account => 'Konto';
+
+  @override
+  String get createAccount => 'Konto erstellen';
+
+  @override
+  String get createAccountSubtitle =>
+      'Jetzt registrieren und alle Funktionen nutzen';
+
+  @override
+  String get login => 'Anmelden';
+
+  @override
+  String get loginSubtitle => 'Bereits ein Konto? Hier einloggen';
+
+  @override
+  String get email => 'E-Mail';
+
+  @override
+  String get username => 'Benutzername';
+
+  @override
+  String get changePassword => 'Passwort ändern';
+
+  @override
+  String get logout => 'Abmelden';
+
+  @override
+  String get deleteAccount => 'Konto löschen';
+
+  @override
+  String get logoutConfirmMessage => 'Möchtest du dich wirklich abmelden?';
+
+  @override
+  String get editEmail => 'E-Mail ändern';
+
+  @override
+  String get newEmail => 'Neue E-Mail';
+
+  @override
+  String get editUsername => 'Benutzername ändern';
+
+  @override
+  String get newUsername => 'Neuer Benutzername';
+
+  @override
+  String get currentPassword => 'Aktuelles Passwort';
+
+  @override
+  String get newPassword => 'Neues Passwort';
+
+  @override
+  String get minEightCharacters => 'Mindestens 8 Zeichen';
+
+  @override
+  String get confirmPassword => 'Passwort bestätigen';
+
+  @override
+  String get password => 'Passwort';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwörter stimmen nicht überein';
+
+  @override
+  String get passwordChangedSuccessfully => 'Passwort erfolgreich geändert';
+
+  @override
+  String get deleteAccountWarning =>
+      'Diese Aktion kann nicht rückgängig gemacht werden. Bitte gib dein Passwort zur Bestätigung ein.';
+
+  @override
+  String get emailOrUsername => 'E-Mail oder Benutzername';
+
+  @override
+  String get enterEmailOrUsername => 'Bitte E-Mail oder Benutzername eingeben';
+
+  @override
+  String get enterPassword => 'Bitte Passwort eingeben';
+
+  @override
+  String get noAccountRegisterNow => 'Noch kein Konto? Jetzt registrieren';
+
+  @override
+  String get continueWithoutLogin => 'Ohne Anmeldung fortfahren';
+
+  @override
+  String get usernameOptional => 'Benutzername (optional)';
+
+  @override
+  String get usernameMinThree => 'Benutzername muss mindestens 3 Zeichen haben';
+
+  @override
+  String get usernameAllowedChars => 'Nur Buchstaben, Zahlen und _ erlaubt';
+
+  @override
+  String get enterEmail => 'Bitte E-Mail eingeben';
+
+  @override
+  String get invalidEmail => 'Ungültige E-Mail-Adresse';
+
+  @override
+  String get passwordMinEight => 'Passwort muss mindestens 8 Zeichen haben';
+
+  @override
+  String get alreadyRegisteredLogin => 'Bereits registriert? Anmelden';
+
+  @override
+  String get emailAlreadyRegistered => 'E-Mail bereits registriert';
+
+  @override
+  String get usernameAlreadyTaken => 'Benutzername bereits vergeben';
+
+  @override
+  String get invalidCredentials => 'Ungültige Anmeldedaten';
+
+  @override
+  String get usernameCannotBeEmpty => 'Benutzername darf nicht leer sein';
+
+  @override
+  String get notLoggedIn => 'Nicht angemeldet';
+
+  @override
+  String get userNotFound => 'Benutzer nicht gefunden';
+
+  @override
+  String get currentPasswordIncorrect => 'Aktuelles Passwort ist falsch';
+
+  @override
+  String get wrongPassword => 'Falsches Passwort';
+
+  @override
+  String errorWithDetails(Object details) {
+    return 'Fehler: $details';
+  }
+
+  @override
   String get aboutApp => 'Über die App';
 
   @override
@@ -87,6 +223,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get register => 'Registrieren';
 
   @override
   String get history => 'Historie';
@@ -150,6 +289,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get yourTickBites => 'Deine Zeckenstiche';
+
+  @override
+  String timeAt(Object time) {
+    return 'Uhrzeit: $time Uhr';
+  }
+
+  @override
+  String coordinatesAt(Object coordinates) {
+    return 'Koordinaten: $coordinates';
+  }
 
   @override
   String get noEntriesDescription =>

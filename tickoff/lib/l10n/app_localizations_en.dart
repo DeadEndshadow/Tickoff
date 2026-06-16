@@ -66,6 +66,141 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationSettings => 'Notification Settings';
 
   @override
+  String get account => 'Account';
+
+  @override
+  String get createAccount => 'Create account';
+
+  @override
+  String get createAccountSubtitle => 'Register now and unlock all features';
+
+  @override
+  String get login => 'Log in';
+
+  @override
+  String get loginSubtitle => 'Already have an account? Sign in here';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get username => 'Username';
+
+  @override
+  String get changePassword => 'Change password';
+
+  @override
+  String get logout => 'Log out';
+
+  @override
+  String get deleteAccount => 'Delete account';
+
+  @override
+  String get logoutConfirmMessage => 'Do you really want to log out?';
+
+  @override
+  String get editEmail => 'Change email';
+
+  @override
+  String get newEmail => 'New email';
+
+  @override
+  String get editUsername => 'Change username';
+
+  @override
+  String get newUsername => 'New username';
+
+  @override
+  String get currentPassword => 'Current password';
+
+  @override
+  String get newPassword => 'New password';
+
+  @override
+  String get minEightCharacters => 'At least 8 characters';
+
+  @override
+  String get confirmPassword => 'Confirm password';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get deleteAccountWarning =>
+      'This action cannot be undone. Please enter your password to confirm.';
+
+  @override
+  String get emailOrUsername => 'Email or username';
+
+  @override
+  String get enterEmailOrUsername => 'Please enter your email or username';
+
+  @override
+  String get enterPassword => 'Please enter your password';
+
+  @override
+  String get noAccountRegisterNow => 'No account yet? Register now';
+
+  @override
+  String get continueWithoutLogin => 'Continue without logging in';
+
+  @override
+  String get usernameOptional => 'Username (optional)';
+
+  @override
+  String get usernameMinThree => 'Username must be at least 3 characters';
+
+  @override
+  String get usernameAllowedChars => 'Only letters, numbers and _ are allowed';
+
+  @override
+  String get enterEmail => 'Please enter your email';
+
+  @override
+  String get invalidEmail => 'Invalid email address';
+
+  @override
+  String get passwordMinEight => 'Password must be at least 8 characters';
+
+  @override
+  String get alreadyRegisteredLogin => 'Already registered? Log in';
+
+  @override
+  String get emailAlreadyRegistered => 'Email already registered';
+
+  @override
+  String get usernameAlreadyTaken => 'Username already taken';
+
+  @override
+  String get invalidCredentials => 'Invalid credentials';
+
+  @override
+  String get usernameCannotBeEmpty => 'Username cannot be empty';
+
+  @override
+  String get notLoggedIn => 'Not logged in';
+
+  @override
+  String get userNotFound => 'User not found';
+
+  @override
+  String get currentPasswordIncorrect => 'Current password is incorrect';
+
+  @override
+  String get wrongPassword => 'Wrong password';
+
+  @override
+  String errorWithDetails(Object details) {
+    return 'Error: $details';
+  }
+
+  @override
   String get aboutApp => 'About the App';
 
   @override
@@ -86,6 +221,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ok => 'OK';
+
+  @override
+  String get register => 'Register';
 
   @override
   String get history => 'History';
@@ -149,6 +287,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yourTickBites => 'Your Tick Bites';
+
+  @override
+  String timeAt(Object time) {
+    return 'Time: $time';
+  }
+
+  @override
+  String coordinatesAt(Object coordinates) {
+    return 'Coordinates: $coordinates';
+  }
 
   @override
   String get noEntriesDescription =>

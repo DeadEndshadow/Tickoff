@@ -175,12 +175,14 @@ class _HistoryPageState extends State<HistoryPage> {
                     children: [
                       const SizedBox(height: 4),
                       Text(
-                        'Uhrzeit: ${timeFormat.format(tickBite.timestamp)} Uhr',
+                        l10n.timeAt(timeFormat.format(tickBite.timestamp)),
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Koordinaten: ${tickBite.location.latitude.toStringAsFixed(4)}, ${tickBite.location.longitude.toStringAsFixed(4)}',
+                        l10n.coordinatesAt(
+                          '${tickBite.location.latitude.toStringAsFixed(4)}, ${tickBite.location.longitude.toStringAsFixed(4)}',
+                        ),
                         style: TextStyle(color: Colors.grey[500], fontSize: 12),
                       ),
                     ],
