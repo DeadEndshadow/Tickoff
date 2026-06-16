@@ -465,6 +465,13 @@ class _SettingsPageState extends State<SettingsPage> {
                   flag: '🇫🇷',
                   onSelected: LocaleController.instance.setFrench,
                 ),
+                _buildLanguageOption(
+                  context: context,
+                  value: 'it',
+                  label: l10n.italian,
+                  flag: '🇮🇹',
+                  onSelected: LocaleController.instance.setItalian,
+                ),
               ],
             ),
           ),

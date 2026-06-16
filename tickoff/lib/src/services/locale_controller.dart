@@ -24,6 +24,7 @@ class LocaleController {
   void setGerman() => setLocale(const Locale('de'));
   void setEnglish() => setLocale(const Locale('en'));
   void setFrench() => setLocale(const Locale('fr'));
+  void setItalian() => setLocale(const Locale('it'));
 
   String getLanguageName(String languageCode) {
     switch (languageCode) {
@@ -33,6 +34,8 @@ class LocaleController {
         return 'English';
       case 'fr':
         return 'Français';
+      case 'it':
+        return 'Italiano';
       default:
         return languageCode;
     }
@@ -42,5 +45,6 @@ class LocaleController {
     Locale('de'),
     Locale('en'),
     Locale('fr'),
+    Locale('it'),
   ];
 }

@@ -17,6 +17,7 @@
   "german": "Allemand",
   "english": "Anglais",
   "french": "Français",
+  "italian": "Italien",
   "notifications": "Notifications",
   "notificationSettings": "Paramètres de Notification",
   "account": "Compte",
@@ -108,6 +109,10 @@
       "coordinates": {}
     }
   },
+  "yourReportDescription": "Il s'agit de votre morsure de tique signalée. Vous pouvez la supprimer.",
+  "communityReportDescription": "Cette morsure de tique a été signalée par une autre personne et ne peut pas être supprimée par vous.",
+  "deleteOwnTickBiteMessage": "Voulez-vous vraiment supprimer votre morsure de tique signalée ?",
+  "deleteNotAllowed": "Vous ne pouvez supprimer que vos propres marqueurs.",
   "noEntriesDescription": "Signalez une morsure de tique sur la carte des risques\npour la voir ici.",
   "errorLoading": "Erreur de chargement",
   "successfullySaved": "Enregistré avec succès!",

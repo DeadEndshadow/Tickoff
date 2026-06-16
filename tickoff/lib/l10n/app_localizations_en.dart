@@ -60,6 +60,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get french => 'French';
 
   @override
+  String get italian => 'Italian';
+
+  @override
   String get notifications => 'Notifications';
 
   @override
@@ -297,6 +300,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String coordinatesAt(Object coordinates) {
     return 'Coordinates: $coordinates';
   }
+
+  @override
+  String get yourReportDescription =>
+      'This is your reported tick bite. You can delete it again.';
+
+  @override
+  String get communityReportDescription =>
+      'This tick bite was reported by someone else and cannot be deleted by you.';
+
+  @override
+  String get deleteOwnTickBiteMessage =>
+      'Do you really want to delete your reported tick bite?';
+
+  @override
+  String get deleteNotAllowed => 'You can only delete your own markers.';
 
   @override
   String get noEntriesDescription =>

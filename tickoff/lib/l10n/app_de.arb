@@ -17,6 +17,7 @@
   "german": "Deutsch",
   "english": "Englisch",
   "french": "Französisch",
+  "italian": "Italienisch",
   "notifications": "Benachrichtigungen",
   "notificationSettings": "Benachrichtigungseinstellungen",
   "account": "Konto",
@@ -108,6 +109,10 @@
       "coordinates": {}
     }
   },
+  "yourReportDescription": "Das ist dein gemeldeter Zeckenstich. Du kannst ihn wieder löschen.",
+  "communityReportDescription": "Dieser Zeckenstich wurde von einer anderen Person gemeldet und kann nicht von dir gelöscht werden.",
+  "deleteOwnTickBiteMessage": "Möchtest du deinen gemeldeten Zeckenstich wirklich löschen?",
+  "deleteNotAllowed": "Du kannst nur deine eigenen Markierungen löschen.",
   "noEntriesDescription": "Melde einen Zeckenstich auf der Risikokarte,\num ihn hier zu sehen.",
   "errorLoading": "Fehler beim Laden",
   "successfullySaved": "Erfolgreich gespeichert!",

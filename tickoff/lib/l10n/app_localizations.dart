@@ -8,6 +8,7 @@ import 'package:intl/intl.dart' as intl;
 import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_it.dart';
 
 // ignore_for_file: type=lint
 
@@ -98,6 +99,7 @@ abstract class AppLocalizations {
     Locale('de'),
     Locale('en'),
     Locale('fr'),
+    Locale('it'),
   ];
 
   /// No description provided for @appTitle.
@@ -201,6 +203,12 @@ abstract class AppLocalizations {
   /// In de, this message translates to:
   /// **'Französisch'**
   String get french;
+
+  /// No description provided for @italian.
+  ///
+  /// In de, this message translates to:
+  /// **'Italienisch'**
+  String get italian;
 
   /// No description provided for @notifications.
   ///
@@ -658,6 +666,30 @@ abstract class AppLocalizations {
   /// **'Koordinaten: {coordinates}'**
   String coordinatesAt(Object coordinates);
 
+  /// No description provided for @yourReportDescription.
+  ///
+  /// In de, this message translates to:
+  /// **'Das ist dein gemeldeter Zeckenstich. Du kannst ihn wieder löschen.'**
+  String get yourReportDescription;
+
+  /// No description provided for @communityReportDescription.
+  ///
+  /// In de, this message translates to:
+  /// **'Dieser Zeckenstich wurde von einer anderen Person gemeldet und kann nicht von dir gelöscht werden.'**
+  String get communityReportDescription;
+
+  /// No description provided for @deleteOwnTickBiteMessage.
+  ///
+  /// In de, this message translates to:
+  /// **'Möchtest du deinen gemeldeten Zeckenstich wirklich löschen?'**
+  String get deleteOwnTickBiteMessage;
+
+  /// No description provided for @deleteNotAllowed.
+  ///
+  /// In de, this message translates to:
+  /// **'Du kannst nur deine eigenen Markierungen löschen.'**
+  String get deleteNotAllowed;
+
   /// No description provided for @noEntriesDescription.
   ///
   /// In de, this message translates to:
@@ -1084,7 +1116,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['de', 'en', 'fr'].contains(locale.languageCode);
+      <String>['de', 'en', 'fr', 'it'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -1099,6 +1131,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'fr':
       return AppLocalizationsFr();
+    case 'it':
+      return AppLocalizationsIt();
   }
 
   throw FlutterError(

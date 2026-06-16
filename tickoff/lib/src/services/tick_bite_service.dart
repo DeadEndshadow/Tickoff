@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'api_service.dart';
 
 class TickBite {
@@ -62,18 +63,34 @@ class TickBite {
 class TickBiteService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static const String _collection = 'tick_bites';
+  static const String _deviceUserIdKey = 'tick_bite_device_user_id';
 
   // Simple device-based user ID (persists across app restarts)
   static String? _deviceUserId;
 
-  String get deviceUserId {
-    _deviceUserId ??= 'device_${DateTime.now().millisecondsSinceEpoch}_$hashCode';
-    return _deviceUserId!;
+  Future<String> get deviceUserId async {
+    if (_deviceUserId != null) return _deviceUserId!;
+
+    final prefs = await SharedPreferences.getInstance();
+    final storedId = prefs.getString(_deviceUserIdKey);
+    if (storedId != null && storedId.isNotEmpty) {
+      _deviceUserId = storedId;
+      return storedId;
+    }
+
+    final generatedId = 'device_${DateTime.now().millisecondsSinceEpoch}';
+    _deviceUserId = generatedId;
+    await prefs.setString(_deviceUserIdKey, generatedId);
+    return generatedId;
   }
 
   // Set user ID (call this once when app starts)
   static void setDeviceUserId(String id) {
     _deviceUserId = id;
+  }
+
+  Future<bool> isOwnedByCurrentUser(TickBite tickBite) async {
+    return tickBite.userId == await deviceUserId;
   }
 
   /// Stream of all tick bites from Firestore (for map display).
@@ -89,29 +106,23 @@ class TickBiteService {
 
   /// Stream of user's own tick bites (for history page)
   Stream<List<TickBite>> getUserTickBitesStream() {
-    return _firestore
-        .collection(_collection)
-        .where('userId', isEqualTo: deviceUserId)
-        .orderBy('timestamp', descending: true)
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => TickBite.fromFirestore(doc)).toList());
+    return Stream.fromFuture(deviceUserId).asyncExpand(
+      (currentUserId) => _firestore
+          .collection(_collection)
+          .where('userId', isEqualTo: currentUserId)
+          .orderBy('timestamp', descending: true)
+          .snapshots()
+          .map(
+            (snapshot) =>
+                snapshot.docs.map((doc) => TickBite.fromFirestore(doc)).toList(),
+          ),
+    );
   }
 
-  /// Add a new tick bite. Tries the backend API first, falls back to Firebase.
+  /// Add a new tick bite to the app store and mirror it anonymously to the backend when possible.
   Future<void> addTickBite(LatLng location) async {
-    // Try backend API first (routes through auth service gateway)
-    try {
-      final response = await ApiService.instance.post('/api/reports', {
-        'latitude': location.latitude,
-        'longitude': location.longitude,
-      });
-      if (response.statusCode == 201) return;
-    } catch (_) {
-      // Backend unavailable – fall through to Firebase
-    }
+    final currentUserId = await deviceUserId;
 
-    // Firebase fallback
     await _firestore
         .collection(_collection)
         .add(
@@ -119,7 +130,7 @@ class TickBiteService {
             id: '',
             location: location,
             timestamp: DateTime.now(),
-            userId: deviceUserId,
+            userId: currentUserId,
           ).toFirestore(),
         )
         .timeout(
@@ -130,6 +141,16 @@ class TickBiteService {
             );
           },
         );
+
+    // Best-effort anonymous backend report for aggregated hotspots.
+    try {
+      await ApiService.instance.post('/api/reports', {
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+      });
+    } catch (_) {
+      // Firestore is the source of truth for the in-app map/history experience.
+    }
   }
 
   /// Get nearby hotspots from the backend.
@@ -153,8 +174,12 @@ class TickBiteService {
   }
 
   /// Delete a tick bite from Firestore
-  Future<void> deleteTickBite(String id) async {
-    await _firestore.collection(_collection).doc(id).delete();
+  Future<void> deleteTickBite(TickBite tickBite) async {
+    if (!await isOwnedByCurrentUser(tickBite)) {
+      throw StateError('not-owner');
+    }
+
+    await _firestore.collection(_collection).doc(tickBite.id).delete();
   }
 }
 

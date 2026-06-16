@@ -36,7 +36,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
     if (confirmed == true) {
       try {
-        await _tickBiteService.deleteTickBite(tickBite.id);
+        await _tickBiteService.deleteTickBite(tickBite);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -49,7 +49,9 @@ class _HistoryPageState extends State<HistoryPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${l10n.errorDeleting}: $e'),
+              content: Text(
+                e is StateError ? l10n.deleteNotAllowed : '${l10n.errorDeleting}: $e',
+              ),
               backgroundColor: Colors.red,
             ),
           );

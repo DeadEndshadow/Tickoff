@@ -17,6 +17,7 @@
   "german": "German",
   "english": "English",
   "french": "French",
+  "italian": "Italian",
   "notifications": "Notifications",
   "notificationSettings": "Notification Settings",
   "account": "Account",
@@ -108,6 +109,10 @@
       "coordinates": {}
     }
   },
+  "yourReportDescription": "This is your reported tick bite. You can delete it again.",
+  "communityReportDescription": "This tick bite was reported by someone else and cannot be deleted by you.",
+  "deleteOwnTickBiteMessage": "Do you really want to delete your reported tick bite?",
+  "deleteNotAllowed": "You can only delete your own markers.",
   "noEntriesDescription": "Report a tick bite on the risk map\nto see it here.",
   "errorLoading": "Error loading",
   "successfullySaved": "Successfully saved!",

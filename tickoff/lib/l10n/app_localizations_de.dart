@@ -61,6 +61,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get french => 'Französisch';
 
   @override
+  String get italian => 'Italienisch';
+
+  @override
   String get notifications => 'Benachrichtigungen';
 
   @override
@@ -299,6 +302,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String coordinatesAt(Object coordinates) {
     return 'Koordinaten: $coordinates';
   }
+
+  @override
+  String get yourReportDescription =>
+      'Das ist dein gemeldeter Zeckenstich. Du kannst ihn wieder löschen.';
+
+  @override
+  String get communityReportDescription =>
+      'Dieser Zeckenstich wurde von einer anderen Person gemeldet und kann nicht von dir gelöscht werden.';
+
+  @override
+  String get deleteOwnTickBiteMessage =>
+      'Möchtest du deinen gemeldeten Zeckenstich wirklich löschen?';
+
+  @override
+  String get deleteNotAllowed =>
+      'Du kannst nur deine eigenen Markierungen löschen.';
 
   @override
   String get noEntriesDescription =>

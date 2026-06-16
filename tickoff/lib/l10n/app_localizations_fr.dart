@@ -61,6 +61,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get french => 'Français';
 
   @override
+  String get italian => 'Italien';
+
+  @override
   String get notifications => 'Notifications';
 
   @override
@@ -305,6 +308,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String coordinatesAt(Object coordinates) {
     return 'Coordonnées : $coordinates';
   }
+
+  @override
+  String get yourReportDescription =>
+      'Il s\'agit de votre morsure de tique signalée. Vous pouvez la supprimer.';
+
+  @override
+  String get communityReportDescription =>
+      'Cette morsure de tique a été signalée par une autre personne et ne peut pas être supprimée par vous.';
+
+  @override
+  String get deleteOwnTickBiteMessage =>
+      'Voulez-vous vraiment supprimer votre morsure de tique signalée ?';
+
+  @override
+  String get deleteNotAllowed =>
+      'Vous ne pouvez supprimer que vos propres marqueurs.';
 
   @override
   String get noEntriesDescription =>
