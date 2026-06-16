@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
       if (!GuestSession.isGuest)
         _HomeFeature(
           icon: Icons.history_rounded,
-          color: Colors.orange,
+          color: const Color(0xFFE3A24A),
           title: l10n.myHistory,
           routeBuilder: () => const HistoryPage(),
         ),
@@ -189,23 +189,27 @@ class HomePage extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
+          stops: const [0.0, 0.58, 1.0],
           colors: [
-            if (isLight) const Color(0xFF86DEC9) else scheme.primary,
+            if (isLight) const Color(0xFF8FE3CE) else const Color(0xFF2E8169),
             if (isLight)
-              const Color(0xFFB2DDB8)
+              const Color(0xFFA7D9B4)
             else
-              const Color(0xFF24463B),
+              const Color(0xFF21413A),
             if (isLight)
-              const Color(0xFFF0B092)
+              const Color(0xFFF1B196)
             else
-              const Color(0xFF4E3028),
+              const Color(0xFF4C332C),
           ],
+        ),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: isLight ? 0.45 : 0.08),
         ),
         boxShadow: [
           BoxShadow(
-            color: scheme.primary.withValues(alpha: isLight ? 0.12 : 0.2),
-            blurRadius: 30,
-            offset: const Offset(0, 18),
+            color: scheme.primary.withValues(alpha: isLight ? 0.18 : 0.28),
+            blurRadius: 34,
+            offset: const Offset(0, 20),
           ),
         ],
       ),
@@ -253,12 +257,14 @@ class HomePage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: chipBackground,
                       borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: chipBorder),
+                      border: Border.all(
+                        color: feature.color.withValues(alpha: isLight ? 0.32 : 0.42),
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(feature.icon, size: 16, color: heroTextColor),
+                        Icon(feature.icon, size: 16, color: feature.color),
                         const SizedBox(width: 8),
                         Text(
                           feature.title,
@@ -282,11 +288,29 @@ class HomePage extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     final isLight = theme.brightness == Brightness.light;
+    final accent = feature.color;
+
+    // Clean base surfaces with only a whisper of the accent, so the colour
+    // lives in the icon, border, arrow and glow rather than flooding the card.
+    final cardGradient = isLight
+        ? [
+            Colors.white,
+            Color.alphaBlend(accent.withValues(alpha: 0.06), Colors.white),
+          ]
+        : [
+            const Color(0xFF1C2723),
+            Color.alphaBlend(
+              accent.withValues(alpha: 0.12),
+              const Color(0xFF141D1A),
+            ),
+          ];
 
     return Material(
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(28),
+        splashColor: accent.withValues(alpha: 0.10),
+        highlightColor: accent.withValues(alpha: 0.05),
         onTap: () {
           Navigator.push(
             context,
@@ -299,27 +323,26 @@ class HomePage extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                isLight ? Colors.white : theme.cardColor,
-                feature.color.withValues(alpha: isLight ? 0.14 : 0.14),
-              ],
+              colors: cardGradient,
             ),
             border: Border.all(
-              color: scheme.outline.withValues(alpha: isLight ? 0.12 : 0.14),
+              color: accent.withValues(alpha: isLight ? 0.20 : 0.26),
             ),
             boxShadow: [
-              if (isLight)
-                BoxShadow(
-                  color: scheme.shadow.withValues(alpha: 0.05),
-                  blurRadius: 18,
-                  offset: const Offset(0, 10),
-                )
-              else
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.18),
-                  blurRadius: 24,
-                  offset: const Offset(0, 14),
-                ),
+              // Soft neutral shadow for depth.
+              BoxShadow(
+                color: isLight
+                    ? scheme.shadow.withValues(alpha: 0.06)
+                    : Colors.black.withValues(alpha: 0.22),
+                blurRadius: 24,
+                offset: const Offset(0, 14),
+              ),
+              // Subtle accent glow for a modern, cohesive feel.
+              BoxShadow(
+                color: accent.withValues(alpha: isLight ? 0.10 : 0.14),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
             ],
           ),
           child: Padding(
@@ -328,13 +351,30 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 48,
-                  height: 48,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: feature.color.withValues(alpha: 0.14),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        accent.withValues(alpha: isLight ? 0.24 : 0.30),
+                        accent.withValues(alpha: isLight ? 0.12 : 0.16),
+                      ],
+                    ),
                     borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: accent.withValues(alpha: 0.30),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: accent.withValues(alpha: isLight ? 0.16 : 0.22),
+                        blurRadius: 12,
+                        offset: const Offset(0, 6),
+                      ),
+                    ],
                   ),
-                  child: Icon(feature.icon, color: feature.color, size: 24),
+                  child: Icon(feature.icon, color: accent, size: 24),
                 ),
                 const Spacer(),
                 Text(
@@ -356,15 +396,18 @@ class HomePage extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Container(
-                    width: 32,
-                    height: 32,
+                    width: 34,
+                    height: 34,
                     decoration: BoxDecoration(
-                      color: scheme.primary.withValues(alpha: 0.08),
+                      color: accent.withValues(alpha: isLight ? 0.14 : 0.18),
                       borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: accent.withValues(alpha: 0.22),
+                      ),
                     ),
                     child: Icon(
                       Icons.arrow_outward_rounded,
-                      color: scheme.primary,
+                      color: accent,
                       size: 16,
                     ),
                   ),
